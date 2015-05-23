@@ -3,9 +3,12 @@ from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 from glob import iglob
-import os
+import os, sys
 
-# python setup.py build_ext --inplace
+# python cython_setup.py build_ext --inplace
+if len(sys.argv) == 1:
+    sys.argv.append("build_ext")
+    sys.argv.append("--inplace")
 
 option = {}
 if os.name == "nt":
