@@ -83,7 +83,7 @@ class World(object):
         glDisable(GL_DEPTH_TEST)
         glLoadMatrixd(matrix_i.to_opengl())
         self.sky.draw(matrix_i, Lorentz(-self.player.P.U))
-        # self.stardust.draw(Xp, L)
+        self.stardust.draw(Xp, L)
         # self.wireframe.draw(Xp, L)
         glEnable(GL_DEPTH_TEST)
         self.stars.draw(Xp, L)
@@ -96,11 +96,9 @@ class World(object):
         self.enemies.bullets.draw(Xp, L)
         
         if keys.k_map == 1:
-            # self.player.draw_lines(L, matrix)
             glDisable(GL_DEPTH_TEST)
             self.player.draw_window(L)
             glEnable(GL_DEPTH_TEST)
         self.player.draw_hp()
-        # self.player.draw_bloot()
         self.player.draw_gun_name()
         self.player.draw_booster(keys)

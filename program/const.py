@@ -4,16 +4,8 @@ import os as _os
 import sys as _sys
 
 path = _os.path.abspath(_os.path.dirname(_sys.argv[0]))
-
-_os.environ["PYSDL2_DLL_PATH"] = path
-
-if _os.path.isdir(_os.path.join(path, "img")):
-    _input_path = path
-elif  _os.path.isdir(_os.path.join(path, "../", "bin/%s/"%_os.name)):
-    _input_path = "../"
-    _os.environ["PYSDL2_DLL_PATH"] = _input_path + "bin/%s/"%_os.name
-else:
-    raise ImportError
+_input_path = _os.path.join(path, "resources")
+_os.environ["PYSDL2_DLL_PATH"] = _os.path.join(_input_path, "bin", _os.name)
 
 import sdl2
 

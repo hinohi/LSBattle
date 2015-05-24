@@ -7,107 +7,10 @@ from OpenGL.GL import *
 from go import Matrix44
 from model.polygon import MqoGpoPolygon
 from program.box import BOX
-from program.utils import load_texture, compile_program
+from program.utils import load_texture, compile_program, search_imagefile
 from program.const import IMG_DIR, VIEW_ANGLE
 from program import script
 
-
-class Sky_old(MqoGpoPolygon):
-
-    def load_program(self):
-        self.program = compile_program(
-        """
-        #version 120
-        uniform mat4 lorentz;
-        void main() {
-            vec4 vertex = lorentz * vec4(gl_Vertex.xyz, -length(gl_Vertex.xyz));
-            vertex.w = 1.0;
-            gl_Position = gl_ModelViewProjectionMatrix * vertex;
-            gl_TexCoord[0] = gl_MultiTexCoord0;
-        }
-        """,
-        """
-        #version 120
-        uniform sampler2D texture;
-        void main() {
-            gl_FragColor = texture2D(texture, gl_TexCoord[0].xy);
-        }
-        """)
-        self.mat_local = glGetUniformLocation(self.program, "lorentz")
-        self.tex_local = glGetUniformLocation(self.program, "texture")
-
-    def __init__(self):
-        self.load_program()
-        m = Matrix44.z_rotation(script.world.sky.rotation)
-        def func(x, y, z):
-            return m.get_rotate([x, y, z])
-        file_path = self.make_gpo(IMG_DIR+script.world.sky.model)
-        if script.world.sky.texture is None:
-            self.load_gpo(file_path, func=func)
-        else:
-            self.load_gpo(file_path, func=func, texture=False)
-            self.set_texture(script.world.sky.texture)
-        self.material, self.n, self.indices = self.objects[0]
-
-    def draw(self, L):
-        glUseProgram(self.program)
-        glVertexPointer(3, GL_FLOAT, 0, self.vertices)
-        glTexCoordPointer(2, GL_FLOAT, 0, self.texcoords)
-        glBindTexture(GL_TEXTURE_2D, self.material.texture_id)
-        glUniformMatrix4fv(self.mat_local, 1, GL_FALSE, L.to_glsl())
-        glUniform1i(self.tex_local, 0)
-        glDrawElements(GL_TRIANGLES, self.n, GL_UNSIGNED_INT, self.indices)
-        glUseProgram(0)
-
-class Sky2(MqoGpoPolygon):
-
-    def load_program(self):
-        self.program = compile_program(
-        """
-        #version 120
-        
-        varing vec3 vertex;
-        void main() {
-            vec4 vertex = lorentz * vec4(gl_Vertex.xyz, -length(gl_Vertex.xyz));
-            vertex.w = 1.0;
-            gl_Position = gl_ModelViewProjectionMatrix * vertex;
-            gl_TexCoord[0] = gl_MultiTexCoord0;
-        }
-        """,
-        """
-        #version 120
-        uniform sampler2D texture;
-        uniform mat4 lorentz;
-        varing vex3 vertex;
-        void main() {
-            gl_FragColor = texture2D(texture, gl_TexCoord[0].xy);
-        }
-        """)
-        self.mat_local = glGetUniformLocation(self.program, "lorentz")
-        self.tex_local = glGetUniformLocation(self.program, "texture")
-
-    def __init__(self):
-        self.load_program()
-        m = Matrix44.z_rotation(script.world.sky.rotation)
-        def func(x, y, z):
-            return m.get_rotate([x, y, z])
-        file_path = self.make_gpo(IMG_DIR+script.world.sky.model)
-        if script.world.sky.texture is None:
-            self.load_gpo(file_path, func=func)
-        else:
-            self.load_gpo(file_path, func=func, texture=False)
-            self.set_texture(script.world.sky.texture)
-        self.material, self.n, self.indices = self.objects[0]
-
-    def draw(self, L):
-        glUseProgram(self.program)
-        glVertexPointer(3, GL_FLOAT, 0, self.vertices)
-        glTexCoordPointer(2, GL_FLOAT, 0, self.texcoords)
-        glBindTexture(GL_TEXTURE_2D, self.material.texture_id)
-        glUniformMatrix4fv(self.mat_local, 1, GL_FALSE, L.to_glsl())
-        glUniform1i(self.tex_local, 0)
-        glDrawElements(GL_TRIANGLES, self.n, GL_UNSIGNED_INT, self.indices)
-        glUseProgram(0)
 
 class Sky(object):
     
@@ -115,7 +18,7 @@ class Sky(object):
     mat_local = None
     tex_local = None
     
-    def __init__(self, n=20, m=10):
+    def __init__(self, n=2, m=1):
         self.ver = []
         alpha = VIEW_ANGLE*pi/360
         a = alpha/n
@@ -140,18 +43,15 @@ class Sky(object):
                 vertex.extend(self.ver[i])
         self.n = len(vertex)/3
         self.vertex = (GLfloat*len(vertex))(*vertex)
-        self.GLtex = GLfloat*(len(self.faces)*8)
         
         self.m = Matrix44.z_rotation(pi*63/180)
         
-        self.texture_id = load_texture(IMG_DIR+"milkyway.jpg")
+        self.texture_id = load_texture(search_imagefile("milkyway.jpg"))
 
-        if self.program is None or not glIsProgram(self.program):
-            self.init_program()
+        self.init_program()
 
-    @classmethod
-    def init_program(cls):
-        cls.program = compile_program(
+    def init_program(self):
+        self.program = compile_program(
         """
         #version 120
         varying vec3 pos;
@@ -175,8 +75,8 @@ class Sky(object):
             gl_FragColor = texture2D(texture, tex);
         }
         """)
-        cls.mat_local = glGetUniformLocation(cls.program, "lorentz")
-        cls.tex_local = glGetUniformLocation(cls.program, "texture")
+        self.mat_local = glGetUniformLocation(self.program, "lorentz")
+        self.tex_local = glGetUniformLocation(self.program, "texture")
     
     def draw(self, pm, L):
         m = self.m * L * pm
