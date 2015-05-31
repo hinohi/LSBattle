@@ -368,7 +368,7 @@ if __name__ == "__main__":
                 raise StopIteration
 
     t1 = time.clock()
-    name = "../../../img/haruna/haruna.mqo"
+    name = "../resources/img/haruna/haruna.mqo"
     m = MqoObject(F(open(name)))
     t2 = time.clock()
     print t2 - t1

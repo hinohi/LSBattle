@@ -99,6 +99,12 @@ def bind_texture(raw_data, width, height, mode):
     glTexParameteri(GL_TEXTURE_2D,
                     GL_TEXTURE_MIN_FILTER,
                     GL_LINEAR_MIPMAP_LINEAR)
+    # glTexParameteri(GL_TEXTURE_2D,
+    #                 GL_TEXTURE_WRAP_S,
+    #                 GL_CLAMP_TO_EDGE)
+    # glTexParameteri(GL_TEXTURE_2D,
+    #                 GL_TEXTURE_WRAP_T,
+    #                 GL_CLAMP_TO_EDGE)
     n = {1:1, 2:2, 3:3, 4:4, "L":1, "LA":2, "RGB":3, "RGBA":4, "A":1}[mode]
     m = {1:GL_LUMINANCE, 2:GL_LUMINANCE_ALPHA, 3:GL_RGB, 4:GL_RGBA,
          "L":GL_LUMINANCE, "LA":GL_LUMINANCE_ALPHA,"RGB":GL_RGB, "RGBA":GL_RGBA,

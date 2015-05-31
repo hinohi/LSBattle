@@ -55,7 +55,7 @@ class World(object):
         count = 0
         while count < n:
             self.player.action(keys, ds)
-            self.score += self.enemies.action(ds)
+            # self.score += self.enemies.action(ds)
             self.stars.hit_check(self.player.P.X)
             
             if (self.item is not None and

@@ -18,8 +18,6 @@ except:
         p = os.path.dirname(sys.argv[0])
     p = os.path.join(os.path.dirname(sys.argv[0]),"error.log")
     traceback.print_exception(exc_type, exc_value, exc_traceback,
-    
-
                               file=open(p, "w")
                               )
     sys.exit(1)

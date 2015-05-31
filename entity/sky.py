@@ -1,6 +1,6 @@
 # coding: utf8
 # entity/sky.py
-from math import pi
+from math import pi, tan
 
 from OpenGL.GL import *
 
@@ -18,37 +18,24 @@ class Sky(object):
     mat_local = None
     tex_local = None
     
-    def __init__(self, n=2, m=1):
-        self.ver = []
-        alpha = VIEW_ANGLE*pi/360
-        a = alpha/n
-        b = alpha*BOX.X/BOX.Y/m
-        for i in xrange(-n, n+1):
-            v = Matrix44.x_rotation(a*i).get_rotate((0, 0, -1))
-            for k in xrange(-m, m+1):
-                vv = Matrix44.y_rotation(b*k).get_rotate(v)
-                self.ver.append(vv)
-        self.faces = []
-        a = 2*n + 1
-        b = 2*m + 1
-        for i in xrange(a-1):
-            for k in xrange(b-1):
-                self.faces.append((k   + b*i,
-                                   k   + b*(i+1),
-                                   k+1 + b*(i+1),
-                                   k+1 + b*i))
-        vertex = []
-        for f in self.faces:
-            for i in f:
-                vertex.extend(self.ver[i])
+    def __init__(self):
+        self.init_vertex()
+        self.init_program()
+        self.m = Matrix44.z_rotation(script.world.sky.rotation)
+        texture_name = search_imagefile(script.world.sky.texture)
+        self.texture_id = load_texture(texture_name)
+
+    def init_vertex(self):
+        angle = VIEW_ANGLE*pi/180
+        z = -1.0
+        x = tan(angle) * abs(z)
+        y = x * BOX.Y / BOX.X
+        vertex = [ x,  y, z,
+                  -x,  y, z,
+                  -x, -y, z,
+                   x, -y, z]
         self.n = len(vertex)/3
         self.vertex = (GLfloat*len(vertex))(*vertex)
-        
-        self.m = Matrix44.z_rotation(pi*63/180)
-        
-        self.texture_id = load_texture(search_imagefile("milkyway.jpg"))
-
-        self.init_program()
 
     def init_program(self):
         self.program = compile_program(
@@ -68,10 +55,8 @@ class Sky(object):
         void main() {
             vec4 v = lorentz * vec4(pos, -length(pos));
             vec2 tex;
-            //tex.s = atan(v.z, v.x) * 0.15915494309189533;
-            //tex.t = atan(length(v.xz), v.y) * 0.31830988618379067;
             tex.s = atan(v.y, v.x) * 0.15915494309189533;
-            tex.t = 1.0 - atan(length(v.xy), v.z) * 0.31830988618379067;
+            tex.t = atan(length(v.xy), v.z) * 0.31830988618379067;
             gl_FragColor = texture2D(texture, tex);
         }
         """)

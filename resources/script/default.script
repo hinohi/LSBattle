@@ -8,9 +8,6 @@ Player {
     turbo = 3.0                                            # float 0.0<=x<=100.0
     turn_acceleration = 9.0                                # float -100.0<=x<=100.0
     turn_resistivity = 5.0                                 # float 0.0<=x<=100.0
-    window {
-        pre_color = [0.5,0.5,1,1]
-        }
     gun {
         accuracy_condition = 0.0                           # float 0.0<=x<=1.0
         automatic = False                                  # eval
@@ -116,6 +113,14 @@ Player {
         blood_color = [1.0, 0.0, 0.0, 1.0]                 # color_func
         color = [0.0, 0.0, 0.9, 0.5]                       # color_func
     }
+    window {
+        color = (1.0, 1.0, 1.0, 1.0)                       # color_func
+        pre_size = 0.025                                   # float 0.0001<=x<=0.2
+        size = 0.05                                        # float 0.0001<=x<=0.2
+        texture = None                                     # func_str
+        texture_dynamic_num = 1                            # eval
+        pre_color = [0.5, 0.5, 1.0, 1.0]                   # color_func
+    }
 }
 Game {
     cheat = False                                          # eval
@@ -165,9 +170,9 @@ World {
     enemy_bullet_num_limit = 1200                          # int 100<=x<=100000000
     player_bullet_num_limit = 1200                         # int 100<=x<=100000000
     sky {
-        model = galaxy                                     # str
         rotation = 1.0471975512                            # float 0.0<=x<=6.28318530718
-        texture = None                                     # func_str
+        texture = milkyway.jpg                           # func_str
+        texture = a.png                           # func_str
     }
     stardust {
         num = 100000                                       # int 1<=x<=10000000000
