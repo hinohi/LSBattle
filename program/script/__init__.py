@@ -20,7 +20,8 @@ from .world import World
 
 
 def make_default_script():
-    f = open("default.script", "w")
+    out_path = _os.path.dirname(_sys.argv[0])
+    f = open(_os.path.join(out_path, "default.script"), "w")
     indent = "    "
 
     def pri(block, depth=0):
@@ -48,7 +49,7 @@ def make_default_script():
     for block in _kws.itervalues():
         pri(block)
 
-    print "make default script: OK"
+    # print "make default script: OK"
 
 game   = Game()
 ui     = UI()
@@ -69,9 +70,18 @@ for _name in _glob.iglob(_os.path.join(const.SCRIPT_DIR, "*.script")):
     except:pass
         # _s = _traceback.format_exc()
         # _logging.error(_s)
+for _name in _glob.iglob(_os.path.join(_os.path.dirname(_sys.argv[0]), "*.script")):
+    # _logging.info("parse '%s' file", _name)
+    try:
+        _parser.parse(open(_name), **_kws)
+    except:pass
+        # _s = _traceback.format_exc()
+        # _logging.error(_s)
+
 
 for _key in _kws:
     if hasattr(_kws[_key], "_check"):
         _kws[_key]._check()
 
-# make_default_script()
+if game.output_script:
+    make_default_script()

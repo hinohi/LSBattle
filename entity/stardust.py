@@ -11,9 +11,9 @@ from program import script
 
 class StarDust(object):
 
-    def __init__(self, world):
+    def __init__(self, scale):
         n = script.world.stardust.num
-        R = script.world.stardust.range
+        R = script.world.stardust.range * scale
         vertices = []
         for i in xrange(n):
             r = R * random()**(1./3)

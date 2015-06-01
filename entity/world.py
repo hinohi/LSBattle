@@ -23,8 +23,8 @@ class World(object):
         self.scale = scale
         L *= scale
         self.L = L
-        self.stardust = StarDust(self)
-        self.wireframe = WireFrame(L*60, 30)
+        self.stardust = StarDust(scale)
+        self.wireframe = WireFrame(scale)
         self.sky = Sky()
         self.player = Player(self, playerstate, Vector4D(0, 0, 0, L))
         self.enemies = Enemies(self)
@@ -84,7 +84,7 @@ class World(object):
         glLoadMatrixd(matrix_i.to_opengl())
         self.sky.draw(matrix_i, Lorentz(-self.player.P.U))
         self.stardust.draw(Xp, L)
-        # self.wireframe.draw(Xp, L)
+        self.wireframe.draw(Xp, L)
         glEnable(GL_DEPTH_TEST)
         self.stars.draw(Xp, L)
         self.enemies.draw(Xp, L)

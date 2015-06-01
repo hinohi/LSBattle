@@ -114,17 +114,18 @@ Player {
         color = [0.0, 0.0, 0.9, 0.5]                       # color_func
     }
     window {
-        color = (1.0, 1.0, 1.0, 1.0)                       # color_func
         pre_size = 0.025                                   # float 0.0001<=x<=0.2
         size = 0.05                                        # float 0.0001<=x<=0.2
         texture = None                                     # func_str
         texture_dynamic_num = 1                            # eval
+        color = [1.0, 1.0, 1.0, 1.0]                       # color_func
         pre_color = [0.5, 0.5, 1.0, 1.0]                   # color_func
     }
 }
 Game {
     cheat = False                                          # eval
     continue_num = 3                                       # int 0<=x<=100
+    output_script = False                                   # eval
     scale = 0.1                                            # float 0.0001<=x<=10.0
     stage_num = 20                                         # int 1<=x<=10000
     score {
@@ -171,13 +172,17 @@ World {
     player_bullet_num_limit = 1200                         # int 100<=x<=100000000
     sky {
         rotation = 1.0471975512                            # float 0.0<=x<=6.28318530718
-        texture = milkyway.jpg                           # func_str
-        texture = a.png                           # func_str
+        texture = milkyway.jpg                             # func_str
     }
     stardust {
         num = 100000                                       # int 1<=x<=10000000000
-        range = 100.0                                      # float 1.0<=x<=100.0
+        range = 1000.0                                      # float 1.0<=x<=10000.0
         size = 0.08                                        # float 0.0001<=x<=1000
+        color = [1.0, 1.0, 1.0, 0.5]                       # color_func
+    }
+    wireframe {
+        div = 30                                           # int 2<=x<=100
+        range = 300.0                                      # float 1.0<=x<=10000.0
         color = [1.0, 1.0, 1.0, 0.5]                       # color_func
     }
 }

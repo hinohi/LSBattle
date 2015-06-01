@@ -8,13 +8,15 @@ from OpenGL.GL import *
 from go import Vector3, Vector4D, Matrix44, Lorentz
 from program.const import *
 from program.utils import compile_program, load_texture, DY_TEXTURE_KYU
+from program import script
 
 
 class WireFrame(object):
 
-    def __init__(self, L, N, color=(1.0,1.0,1.0,0.5)):
-        self.L = L
-        self.color = color
+    def __init__(self, scale):
+        L = script.world.wireframe.range * scale
+        N = script.world.wireframe.div
+        self.color = script.world.wireframe.color
         vertices = []
         indices = []
         n = 2*N + 1
@@ -33,9 +35,9 @@ class WireFrame(object):
                     if z < N:
                         indices.append(xx + yy*n + zz*n*n)
                         indices.append(xx + yy*n + (zz+1)*n*n)
-                    vertices.extend([(x+0.5)*self.L/N,
-                                     (y+0.5)*self.L/N,
-                                     (z+0.5)*self.L/N])
+                    vertices.extend([(x+0.5)*L/N,
+                                     (y+0.5)*L/N,
+                                     (z+0.5)*L/N])
         self.vertices = (GLfloat*len(vertices))(*vertices)
         self.indices = (GLint*len(indices))(*indices)
         self.n = len(indices)
@@ -53,8 +55,11 @@ class WireFrame(object):
                 vec4 vertex = lorentz * vec4(v, -length(v));
                 vertex.w = 1.0;
                 gl_Position = gl_ModelViewProjectionMatrix * vertex;
+                float factor = max(1.0/50.0,
+                                   min(1.0, 10.0/(gl_Position.w*gl_Position.w))
+                                   );
                 vec4 color = gl_Color;
-                color.a = max(color.a/50,min(color.a, color.a/pow(gl_Position.w,2)*10));
+                color.a *= factor;
                 gl_FrontColor = color;
             }
             """,

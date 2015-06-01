@@ -11,4 +11,4 @@ class stardust(Block):
         self._num_func = high_func_num(int, 1, 10**10)
         self._color_func = color_func
         self._size_func = high_func_num(float, 0.0001, 1000)
-        self._range_func = high_func_num(float, 1.0, 100.0)
+        self._range_func = high_func_num(float, 1.0, 10000.0)
