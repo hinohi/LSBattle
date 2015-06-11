@@ -19,7 +19,13 @@ class Lines(object):
             vec4 vertex = lorentz * vec4(v, -length(v));
             vertex.w = 1.0;
             gl_Position = gl_ModelViewProjectionMatrix * vertex;
-            gl_FrontColor = gl_Color;
+            float factor = max(1.0/5.0,
+                                   min(1.0, 10.0/(gl_Position.w*gl_Position.w))
+                                   );
+            vec4 color = gl_Color;
+            color.a *= factor;
+            gl_FrontColor = color;
+            gl_FrontColor = color;
         }
         """,
         """

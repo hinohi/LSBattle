@@ -1,6 +1,6 @@
 # -*- mode: python -*-
 import os, sys
-p = 'C:\\Users\\Daiju\\Dropbox\\kiclab\\python\\sogebu\\FPS3D\\v11'
+p = r'C:\Users\Daiju\Dropbox\daiju\LSBattle'
 a = Analysis(['LSBattle3D.py'],
              pathex=[p],
              hiddenimports=[],
@@ -30,7 +30,7 @@ for i in a.binaries:
                 break
         else:
             binaries.append(i)
-binaries = binaries + [("SDL2.dll", os.path.abspath(os.path.join(p, "../bin/nt/SDL2.dll")), 'BINARY')]
+binaries = binaries + [("SDL2.dll", os.path.abspath(os.path.join(p, "resources/bin/nt/SDL2.dll")), 'BINARY')]
 a.binaries = binaries
 a.zipfiles = []
 pyz = PYZ(a.pure)

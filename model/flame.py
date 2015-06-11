@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 # flame.py
 from math import sqrt, sin, cos, pi
+from random import random
 
 from go import Vector4D, Lorentz
 from model.pointsprite import PointSprite
@@ -19,22 +20,23 @@ class Flame(object):
         psize: float, size of each particle consisting of the flame, relative to screen size.
         """
         self.model = PointSprite(color=color, texture=DY_TEXTURE_KYU)
-        self.S = S * 1.0
-        self.size = BOX.Y*psize
         t = 1.0/v
-        vertex = [Vector4D(t, 0.0, 1.0, 0.0)]
+        vertices = [Vector4D(t, 0.0, 1.0, 0.0)]
         for i in xrange(1, m):
             phi = pi/m*i
             if i%2: e = pi/n
             else:   e = 0.0
             for j in xrange(n):
                 theta = 2.0*pi/n*j + e
-                vertex.append(Vector4D(t, sin(phi)*sin(theta),
-                                          cos(phi),
-                                          sin(phi)*cos(theta)))
-        vertex.append(Vector4D(t, 0.0, -1.0, 0.0))
-        self.vertex = vertex
-        self.a = self.vertex[0].squared_norm()
+                vertices.append(Vector4D(t, sin(phi)*sin(theta),
+                                            cos(phi),
+                                            sin(phi)*cos(theta)))
+        vertices.append(Vector4D(t, 0.0, -1.0, 0.0))
+        self.vertices = vertices
+        self.a = self.vertices[0].squared_norm()
+        # self.sizes = [BOX.Y*psize*(random() + 0.5) for i in self.vertices]
+        self.sizes = [BOX.Y*psize for i in self.vertices]
+        self.SS = [S * (random()*2.0 + 0.5) for i in self.vertices]
 
     def draw(self, X, Xp, L, LL=None, color=None):
         a = self.a
@@ -44,16 +46,17 @@ class Flame(object):
         vertices = []
         sizes = []
         if LL is None:
-            NN = self.vertex
+            NN = self.vertices
         else:
-            NN = [LL.get_transform_v4(N) for N in self.vertex]
-        for N in NN:
+            NN = [LL.get_transform_v4(N) for N in self.vertices]
+        for N, size, S in zip(NN, self.sizes, self.SS):
             b = N.inner_product(dX)
             s = b - sqrt(b*b - ac)
-            if 0.0 < s < self.S:
+            if 0.0 < s < S:
                 vertices.extend(X.get_linear_add_lis3(N, s))
-                r = 2.0*s/self.S
-                sizes.append(self.size*r*(2.0-r))
+                # r = 2.0*s/S
+                # sizes.append(size*r*(2.0-r))
+                sizes.append(size)
         if vertices:
             self.model.draw(Xp, L, vertices, sizes, color=color)
             return True

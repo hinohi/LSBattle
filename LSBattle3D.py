@@ -16,7 +16,7 @@ except:
         p = os.path.dirname(p)
     else:
         p = os.path.dirname(sys.argv[0])
-    p = os.path.join(os.path.dirname(sys.argv[0]),"error.log")
+    p = os.path.join(p, "error.log")
     traceback.print_exception(exc_type, exc_value, exc_traceback,
                               file=open(p, "w")
                               )
@@ -40,7 +40,7 @@ if __name__ == "__main__":
             p = os.path.dirname(p)
         else:
             p = os.path.dirname(sys.argv[0])
-        p = os.path.join(os.path.dirname(sys.argv[0]),"error.log")
+        p = os.path.join(p, "error.log")
         traceback.print_exception(exc_type, exc_value, exc_traceback,
                                   file=open(p, "w")
                                   )

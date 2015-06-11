@@ -12,46 +12,62 @@ from program import script
 
 
 class WireFrame(object):
-
+    vertices = None
     def __init__(self, scale):
-        L = script.world.wireframe.range * scale
-        N = script.world.wireframe.div
+        self.L = script.world.wireframe.range * scale
+        self.N = script.world.wireframe.div
         self.color = script.world.wireframe.color
+        self.make_lattice(self.N, self.L)
+        self.make_program()
+
+    @classmethod
+    def make_lattice(cls, N, L):
+        if cls.vertices is not None:
+            return
+        def add(xx, yy, zz, a):
+            vertices.extend([xx, yy, zz])
+            if a < N*c:
+                indices.append(len(vertices)/3-1)
+                indices.append(len(vertices)/3)
+        c = 5
         vertices = []
         indices = []
         n = 2*N + 1
-        for z in xrange(-N, N+1):
-            zz = z + N
-            for y in xrange(-N, N+1):
-                yy = y + N
-                for x in xrange(-N, N+1):
-                    xx = x + N
-                    if x < N:
-                        indices.append(xx +     yy*n + zz*n*n)
-                        indices.append((xx+1) + yy*n + zz*n*n)
-                    if y < N:
-                        indices.append(xx + yy*n +     zz*n*n)
-                        indices.append(xx + (yy+1)*n + zz*n*n)
-                    if z < N:
-                        indices.append(xx + yy*n + zz*n*n)
-                        indices.append(xx + yy*n + (zz+1)*n*n)
-                    vertices.extend([(x+0.5)*L/N,
-                                     (y+0.5)*L/N,
-                                     (z+0.5)*L/N])
-        self.vertices = (GLfloat*len(vertices))(*vertices)
-        self.indices = (GLint*len(indices))(*indices)
-        self.n = len(indices)
-
-        self.make_program()
+        for i in xrange(-N, N+1):
+            xx = (i+0.5)*L/N
+            for j in xrange(-N, N+1):
+                yy = (j+0.5)*L/N
+                for k in xrange(-N*c, N*c+1):
+                    zz = (k+0.5*c)*L/(N*c)
+                    add(xx, yy, zz, k)
+        for i in xrange(-N, N+1):
+            xx = (i+0.5)*L/N
+            for j in xrange(-N, N+1):
+                zz = (j+0.5)*L/N
+                for k in xrange(-N*c, N*c+1):
+                    yy = (k+0.5*c)*L/(N*c)
+                    add(xx, yy, zz, k)
+        for i in xrange(-N, N+1):
+            zz = (i+0.5)*L/N
+            for j in xrange(-N, N+1):
+                yy = (j+0.5)*L/N
+                for k in xrange(-N*c, N*c+1):
+                    xx = (k+0.5*c)*L/(N*c)
+                    add(xx, yy, zz, k)
+        cls.vertices = (GLfloat*len(vertices))(*vertices)
+        cls.indices = (GLint*len(indices))(*indices)
+        cls.n = len(indices)
+        cls.lattice_unit = L / N
 
     def make_program(self):
         self.program_id = compile_program(
             """
             #version 120
             uniform vec3 Xp;
+            uniform vec3 Xo;
             uniform mat4 lorentz;
             void main() {
-                vec3 v = gl_Vertex.xyz - Xp;
+                vec3 v = gl_Vertex.xyz - Xp + Xo;
                 vec4 vertex = lorentz * vec4(v, -length(v));
                 vertex.w = 1.0;
                 gl_Position = gl_ModelViewProjectionMatrix * vertex;
@@ -69,20 +85,29 @@ class WireFrame(object):
                 gl_FragColor = gl_Color;
             }
             """)
-        self.vec_local  = glGetUniformLocation(self.program_id, "Xp")
+        self.Xp_local  = glGetUniformLocation(self.program_id, "Xp")
+        self.Xo_local  = glGetUniformLocation(self.program_id, "Xo")
         self.mat_local  = glGetUniformLocation(self.program_id, "lorentz")
     
     def draw(self, Xp, L, color=None):
+        glLineWidth(script.world.wireframe.line_width)
         glUseProgram(self.program_id)
         if color is None:
-            glColor(*self.color)
+            r, g, b, a = self.color
         else:
-            glColor(*color)
-        glUniform3fv(self.vec_local, 1, Xp.get_lis3())
+            r, g, b, a = color
+        glColor(r, g, b, min(a,10*a/L.get_gamma()))
+        xp, yp, zp = Xp.get_lis3()
+        xo = int(xp/self.lattice_unit) * self.lattice_unit
+        yo = int(yp/self.lattice_unit) * self.lattice_unit
+        zo = int(zp/self.lattice_unit) * self.lattice_unit
+        glUniform3fv(self.Xp_local, 1, [xp, yp, zp])
+        glUniform3fv(self.Xo_local, 1, [xo, yo, zo])
         glUniformMatrix4fv(self.mat_local, 1, GL_FALSE, L.to_glsl())
         glVertexPointer(3, GL_FLOAT, 0, self.vertices)
         glDrawElements(GL_LINES, self.n, GL_UNSIGNED_INT, self.indices)
         glUseProgram(0)
+        glLineWidth(1)
 
 
 

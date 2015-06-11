@@ -361,4 +361,5 @@ cdef class Matrix44(object):
                 self.m12, self.m22, self.m32, self.m02,
                 self.m13, self.m23, self.m33, self.m03,
                 self.m10, self.m20, self.m30, self.m00]
-    
+    def get_gamma(self):
+        return self.m00

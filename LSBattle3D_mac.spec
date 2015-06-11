@@ -1,6 +1,6 @@
 # -*- mode: python -*-
 import os, sys
-p = '/Users/odakin/Dropbox/Physics/relativity/daiju/FPS3D/v11'
+p = '/Users/odakin/Dropbox/Physics/relativity/daiju/LSBattle'
 a = Analysis(['LSBattle3D.py'],
              pathex=[p],
              hiddenimports=[],
@@ -19,8 +19,8 @@ def add_data(root, to, remove=[]):
             if ext in remove:continue
             a.datas += [(os.path.join(to, name), os.path.join(root, name), "DATA")]
 
-for i in ["img", "script", "config"]:
-    add_data(os.path.join(p, "../", i), i, [".mqo"])
+for i in ["resources/img", "resources/script", "resources/config"]:
+    add_data(os.path.join(p, "", i), i, [".mqo"])
 
 r = ['bz2', 'cPickle', 'openssl']
 binaries = []
@@ -30,7 +30,7 @@ for i in a.binaries:
                 break
         else:
             binaries.append(i)
-binaries = binaries + [("libSDL2.dylib", os.path.abspath(os.path.join(p, "../bin/%s/libSDL2.dylib"%os.name)), 'BINARY')]
+binaries = binaries + [("libSDL2.dylib", os.path.abspath(os.path.join(p, "resources/bin/%s/libSDL2.dylib"%os.name)), 'BINARY')]
 a.binaries = binaries
 a.zipfiles = []
 pyz = PYZ(a.pure)

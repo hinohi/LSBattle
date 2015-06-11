@@ -13,7 +13,7 @@ class KeyConfig(object):
     def init(self):
         self.keys = Keys()
         self.keys.load_map()
-        self.menu_1 = MenuItems(self.keys.name2+["default"], BOX.Y/18, 0.15,
+        self.menu_1 = MenuItems(self.keys.name2+["default"], BOX.Y/20, 0.15,
                                 colum=M.LEFT_RIGHT, row=M.BOTTOM, ofy=BOX.Y/15,
                                 ret=True, title="Key Config")
         self.menu_1.repos_colum(self.menu_1.RETURN-1, M.CENTER)
@@ -24,7 +24,7 @@ class KeyConfig(object):
         for name, key in self.keys:
             texts_2.append(self.keys.key_map[key])
         texts_2 += [""]
-        self.menu_2 = MenuItems(texts_2, BOX.Y/18, 0.15,
+        self.menu_2 = MenuItems(texts_2, BOX.Y/20, 0.15,
                                 colum=M.RIGHT_LEFT, row=M.BOTTOM, ofy=BOX.Y/15,
                                 ret=True)
         self.menu_2.choice = self.menu_1.choice

@@ -23,7 +23,7 @@ class World(object):
         self.scale = scale
         L *= scale
         self.L = L
-        self.stardust = StarDust(scale)
+        # self.stardust = StarDust(scale)
         self.wireframe = WireFrame(scale)
         self.sky = Sky()
         self.player = Player(self, playerstate, Vector4D(0, 0, 0, L))
@@ -55,7 +55,7 @@ class World(object):
         count = 0
         while count < n:
             self.player.action(keys, ds)
-            # self.score += self.enemies.action(ds)
+            self.score += self.enemies.action(ds)
             self.stars.hit_check(self.player.P.X)
             
             if (self.item is not None and
@@ -83,8 +83,9 @@ class World(object):
         glDisable(GL_DEPTH_TEST)
         glLoadMatrixd(matrix_i.to_opengl())
         self.sky.draw(matrix_i, Lorentz(-self.player.P.U))
-        self.stardust.draw(Xp, L)
-        self.wireframe.draw(Xp, L)
+        if keys.k_map:
+            # self.stardust.draw(Xp, L)
+            self.wireframe.draw(Xp, L)
         glEnable(GL_DEPTH_TEST)
         self.stars.draw(Xp, L)
         self.enemies.draw(Xp, L)
@@ -94,11 +95,11 @@ class World(object):
         for gun in self.player.guns:
             gun.bullets.draw(Xp, L)
         self.enemies.bullets.draw(Xp, L)
-        
-        if keys.k_map == 1:
-            glDisable(GL_DEPTH_TEST)
-            self.player.draw_window(L)
-            glEnable(GL_DEPTH_TEST)
-        self.player.draw_hp()
-        self.player.draw_gun_name()
+
+        glDisable(GL_DEPTH_TEST)
+        self.player.draw_window(L)
+        glEnable(GL_DEPTH_TEST)
+        if keys.k_map:
+            self.player.draw_hp()
+            self.player.draw_gun_name()
         self.player.draw_booster(keys)

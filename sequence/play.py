@@ -93,7 +93,7 @@ class Play(object):
                     elif key == self.keys.shoot:        shoot = True
                     elif key in KS_RETURN:
                         ret = True
-                    elif key == sdl2.SDLK_TAB:
+                    elif key == self.keys.toggle_HUD:
                         self.keys.k_map = (self.keys.k_map+1)%2
                     elif key == self.keys.change_gun:
                         self.world.player.state.gun_change()
@@ -201,19 +201,20 @@ class Play(object):
                 g = self.world.player.P.U.get_gamma()
                 u = sqrt(1.0 - 1.0/g**2)
                 v = c * u
-                text = "Stage %i\n"%self.level.stage
-                text += "FPS %i\n"%(fps.get())
-                text += "Speed {:,d}m/s\n".format(int(v))
+                text = "Stage: %i\n"%self.level.stage
+                text += "FPS: %i\n"%(fps.get())
+                text += "Speed: {:,d}m/s\n".format(int(v))
                 # text += "      {:,d}km/h\n".format(int(v*3.6))
-                text += "      %.2fc\n"%(u)
+                text += "       %.3fc\n"%(u)
+                text += "Lorentz factor: %.1f\n"%(g)
                 text += "Enemy: %i"%(len([e for e in self.world.enemies if e.hp > 0]))
                 GL.glColor(0.3, 0.6, 0.3, 1.0)
                 drawSentence(text, textHeight, BOX.X*0.01, BOX.Y-scoreHight)
 
-                text  = "Proper Time %is\n"%(total_time)
-                text += " World Time %is\n"%(self.world.player.P.X.t)
+                text  = "Proper Time: %is\n"%(total_time)
+                text += " World Time: %is\n"%(self.world.player.P.X.t)
                 GL.glColor(1.0, 1.0, 1.0, 0.5)
-                drawSentence(text, textHeight, BOX.X*0.01, BOX.Y-scoreHight-5*textHeight)
+                drawSentence(text, textHeight, BOX.X*0.01, BOX.Y-scoreHight-6*textHeight)
 
                 # text = "enemie's B num = %i\n"%(len(self.world.enemies.bullets.bullets))
                 # text += "player's B num = %i"%(sum([len(g.bullets.bullets) for g in self.world.player.guns]))

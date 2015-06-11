@@ -11,6 +11,6 @@ class flame(Block):
         self.num = 10
         self._life_func  = high_func_num(float, 0.01, 100.0)
         self._speed_func = high_func_num(float, 0.1, 0.999)
-        self._size_func  = high_func_num(float, 0.001, 0.1)
+        self._size_func  = high_func_num(float, 0.001, 1.0)
         self._color_func = color_func
         self._num_func = high_func_num(int, 4, 20)

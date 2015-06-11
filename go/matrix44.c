@@ -729,6 +729,7 @@ static PyObject *__pyx_pf_2go_8matrix44_8Matrix44_42get_transform_v4(struct __py
 static PyObject *__pyx_pf_2go_8matrix44_8Matrix44_44get_transform_lis3(struct __pyx_obj_2go_8matrix44_Matrix44 *__pyx_v_self, PyObject *__pyx_v_v); /* proto */
 static PyObject *__pyx_pf_2go_8matrix44_8Matrix44_46to_opengl(struct __pyx_obj_2go_8matrix44_Matrix44 *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_2go_8matrix44_8Matrix44_48to_glsl(struct __pyx_obj_2go_8matrix44_Matrix44 *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_2go_8matrix44_8Matrix44_50get_gamma(struct __pyx_obj_2go_8matrix44_Matrix44 *__pyx_v_self); /* proto */
 static PyObject *__pyx_tp_new_2go_8matrix44_Matrix44(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static char __pyx_k_m[] = "m";
 static char __pyx_k_up[] = "up";
@@ -4955,7 +4956,7 @@ static PyObject *__pyx_pf_2go_8matrix44_8Matrix44_48to_glsl(struct __pyx_obj_2go
  *                 self.m12, self.m22, self.m32, self.m02,
  *                 self.m13, self.m23, self.m33, self.m03,             # <<<<<<<<<<<<<<
  *                 self.m10, self.m20, self.m30, self.m00]
- * 
+ *     def get_gamma(self):
  */
   __pyx_t_9 = PyFloat_FromDouble(__pyx_v_self->m13); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 362; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_9);
@@ -4970,7 +4971,8 @@ static PyObject *__pyx_pf_2go_8matrix44_8Matrix44_48to_glsl(struct __pyx_obj_2go
  *                 self.m12, self.m22, self.m32, self.m02,
  *                 self.m13, self.m23, self.m33, self.m03,
  *                 self.m10, self.m20, self.m30, self.m00]             # <<<<<<<<<<<<<<
- * 
+ *     def get_gamma(self):
+ *         return self.m00
  */
   __pyx_t_13 = PyFloat_FromDouble(__pyx_v_self->m10); if (unlikely(!__pyx_t_13)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 363; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_13);
@@ -5077,6 +5079,65 @@ static PyObject *__pyx_pf_2go_8matrix44_8Matrix44_48to_glsl(struct __pyx_obj_2go
   return __pyx_r;
 }
 
+/* "go/matrix44.pyx":364
+ *                 self.m13, self.m23, self.m33, self.m03,
+ *                 self.m10, self.m20, self.m30, self.m00]
+ *     def get_gamma(self):             # <<<<<<<<<<<<<<
+ *         return self.m00
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_2go_8matrix44_8Matrix44_51get_gamma(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_2go_8matrix44_8Matrix44_51get_gamma(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_gamma (wrapper)", 0);
+  __pyx_r = __pyx_pf_2go_8matrix44_8Matrix44_50get_gamma(((struct __pyx_obj_2go_8matrix44_Matrix44 *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_2go_8matrix44_8Matrix44_50get_gamma(struct __pyx_obj_2go_8matrix44_Matrix44 *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("get_gamma", 0);
+
+  /* "go/matrix44.pyx":365
+ *                 self.m10, self.m20, self.m30, self.m00]
+ *     def get_gamma(self):
+ *         return self.m00             # <<<<<<<<<<<<<<
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->m00); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 365; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "go/matrix44.pyx":364
+ *                 self.m13, self.m23, self.m33, self.m03,
+ *                 self.m10, self.m20, self.m30, self.m00]
+ *     def get_gamma(self):             # <<<<<<<<<<<<<<
+ *         return self.m00
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("go.matrix44.Matrix44.get_gamma", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
 static PyObject *__pyx_tp_new_2go_8matrix44_Matrix44(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
   PyObject *o;
   if (likely((t->tp_flags & Py_TPFLAGS_IS_ABSTRACT) == 0)) {
@@ -5120,6 +5181,7 @@ static PyMethodDef __pyx_methods_2go_8matrix44_Matrix44[] = {
   {"get_transform_lis3", (PyCFunction)__pyx_pw_2go_8matrix44_8Matrix44_45get_transform_lis3, METH_O, 0},
   {"to_opengl", (PyCFunction)__pyx_pw_2go_8matrix44_8Matrix44_47to_opengl, METH_NOARGS, __pyx_doc_2go_8matrix44_8Matrix44_46to_opengl},
   {"to_glsl", (PyCFunction)__pyx_pw_2go_8matrix44_8Matrix44_49to_glsl, METH_NOARGS, __pyx_doc_2go_8matrix44_8Matrix44_48to_glsl},
+  {"get_gamma", (PyCFunction)__pyx_pw_2go_8matrix44_8Matrix44_51get_gamma, METH_NOARGS, 0},
   {0, 0, 0, 0}
 };
 

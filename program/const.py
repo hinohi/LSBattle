@@ -5,7 +5,11 @@ import sys as _sys
 
 path = _os.path.abspath(_os.path.dirname(_sys.argv[0]))
 _input_path = _os.path.join(path, "resources")
-_os.environ["PYSDL2_DLL_PATH"] = _os.path.join(_input_path, "bin", _os.name)
+sdl2_path = _os.path.join(_input_path, "bin", _os.name)
+if _os.path.isdir(sdl2_path):
+	_os.environ["PYSDL2_DLL_PATH"] = sdl2_path
+else:
+	_os.environ["PYSDL2_DLL_PATH"] = path
 
 import sdl2
 

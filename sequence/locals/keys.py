@@ -43,6 +43,7 @@ class Keys(object):
         self.turn_down     = sdl2.SDLK_DOWN
         self.shoot         = sdl2.SDLK_SPACE
         self.change_gun    = sdl2.SDLK_v
+        self.toggle_HUD    = sdl2.SDLK_TAB
         self.names = ["accel_forward", 
                       "accel_back",
                       "accel_right",
@@ -54,7 +55,8 @@ class Keys(object):
                       "turn_up",
                       "turn_down",
                       "shoot",
-                      "change_gun"]
+                      "change_gun",
+                      "toggle_HUD"]
         self.name2 = ["Accel Forward ",
                       "Accel Backward",
                       "Accel Right   ",
@@ -66,7 +68,8 @@ class Keys(object):
                       "Turn Up       ",
                       "Turn Down     ",
                       "Shoot         ",
-                      "Change Gun    "]
+                      "Change Gun    ",
+                      "HUD ON/OFF    "]
 
     def __iter__(self):
         for name in self.names:
