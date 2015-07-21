@@ -23,7 +23,7 @@ class Item(object):
     def action(self, ds):
         self.time += ds
         
-    def draw(self, Xp, L):
+    def draw(self, Xp, L, LL):
         t = Xp.distance_to_squared(self.X)
         X = Vector4D.from_tv(-t, self.X.d)
-        self.model.draw(Xp, L, X, R=Matrix44.y_rotation(self.time*self.rotation_speed))
+        self.model.draw(Xp, L, LL, X, R=Matrix44.y_rotation(self.time*self.rotation_speed))

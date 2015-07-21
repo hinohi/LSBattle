@@ -100,37 +100,90 @@ class MqoGpoPolygon(object):
                 raise IOError("%s's model file is not exsit"%(os.path.split(name)[1]))
         raise IOError("%s's model file is not exsit"%(os.path.split(name)[1]+ext))
 
+vs_T = """
+#version 120
+uniform vec4 color;
+uniform mat4 Lorentz;
+uniform mat4 Lorentz_p2e;
+uniform mat4 Rotate;
+uniform vec4 dX;
+uniform vec4 xp;
+varying float ratio;
+void main() {
+    vec4 xi = Rotate * gl_Vertex;
+    xi.w = xp.w - distance(xp.xyz, xi.xyz);
+    xi = dX + Lorentz * xi;
+    xi.w = -length(xi.xyz);
+    ratio = xi.w / (Lorentz_p2e * xi).w;
+    xi.w = 1.0;
+    gl_Position = gl_ModelViewProjectionMatrix * xi;
+    %s
+}
+"""
+fs_T = """
+#version 120
+%s
+varying float ratio;
+void main() {
+    %s
+    color *= 255.0;
+    float l = max(max(color.r, color.g), color.b);
+    float Tr, Tg, Tb;
+    if (l > 1) {
+        color *= 255.0 / l;
+        Tb = 1000.0 + 904.495*exp(0.00721929 * color.b);
+        Tr = 6000.0 + 8.01879e20 * pow(max(color.r, 1.0), -7.507239275877164);
+        if (color.b > 254.0) {
+            Tg = 6502.86;
+        } else {
+            if (color.b / max(color.r, 1.0) > 0.98084) {
+                Tg = 505.192 * exp(0.0100532 * color.g);
+            } else {
+                Tg = 6000.0 + 3.55446e34 * pow(max(color.g, 1), -13.24242861627803);
+            }
+        }
+        Tr *= ratio;
+        Tg *= ratio;
+        Tb *= ratio;
+        if (1905.0 > Tb) {
+            color.b = 0.0;
+        } else if (6700.0 < Tb) {
+            color.b = 255.0;
+        } else {
+            color.b = -305.045 + 138.518 * log(0.01 * Tb - 10.0);
+        }
+        if (6689.0 > Tr) {
+            color.r = 255.0;
+        } else {
+            color.r = 608.873 * pow(Tr - 6000.0, -0.133205);
+        }
+        if (506.0 > Tg) {
+            color.g = 0.0;
+        } else if (6502.86 > Tg) {
+            color.g = -619.2 + 99.4708 * log(Tg);
+        } else {
+            color.g = 406.534 * pow(Tg - 6000.0, -0.0755148);
+        }
+        color *= l / 255.0;
+    }
+    gl_FragColor = color / 255.0;
+}
+"""
 _polygon_cache = {}
 class Polygon(MqoGpoPolygon):
 
     def load_program_tex(self):
         self.program_tex = compile_program(
-        """
-        #version 120
-        uniform vec4 color;
-        uniform mat4 Lorentz;
-        uniform mat4 Rotate;
-        uniform vec4 dX;
-        uniform vec4 xp;
-        void main() {
-            vec4 xi = Rotate * gl_Vertex;
-            xi.w = xp.w - distance(xp.xyz, xi.xyz);
-            xi = dX + Lorentz * xi;
-            xi.w = 1.0;
-            gl_Position = gl_ModelViewProjectionMatrix * xi;
-            gl_TexCoord[0] = gl_MultiTexCoord0;
-            gl_FrontColor = color;
-        }
-        """,
-        """
-        #version 120
-        uniform sampler2D texture;
-        void main() {
-            gl_FragColor = texture2D(texture, gl_TexCoord[0].xy) * gl_Color;
-        }
-        """)
+            vs_T%("""
+                gl_TexCoord[0] = gl_MultiTexCoord0;
+                gl_FrontColor = color;
+                """),
+            fs_T%("uniform sampler2D texture;",
+                  "vec4 color = texture2D(texture, gl_TexCoord[0].xy) * gl_Color;")
+        )
         self.t_color_local = glGetUniformLocation(self.program_tex, "color")
         self.t_L_local = glGetUniformLocation(self.program_tex, "Lorentz")
+        self.t_Lpe_local = glGetUniformLocation(self.program_col, "Lorentz_p2e")
         self.t_R_local = glGetUniformLocation(self.program_tex, "Rotate")
         self.t_dX_local = glGetUniformLocation(self.program_tex, "dX")
         self.t_xp_local = glGetUniformLocation(self.program_tex, "xp")
@@ -138,30 +191,12 @@ class Polygon(MqoGpoPolygon):
     
     def load_program_col(self):
         self.program_col = compile_program(
-        """
-        #version 120
-        uniform vec4 color;
-        uniform mat4 Lorentz;
-        uniform mat4 Rotate;
-        uniform vec4 dX;
-        uniform vec4 xp;
-        void main() {
-            vec4 xi = Rotate * gl_Vertex;
-            xi.w = xp.w - distance(xp.xyz, xi.xyz);
-            xi = dX + Lorentz * xi;
-            xi.w = 1.0;
-            gl_Position = gl_ModelViewProjectionMatrix * xi;
-            gl_FrontColor = gl_Color * color;
-        }
-        """,
-        """
-        #version 120
-        void main() {
-            gl_FragColor = gl_Color;
-        }
-        """)
+            vs_T%("gl_FrontColor = gl_Color * color;"),
+            fs_T%("", "vec4 color = gl_Color;")
+        )
         self.c_color_local = glGetUniformLocation(self.program_col, "color")
         self.c_L_local = glGetUniformLocation(self.program_col, "Lorentz")
+        self.c_Lpe_local = glGetUniformLocation(self.program_col, "Lorentz_p2e")
         self.c_R_local = glGetUniformLocation(self.program_col, "Rotate")
         self.c_dX_local = glGetUniformLocation(self.program_col, "dX")
         self.c_xp_local = glGetUniformLocation(self.program_col, "xp")
@@ -190,13 +225,32 @@ class Polygon(MqoGpoPolygon):
         self.texture = texture
         _polygon_cache[name] = self
 
-    def draw(self, Xp, L, X=Vector4D(0,0,0,0), U=Vector4D(1,0,0,0), R=Matrix44()):
+    def draw(self, Xp, L, LL, X=Vector4D(0,0,0,0), U=Vector4D(1,0,0,0), R=Matrix44()):
+        """
+        Xp: player's X in background frame
+        L: background to player frame
+        LL: player to background frame
+        U: enemy's U in background frame
+        X: enemy's X in background frame
+        R: enemy's rotation matrix
+        """
+        # dX: X-Xp in background frame
         dX = X - Xp
         dX.t = -dX.length()
         xp = Lorentz(U).get_transform_v4(-dX)
+
+        # xp: Xp-X in enemy frame
         xp = [xp.x, xp.y, xp.z, xp.t]
+
+        # dX: now, X-Xp in player frame
         dX = L.get_transform_lis3(dX) + [0.0]
+
+        # LL: player to background, then background to enemy
+        LL = (Lorentz(U) * LL).to_glsl()
+
+        # L: now, enemy to player
         L = (L * Lorentz(-U)).to_glsl()
+
         R = R.to_glsl()
         glVertexPointer(3, GL_FLOAT, 0, self.vertices)
         glTexCoordPointer(2, GL_FLOAT, 0, self.texcoords)
@@ -207,6 +261,7 @@ class Polygon(MqoGpoPolygon):
                 if self.program_col != program:
                     glUseProgram(self.program_col)
                     glUniformMatrix4fv(self.c_L_local, 1, GL_FALSE, L)
+                    glUniformMatrix4fv(self.c_Lpe_local, 1, GL_FALSE, LL)
                     glUniformMatrix4fv(self.c_R_local, 1, GL_FALSE, R)
                     glUniform4fv(self.c_dX_local, 1, dX)
                     glUniform4fv(self.c_xp_local, 1, xp)
@@ -217,6 +272,7 @@ class Polygon(MqoGpoPolygon):
                 if self.program_tex != program:
                     glUseProgram(self.program_tex)
                     glUniformMatrix4fv(self.t_L_local, 1, GL_FALSE, L)
+                    glUniformMatrix4fv(self.t_Lpe_local, 1, GL_FALSE, LL)
                     glUniformMatrix4fv(self.t_R_local, 1, GL_FALSE, R)
                     glUniform4fv(self.t_dX_local, 1, dX)
                     glUniform4fv(self.t_xp_local, 1, xp)
@@ -225,4 +281,3 @@ class Polygon(MqoGpoPolygon):
                     program = self.program_tex
             glDrawElements(GL_TRIANGLES, n, GL_UNSIGNED_INT, indices)
         glUseProgram(0)
-            

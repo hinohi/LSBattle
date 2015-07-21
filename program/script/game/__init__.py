@@ -11,7 +11,7 @@ class Game(Block):
         self.stage_num = 20
         self.continue_num = 3
         self.cheat = False
-        self.output_script = True
+        self.output_script = False
         self.stage = stage()
         self.score = score()
         self._scale_func = high_func_num(float, 0.0001, 10.0)

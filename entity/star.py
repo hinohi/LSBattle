@@ -32,7 +32,7 @@ class Star(object):
         self.model.set_texture(tex_name)
         self.X = pos + Vector4D(0.0, 0.0, 0.0, -orbital_radius*rescale)
 
-    def draw(self, Xp, L):
+    def draw(self, Xp, L, LL):
         dX = self.X - Xp
         dX.t = -dX.length()
         dx = L.get_transform_v4(dX)
@@ -40,9 +40,9 @@ class Star(object):
         if r > 0.5*BOX.far_clip:
             s = 0.05 * BOX.far_clip / r
             X = Xp + dX*s
-            self.model.draw(Xp, L, X=X, R=Matrix44.scale(s))
+            self.model.draw(Xp, L, LL, X=X, R=Matrix44.scale(s))
         else:
-            self.model.draw(Xp, L, X=self.X)
+            self.model.draw(Xp, L, LL, X=self.X)
 
     def hit_check(self, Xp, world):
         t = Xp.t - Xp.distance_to(self.X)
@@ -58,9 +58,9 @@ class Stars(object):
         rescale = 1.0 / c
         self.stars = [Star(pos, rescale, i) for i in xrange(len(_data))]
 
-    def draw(self, Xp, L):
+    def draw(self, Xp, L, LL):
         for star in self.stars:
-            star.draw(Xp, L)
+            star.draw(Xp, L, LL)
 
     def hit_check(self, Xp):
         for star in self.stars:

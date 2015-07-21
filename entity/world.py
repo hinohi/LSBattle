@@ -74,6 +74,7 @@ class World(object):
 
     def draw(self, keys):
         L = Lorentz(self.player.P.U)
+        LL = Lorentz(-self.player.P.U)
         Xp = self.player.P.X
         matrix = self.player.quaternion.get_RotMat()
         if keys.k_look_behind:
@@ -82,24 +83,24 @@ class World(object):
 
         glDisable(GL_DEPTH_TEST)
         glLoadMatrixd(matrix_i.to_opengl())
-        self.sky.draw(matrix_i, Lorentz(-self.player.P.U))
+        self.sky.draw(matrix_i, LL)
         if keys.k_map:
             # self.stardust.draw(Xp, L)
             self.wireframe.draw(Xp, L)
         glEnable(GL_DEPTH_TEST)
-        self.stars.draw(Xp, L)
-        self.enemies.draw(Xp, L)
+        self.stars.draw(Xp, L, LL)
+        self.enemies.draw(Xp, L, LL)
         if self.item is not None:
-            self.item.draw(Xp, L)
+            self.item.draw(Xp, L, LL)
         
         for gun in self.player.guns:
             gun.bullets.draw(Xp, L)
         self.enemies.bullets.draw(Xp, L)
 
-        glDisable(GL_DEPTH_TEST)
-        self.player.draw_window(L)
-        glEnable(GL_DEPTH_TEST)
         if keys.k_map:
+            glDisable(GL_DEPTH_TEST)
+            self.player.draw_window(L)
+            glEnable(GL_DEPTH_TEST)
             self.player.draw_hp()
             self.player.draw_gun_name()
         self.player.draw_booster(keys)

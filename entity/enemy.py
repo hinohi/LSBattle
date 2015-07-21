@@ -292,14 +292,14 @@ class Enemy(object):
         glVertex(*(O + dup*l))
         glEnd()
 
-    def draw(self, Xp, L):
+    def draw(self, Xp, L, LL):
         X, U = self.worldline.get_XU_on_PLC(Xp)
         if X is not None: # If enemy is not dead...
             state0, state1, s = self.worldline.get_State_on_PLC(Xp)
             q = state0.quaternion.get_spherep(state1.quaternion, s)
             R = q.get_RotMat()
             self.last_R = R
-            self.model.draw(Xp, L, X, U, R) # draw body's polygon
+            self.model.draw(Xp, L, LL, X, U, R) # draw body's polygon
 
             LX = L.get_transform_v4(X-Xp)
             R_i = R.get_inverse_rot()
@@ -351,9 +351,9 @@ class Enemies(object):
     def check_death(self):
         return all(enemy.hp <= 0.0 for enemy in self.enemies)
 
-    def draw(self, Xp, L):
+    def draw(self, Xp, L, LL):
         self.enemies = [enemy for enemy in self.enemies
-                        if (enemy.draw(Xp, L) or enemy.hp > 0.0)]
+                        if (enemy.draw(Xp, L, LL) or enemy.hp > 0.0)]
 
     def hit_check(self, X1, X0, collision_radius2, color=None):
         return self.bullets.hit_check(X1, X0, collision_radius2, color=color)

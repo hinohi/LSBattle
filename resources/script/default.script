@@ -5,7 +5,7 @@ Player {
     hp = 30                                                # int 1<=x<=10000000
     recovery_interval = 3.0                                # float 0.0<=x<=100000.0
     repulsion = 100.0                                      # float 0.0<=x<=1000.0
-    resistivity = 0.1                                      # float 0.0<=x<=10.0
+    resistivity = 0.0                                      # float 0.0<=x<=10.0
     turbo = 3.0                                            # float 0.0<=x<=100.0
     turn_acceleration = 9.0                                # float -100.0<=x<=100.0
     turn_resistivity = 5.0                                 # float 0.0<=x<=100.0
@@ -124,7 +124,7 @@ Player {
     }
 }
 Game {
-    cheat = False                                          # eval
+    cheat = True                                          # eval
     continue_num = 3                                       # int 0<=x<=100
     output_script = False                                  # eval
     scale = 0.1                                            # float 0.0001<=x<=10.0
@@ -173,7 +173,10 @@ World {
     player_bullet_num_limit = 1200                         # int 100<=x<=100000000
     sky {
         rotation = 1.0471975512                            # float 0.0<=x<=6.28318530718
-        texture = milkyway.jpg                             # func_str
+        #texture0 = milkyway.jpg                             # func_str
+        texture0 = eso0932a.tif                             # func_str
+        # texture1 = milkyway.jpg                             # func_str
+        texture1 = eso0932b.tif                             # func_str
     }
     stardust {
         num = 100000                                       # int 1<=x<=10000000000
@@ -182,10 +185,11 @@ World {
         color = [1.0, 1.0, 1.0, 0.5]                       # color_func
     }
     wireframe {
+        inner_div = 2
         div = 20                                           # int 2<=x<=100
         line_width = 1                                     # int 1<=x<=10
-        range = 200.0                                      # float 1.0<=x<=10000.0
-        color = [0.4, 0.4, 0.4, 0.4]                       # color_func
+        range = 1000.0                                      # float 1.0<=x<=10000.0
+        color = [0.4, 0.4, 0.4, 1]                       # color_func
     }
 }
 Enemy {
@@ -498,7 +502,7 @@ Enemy {
         shoot_div = [4, 8]                                 # eval
         think {
             distance0 = 3.0                                # float
-            distance1 = 4.0                               # float
+            distance1 = 4.0                                # float
             far_n = -0.07                                  # float
             far_p = 0.01                                   # float
             near_n = -0.5                                  # float
@@ -522,7 +526,7 @@ Enemy {
         shoot_div = [8]                                    # eval
         think {
             distance0 = 3.0                                # float
-            distance1 = 4.0                               # float
+            distance1 = 4.0                                # float
             far_n = -0.1                                   # float
             far_p = 0.01                                   # float
             near_n = -1.0                                  # float
@@ -581,7 +585,7 @@ Enemy {
     flame {
         life = 6.0                                         # float 0.01<=x<=100.0
         num = 10                                           # int 4<=x<=20
-        size = 0.3                                        # float 0.001<=x<=0.1
+        size = 0.3                                         # float 0.001<=x<=0.1
         speed = 0.4                                        # float 0.1<=x<=0.999
         color = [1.0, 1.0, 1.0, 0.8]                       # color_func
     }

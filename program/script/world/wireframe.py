@@ -8,8 +8,10 @@ class wireframe(Block):
         self.range = 100.0
         self.div = 30
         self.line_width = 1
+        self.inner_div = 5
         self._color_func = color_func
         self._size_func = high_func_num(float, 0.0001, 1000)
         self._range_func = high_func_num(float, 1.0, 10000.0)
         self._div_func = high_func_num(int, 2, 100)
         self._line_width_func = high_func_num(int, 1, 10)
+        self._inner_div_func = high_func_num(int, 1, 100)

@@ -29,7 +29,7 @@ class WireFrame(object):
             if a < N*c:
                 indices.append(len(vertices)/3-1)
                 indices.append(len(vertices)/3)
-        c = 5
+        c = script.world.wireframe.inner_div
         vertices = []
         indices = []
         n = 2*N + 1
@@ -72,7 +72,7 @@ class WireFrame(object):
                 vertex.w = 1.0;
                 gl_Position = gl_ModelViewProjectionMatrix * vertex;
                 float factor = max(1.0/50.0,
-                                   min(1.0, 10.0/(gl_Position.w*gl_Position.w))
+                                   min(1.0, 50.0/(gl_Position.w*gl_Position.w))
                                    );
                 vec4 color = gl_Color;
                 color.a *= factor;

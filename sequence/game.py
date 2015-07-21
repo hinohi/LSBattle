@@ -60,7 +60,7 @@ class Game(object):
                 if stage >= gun.stage_condition:
                     item = playerstate.gun_num
 
-            sdl2.SDL_ShowCursor(0)
+            #sdl2.SDL_ShowCursor(0)
             loading.draw()
             # 1 game unit = scale * (ligh speed * 1 second)
             playerstate.reset_hp()
