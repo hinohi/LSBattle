@@ -237,7 +237,7 @@ class Polygon(MqoGpoPolygon):
         # dX: X-Xp in background frame
         dX = X - Xp
         dX.t = -dX.length()
-        xp = Lorentz(U).get_transform_v4(-dX)
+        xp = Lorentz(U).get_transform(-dX)
 
         # xp: Xp-X in enemy frame
         xp = [xp.x, xp.y, xp.z, xp.t]

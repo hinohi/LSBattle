@@ -46,10 +46,6 @@ class World(object):
         self.score = 0
 
     def action(self, keys, ds):
-        # self.player.worldline.reset()
-        # for enemy in self.enemies:
-        #     enemy.worldline.reset()
-
         n = int(ds * 10.0) + 1
         ds /= n
         count = 0
@@ -67,10 +63,6 @@ class World(object):
                 self.item.action(ds)
 
             count += 1
-
-        # self.player.worldline.cut()
-        # for enemy in self.enemies:
-        #     enemy.worldline.cut()
 
     def draw(self, keys):
         L = Lorentz(self.player.P.U)

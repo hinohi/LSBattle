@@ -1,6 +1,7 @@
 # coding: utf8
 # cython: profile=False
 # go.quaternion.pyx
+cimport cython
 from libc.math cimport cos, sin, sqrt, acos
 DEF pi = 3.141592653589793115997963468544185161590576171875
 
@@ -14,6 +15,7 @@ cdef void _arg0(Quaternion self, args):
     self._x = 0.0
     self._y = 0.0
     self._z = 0.0
+@cython.cdivision(True)
 cdef void _arg1(Quaternion self, args):
     cdef double t, x, y, z, r
     t, x, y, z = args[0]
@@ -29,6 +31,7 @@ cdef void _arg1(Quaternion self, args):
         self._x = 0.0
         self._y = 0.0
         self._z = 0.0
+@cython.cdivision(True)
 cdef void _arg2(Quaternion self, args):
     cdef double t, x, y, z, r
     t, (x, y, z) = args
@@ -44,6 +47,7 @@ cdef void _arg2(Quaternion self, args):
         self._x = 0.0
         self._y = 0.0
         self._z = 0.0
+@cython.cdivision(True)
 cdef void _arg3(Quaternion self, args):
     cdef double x, y, z, r
     x, y, z = args
@@ -64,6 +68,7 @@ cdef void _arg3(Quaternion self, args):
         self._x = 0.0
         self._y = 0.0
         self._z = 0.0
+@cython.cdivision(True)
 cdef void _arg4(Quaternion self, args):
     cdef double t, x, y, z, r
     t, x, y, z = args
@@ -109,11 +114,12 @@ cdef class Quaternion(object):
         x, y, z = ax
         cdef Quaternion v = Quaternion.__new__(Quaternion)
         v._t = c
-        v._x = s*x
-        v._y = s*y
-        v._z = s*z
+        v._x = x * s
+        v._y = y * s
+        v._z = z * s
         return v
 
+    @cython.cdivision(True)
     @classmethod
     def from_RotMat(cls, Matrix44 R):
         cdef double m, n, e
@@ -133,7 +139,7 @@ cdef class Quaternion(object):
             m = n
             i = 3
 
-        e = sqrt(m)*0.5
+        e = sqrt(m) * 0.5
         m = 0.25 / e
         cdef Quaternion v = Quaternion.__new__(Quaternion)
         if i == 0:
@@ -267,12 +273,13 @@ cdef class Quaternion(object):
         self._z = z
         return self
 
+    @cython.cdivision(True)
     def get_spherep(self, Quaternion othr, double t):
         cdef double a = self._t*self._t + self._x*self._x + self._y*self._y + self._z*self._z
         cdef double b = othr._t*othr._t + othr._x*othr._x + othr._y*othr._y + othr._z*othr._z
         cdef double c = self._t*othr._t + self._x*othr._x + self._y*othr._y + self._z*othr._z
         cdef double l = sqrt(a*b*1.0000005)
-        cdef double w = acos(c/l)
+        cdef double w = acos(c / l)
         cdef double sinw = sin(w)
         if sinw == 0.0:
             return self.from_floats(self._t, self._x, self._y, self._z)

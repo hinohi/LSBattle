@@ -1,9 +1,10 @@
 # coding: utf8
 # cython: profile=False
 # go.vector3.pyx
+cimport cython
 from libc.math cimport sqrt
 
-from vector3 cimport Vector3
+from vector3 cimport Vector3, vec3
 
 
 cdef void _arg0(Vector3 self, args):
@@ -38,15 +39,6 @@ cdef class Vector3(object):
         v._x = x
         v._y = y
         v._z = z
-        return v
-
-    @classmethod
-    def from_iter(cls, iterable):
-        next = iter(iterable).next
-        cdef Vector3 v = Vector3.__new__(Vector3)
-        v._x = next()*1.0
-        v._y = next()*1.0
-        v._z = next()*1.0
         return v
 
     cpdef copy(self):
@@ -134,6 +126,7 @@ cdef class Vector3(object):
         else:
             return self.from_floats(length, 0.0, 0.0)
 
+    @cython.cdivision(True)
     def hat(self, double length=1.0):
         cdef double r = self._x*self._x + self._y*self._y + self._z*self._z
         if r:
@@ -144,6 +137,7 @@ cdef class Vector3(object):
         else:
             self._x = length
 
+    @cython.cdivision(True)
     def get_normalize(self, double length=1.0):
         cdef double r = self._x*self._x + self._y*self._y + self._z*self._z
         if r:
@@ -152,6 +146,7 @@ cdef class Vector3(object):
         else:
             return self.from_floats(0.0, 0.0, 0.0)
 
+    @cython.cdivision(True)
     def normalize(self, double length=1.0):
         cdef double r = self._x*self._x + self._y*self._y + self._z*self._z
         if r:

@@ -1,6 +1,7 @@
 # coding: utf8
 # cython: profile=False
 # go.worldline.pyx
+cimport cython
 from libc.math cimport sqrt
 
 from vector4D cimport Vector4D
@@ -10,8 +11,7 @@ cdef class WorldLine(object):
 
     cdef int i, n, last
     cdef double s
-    cdef list line
-    cdef list state
+    cdef list line, state
 
     def __init__(self, P, Q=None):
         self.line  = [P.X.copy()]
@@ -58,16 +58,7 @@ cdef class WorldLine(object):
         self.last = 0
         return -1
 
-    def cut(self):
-        if self.last > 1:
-            self.line = self.line[self.last-1:]
-            self.state = self.state[self.last-1:]
-            self.n -= self.last-1
-        self.i = -1
-
-    def reset(self):
-        self.last = self.n
-
+    @cython.cdivision(True)
     def get_X_FP(self, Vector4D Xp, double w=0.5):
         cdef int i = self.search_position_on_PLC(Xp)
         if i == -1:
@@ -86,6 +77,7 @@ cdef class WorldLine(object):
             s = (b + (1.0 - 2.0*w)*sqrt(b*b - a*c)) / a
         return X0.get_div_point(X1, s)
 
+    @cython.cdivision(True)
     def get_XU_on_PLC(self, Vector4D Xp):
         cdef int i = self.search_position_on_PLC(Xp)
         if i == -1:

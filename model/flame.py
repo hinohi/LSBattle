@@ -48,7 +48,7 @@ class Flame(object):
         if LL is None:
             NN = self.vertices
         else:
-            NN = [LL.get_transform_v4(N) for N in self.vertices]
+            NN = [LL.get_transform(N) for N in self.vertices]
         for N, size, S in zip(NN, self.sizes, self.SS):
             b = N.inner_product(dX)
             s = b - sqrt(b*b - ac)
