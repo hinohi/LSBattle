@@ -30,7 +30,7 @@ def run():
 if __name__ == "__main__":
     try:
         run()
-    except Exception:
+    except:
         import sys, traceback, os
         exc_type, exc_value, exc_traceback = sys.exc_info()
         if os.name == "posix":

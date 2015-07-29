@@ -26,15 +26,15 @@ class World(object):
         # self.stardust = StarDust(scale)
         self.wireframe = WireFrame(scale)
         self.sky = Sky()
-        self.player = Player(self, playerstate, Vector4D(0, 0, 0, L))
+        self.player = Player(self, playerstate, Vector4D(0, 0, 0, L), level=level)
         self.enemies = Enemies(self)
         types = [randint(0, level.types - 1)for i in xrange(level.enemy_num-1)]
         types += [level.types-1]
-        for t in types:
+        for typ in types:
             x = 6*L*(2.0*random()-1.0)
             y = 6*L*(2.0*random()-1.0)
             z = 6*L*(1.0*random()-2.0)
-            self.enemies.add(Vector4D(0, x, y, z), t)
+            self.enemies.add(Vector4D(0, x, y, z), typ=typ, level=self.level)
 
         self.stars = Stars(self, Vector4D(0.0, 0.0, -0.5*scale, L-3*scale), scale)
         
@@ -45,12 +45,16 @@ class World(object):
             
         self.score = 0
 
-    def action(self, keys, ds):
+    def action(self, keys, level, ds):
+        # self.player.worldline.reset()
+        # for enemy in self.enemies:
+        #     enemy.worldline.reset()
+
         n = int(ds * 10.0) + 1
         ds /= n
         count = 0
         while count < n:
-            self.player.action(keys, ds)
+            self.player.action(keys, level, ds)
             self.score += self.enemies.action(ds)
             self.stars.hit_check(self.player.P.X)
             
@@ -63,6 +67,10 @@ class World(object):
                 self.item.action(ds)
 
             count += 1
+
+        # self.player.worldline.cut()
+        # for enemy in self.enemies:
+        #     enemy.worldline.cut()
 
     def draw(self, keys):
         L = Lorentz(self.player.P.U)

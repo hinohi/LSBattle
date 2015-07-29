@@ -4,7 +4,7 @@ from math import sqrt, sin, cos, pi
 
 from go import Vector3, Vector4D, Lorentz
 from go import hit_check
-from model.pointsprite import PointSprite
+from model.pointsprite import PointSprite, PointSpriteDoppler
 from model.flame import Flame
 from program.box import BOX
 from program.utils import DY_TEXTURE_KYU
@@ -13,8 +13,9 @@ from program import script
 
 class Bullet(object):
     
-    def __init__(self, X, L, N, S):
+    def __init__(self, X, U, L, N, S):
         self.X = X.copy()
+        self.U = [U.x, U.y, U.z, U.t]
         self.L = L
         self.N = N.copy()
         self.S = S
@@ -37,11 +38,12 @@ class Bullet(object):
             else:
                 return False
     
-    def draw(self, Xp, L, flame, vertex):
+    def draw(self, Xp, L, flame, vertex, U):
         s = self.get_position(Xp)
         if 0.0 < s < self.S:
             X = self.X.get_linear_add(self.N, s)
             vertex.extend(X.get_lis3())
+            U.extend(self.U)
             return True
         elif self.hit:
             X = self.X.get_linear_add(self.N, self.S)
@@ -83,11 +85,12 @@ class SlowBullet(object):
             else:
                 return False
     
-    def draw(self, Xp, L, flame, vertex):
+    def draw(self, Xp, L, flame, vertex, U):
         s = self.get_position(Xp)
         if 0.0 < s < self.S:
             X = self.X.get_linear_add(self.N, s)
             vertex.extend([X.x, X.y, X.z])
+            U.extend([self.N.x, self.N.y, self.N.z, self.N.t])
             return True
         elif self.hit:
             X = self.X.get_linear_add(self.N, self.S)
@@ -131,8 +134,21 @@ class _BaseBullets(object):
 
 class Bullets(_BaseBullets):
 
-    def add(self, X, L, N, S):
-        self.bullets.append(Bullet(X, L, N, S))
+    def __init__(self, world, color=(0.9, 0.1, 0.1, 0.8), psize=0.02):
+        self.world = world
+        self.bullets = []
+        self.size = BOX.X * psize
+        self.n = 0
+        self.hit_n = 0
+        self.model = PointSpriteDoppler(size=self.size, color=color, texture=DY_TEXTURE_KYU)
+        self.color = [1.0 if i > 1.0 else i for i in  (Vector3(color)*2.0).get_lis()] + [0.8]
+        self.flame = Flame(S=0.3, v=0.4, psize=psize*2, color=self.color)
+
+    def add(self, X, U, L, N, S):
+        """
+        L: background to player
+        """
+        self.bullets.append(Bullet(X, U, L, N, S))
         self.n += 1
         if len(self.bullets) > script.world.player_bullet_num_limit:
             self.bullets = self.bullets[-script.world.player_bullet_num_limit:]
@@ -144,7 +160,31 @@ class Bullets(_BaseBullets):
                 count += 1
         return count
 
+    def draw(self, Xp, L):
+        if self.bullets:
+            vertices = []
+            U = []
+            bullets = []
+            for bullet in self.bullets:
+                if bullet.draw(Xp, L, self.flame, vertices, U):
+                    bullets.append(bullet)
+                elif bullet.hit:
+                    self.hit_n += 1
+            self.bullets = bullets
+            if vertices:
+                self.model.draw(Xp, L, vertices=vertices, U=U)
+
 class SlowBullets(_BaseBullets):
+
+    def __init__(self, world, color=(0.9, 0.1, 0.1, 0.8), psize=0.02):
+        self.world = world
+        self.bullets = []
+        self.size = BOX.X * psize
+        self.n = 0
+        self.hit_n = 0
+        self.model = PointSpriteDoppler(size=self.size, color=color, texture=DY_TEXTURE_KYU)
+        self.color = [1.0 if i > 1.0 else i for i in  (Vector3(color)*2.0).get_lis()] + [0.4]
+        self.flame = Flame(S=0.3, v=0.4, psize=psize*0.5, color=self.color)
 
     def add(self, X, N, S, id=None):
         self.bullets.append(SlowBullet(X, N, S, id))
@@ -158,3 +198,18 @@ class SlowBullets(_BaseBullets):
             if (id is None or id != bullet.id) and bullet.hit_check(X1, X0, collision_radius, color=color):
                 count += 1
         return count
+
+    def draw(self, Xp, L):
+        if self.bullets:
+            X = []
+            U = []
+            bullets = []
+            for bullet in self.bullets:
+                if bullet.draw(Xp, L, self.flame, X, U):
+                    bullets.append(bullet)
+                elif bullet.hit:
+                    self.hit_n += 1
+            self.bullets = bullets
+            if X:
+                self.model.draw(Xp, L, X, U)
+

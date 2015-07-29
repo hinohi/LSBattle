@@ -4,14 +4,15 @@ from math import sqrt, sin, cos, pi
 from random import random
 
 from go import Vector4D, Lorentz
-from model.pointsprite import PointSprite
+from model.pointsprite import PointSpriteDoppler
 from program.box import BOX
 from program.utils import DY_TEXTURE_KYU
 
 
 class Flame(object):
 
-    def __init__(self, S=0.5, v=0.6, n=5, m=10, color=(1.0, 0.9, 0.99, 0.6), psize=0.02):
+    def __init__(self, S=0.5, v=0.6, n=5, m=10,
+                 color=(1.0, 0.9, 0.99, 0.6), psize=0.02, p=0):
         """
         S: float, lifetime of each particle consisting of the flame.
         v: float, velocity of each particle consisting of the flame.
@@ -19,7 +20,7 @@ class Flame(object):
         m: int, number of particles in azimuthal angle direction.
         psize: float, size of each particle consisting of the flame, relative to screen size.
         """
-        self.model = PointSprite(color=color, texture=DY_TEXTURE_KYU)
+        self.model = PointSpriteDoppler(color=color, texture=DY_TEXTURE_KYU)
         t = 1.0/v
         vertices = [Vector4D(t, 0.0, 1.0, 0.0)]
         for i in xrange(1, m):
@@ -32,10 +33,12 @@ class Flame(object):
                                             cos(phi),
                                             sin(phi)*cos(theta)))
         vertices.append(Vector4D(t, 0.0, -1.0, 0.0))
+        if p:print len(vertices)
         self.vertices = vertices
         self.a = self.vertices[0].squared_norm()
         # self.sizes = [BOX.Y*psize*(random() + 0.5) for i in self.vertices]
         self.sizes = [BOX.Y*psize for i in self.vertices]
+        if p: print self.sizes
         self.SS = [S * (random()*2.0 + 0.5) for i in self.vertices]
 
     def draw(self, X, Xp, L, LL=None, color=None):
@@ -44,21 +47,27 @@ class Flame(object):
         c = dX.squared_norm()
         ac = a * c
         vertices = []
+        U = []
         sizes = []
         if LL is None:
             NN = self.vertices
         else:
-            NN = [LL.get_transform(N) for N in self.vertices]
+            NN = [LL.get_transform_v4(N) for N in self.vertices]
+        vc = 0
         for N, size, S in zip(NN, self.sizes, self.SS):
             b = N.inner_product(dX)
             s = b - sqrt(b*b - ac)
-            if 0.0 < s < S:
-                vertices.extend(X.get_linear_add_lis3(N, s))
-                # r = 2.0*s/S
-                # sizes.append(size*r*(2.0-r))
-                sizes.append(size)
+            if 0.0 < s:
+                if s < S:
+                    vertices.extend(X.get_linear_add_lis3(N, s))
+                    U.extend([N.x, N.y, N.z, N.t])
+                    # r = 2.0*s/S
+                    # sizes.append(size*r*(2.0-r))
+                    sizes.append(size)
+            else:
+                vc += 1
         if vertices:
-            self.model.draw(Xp, L, vertices, sizes, color=color)
+            self.model.draw(Xp, L, vertices, U, sizes, color=color)
             return True
-        else:
+        elif vc == 0:
             return False

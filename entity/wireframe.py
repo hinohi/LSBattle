@@ -71,8 +71,8 @@ class WireFrame(object):
                 vec4 vertex = lorentz * vec4(v, -length(v));
                 vertex.w = 1.0;
                 gl_Position = gl_ModelViewProjectionMatrix * vertex;
-                float factor = max(1.0/50.0,
-                                   min(1.0, 50.0/(gl_Position.w*gl_Position.w))
+                float factor = max(0.0,
+                                   min(1.0, 200.0/(gl_Position.w*gl_Position.w))
                                    );
                 vec4 color = gl_Color;
                 color.a *= factor;

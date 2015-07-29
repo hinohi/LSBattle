@@ -1,11 +1,11 @@
 
 Player {
-    acceleration = 1.0                                     # float 0.0<=x<=10.0
+    acceleration = 1.5                                     # float 0.0<=x<=10.0
     collision_radius = 0.35                                # float 0.0<=x<=1.0
     hp = 30                                                # int 1<=x<=10000000
     recovery_interval = 3.0                                # float 0.0<=x<=100000.0
     repulsion = 100.0                                      # float 0.0<=x<=1000.0
-    resistivity = 0.0                                      # float 0.0<=x<=10.0
+    resistivity = 0.1                                      # float 0.0<=x<=10.0
     turbo = 3.0                                            # float 0.0<=x<=100.0
     turn_acceleration = 9.0                                # float -100.0<=x<=100.0
     turn_resistivity = 5.0                                 # float 0.0<=x<=100.0
@@ -56,7 +56,7 @@ Player {
     gun {
         accuracy_condition = 1.0                           # float 0.0<=x<=1.0
         automatic = True                                   # eval
-        name = Beam Gun                                    # str
+        name = Chainsaw                                    # str
         power = 1.0                                        # float 0.01<=x<=1000.0
         range = 80.0                                       # float 2.0<=x<=1000.0
         reload_time = 50                                   # int 1<=x<=100000
@@ -98,7 +98,8 @@ Player {
         }
     }
     gun_info {
-        format = GUN(%(MODE)i/%(NUM)i):%(NAME)s            # func_str
+        #format = GUN(%(MODE)i/%(NUM)i):%(NAME)s            # func_str
+        format = Weapon: %(NAME)s            # func_str
         height = 0.04                                      # float
         position_x = 0.68                                  # float
         position_y = 0.055                                 # float
@@ -124,7 +125,7 @@ Player {
     }
 }
 Game {
-    cheat = True                                          # eval
+    cheat = False                                          # eval
     continue_num = 3                                       # int 0<=x<=100
     output_script = False                                  # eval
     scale = 0.1                                            # float 0.0001<=x<=10.0
@@ -173,10 +174,10 @@ World {
     player_bullet_num_limit = 1200                         # int 100<=x<=100000000
     sky {
         rotation = 1.0471975512                            # float 0.0<=x<=6.28318530718
-        #texture0 = milkyway.jpg                             # func_str
-        texture0 = eso0932a.tif                             # func_str
-        # texture1 = milkyway.jpg                             # func_str
-        texture1 = eso0932b.tif                             # func_str
+        texture0 = milkyway.jpg                             # func_str
+        #texture0 = eso0932a.tif                             # func_str
+        texture1 = milkyway2.jpg                             # func_str
+        #texture1 = eso0932b.tif                             # func_str
     }
     stardust {
         num = 100000                                       # int 1<=x<=10000000000
@@ -185,10 +186,10 @@ World {
         color = [1.0, 1.0, 1.0, 0.5]                       # color_func
     }
     wireframe {
-        inner_div = 2
-        div = 20                                           # int 2<=x<=100
+        inner_div = 20                                     # int 2<=x<=100
+        div = 5                                           # int 2<=x<=100
         line_width = 1                                     # int 1<=x<=10
-        range = 1000.0                                      # float 1.0<=x<=10000.0
+        range = 250.0                                      # float 1.0<=x<=10000.0
         color = [0.4, 0.4, 0.4, 1]                       # color_func
     }
 }
@@ -197,30 +198,6 @@ Enemy {
     bullet {
         size = 0.02                                        # float 0.001<=x<=0.1
         color = [1.0, 0.0, 1.0, 1.0]                       # color_func
-    }
-    character {
-        acceleration = 2.4                                 # float 0.0<=x<=10.0
-        bullet_range = 100.0                               # float 1.0<=x<=1000.0
-        bullet_speed = 0.7                                 # float 0.5<=x<=0.99999
-        collision_radius = 0.5                             # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25                  # float 0.0<=x<=1.0
-        hp = 2                                             # int 1<=x<=10000000
-        name = dorake                                      # str
-        resistivity = 2.0                                  # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02                               # float 0.0<=x<=1.0
-        shoot_interval = 0.8                               # float
-        size = 1.0                                         # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]                       # color_func
-        shoot_div = []                                     # eval
-        think {
-            distance0 = 4.0                                # float
-            distance1 = 10.0                               # float
-            far_n = 1.0                                    # float
-            far_p = 0.0                                    # float
-            near_n = -0.2                                  # float
-            near_p = 0.0                                   # float
-            zgzg_interval = 3.0                            # float
-        }
     }
     character {
         acceleration = 10.0                                # float 0.0<=x<=10.0
@@ -244,6 +221,30 @@ Enemy {
             near_n = 0.2                                   # float
             near_p = 0.0                                   # float
             zgzg_interval = 1.0                            # float
+        }
+    }
+    character {
+        acceleration = 2.4                                 # float 0.0<=x<=10.0
+        bullet_range = 100.0                               # float 1.0<=x<=1000.0
+        bullet_speed = 0.7                                 # float 0.5<=x<=0.99999
+        collision_radius = 0.5                             # float 0.0<=x<=1.0
+        collision_radius_by_friend = 0.25                  # float 0.0<=x<=1.0
+        hp = 2                                             # int 1<=x<=10000000
+        name = dorake                                      # str
+        resistivity = 2.0                                  # float 0.0<=x<=10.0
+        shoot_div_phi = 0.02                               # float 0.0<=x<=1.0
+        shoot_interval = 0.8                               # float
+        size = 1.0                                         # float 0.1<=x<=1000.0
+        color = [1.0, 1.0, 1.0, 1.0]                       # color_func
+        shoot_div = []                                     # eval
+        think {
+            distance0 = 4.0                                # float
+            distance1 = 10.0                               # float
+            far_n = 1.0                                    # float
+            far_p = 0.0                                    # float
+            near_n = -0.2                                  # float
+            near_p = 0.0                                   # float
+            zgzg_interval = 3.0                            # float
         }
     }
     character {
@@ -495,7 +496,7 @@ Enemy {
         hp = 100                                           # int 1<=x<=10000000
         name = Golem                                       # str
         resistivity = 2.0                                  # float 0.0<=x<=10.0
-        shoot_div_phi = 0.1                                # float 0.0<=x<=1.0
+        shoot_div_phi = 0.08                                # float 0.0<=x<=1.0
         shoot_interval = 0.5                               # float
         size = 6.0                                         # float 0.1<=x<=1000.0
         color = [1.0, 1.0, 1.0, 1.0]                       # color_func

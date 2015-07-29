@@ -6,6 +6,8 @@ from program.text import MyFont
 from sequence.locals import GameLevel, GameScore, backimage
 from sequence.title import Title
 from sequence.play import Play
+from sequence.choicemode import ChoiceMode
+from sequence.howto import Howto
 from sequence.option import Option
 from sequence.loading import Loading
 from sequence.continequestion import ContineQuestion
@@ -28,12 +30,15 @@ class Game(object):
     def mainloop(self):
         title = Title()
         option = Option()
+        choicemode = ChoiceMode()
         top = True
         while True:
             flg = title.mainloop(top)
             if flg == title.PLAY:
-                self.play_loop()
-                top = True
+                mode = choicemode.mainloop()
+                if not mode == choicemode.RETURN:
+                    self.play_loop(mode)
+                    top = True
             elif flg == title.OPTION:
                 option.mainloop()
                 top = False
@@ -44,7 +49,10 @@ class Game(object):
             elif flg == title.QUIT:
                 BOX.game_quit()
     
-    def play_loop(self):
+    def play_loop(self, mode):
+        howto = Howto(GameLevel(1, mode))
+        howto.mainloop()
+
         loading = Loading()
         continue_q = ContineQuestion()
         gameover = GameOver()
@@ -65,7 +73,7 @@ class Game(object):
             # 1 game unit = scale * (ligh speed * 1 second)
             playerstate.reset_hp()
             play = Play(playerstate,
-                        GameLevel(stage),
+                        GameLevel(stage, mode),
                         scale=script.game.scale,
                         total_score=total_score,
                         item=item)
