@@ -23,6 +23,7 @@ class _Box(object):
         self.X = 800
         self.Y = 600
         self.FULL_SCREEN = False
+        self.MODE = "EASY"
         self.SAVE = False
         try:
             for line in open(CONFIG_DIR+"setting.ini"):
@@ -37,6 +38,13 @@ class _Box(object):
                         FULL_SCREEN = True
                     else:
                         FULL_SCREEN = False
+                elif w == "MODE":
+                    if v == "EASY":
+                        self.MODE = "EASY"
+                    elif v == "NORMAL":
+                        self.MODE = "NORMAL"
+                    elif v == "HARD":
+                        self.MODE = "HARD"
             if (X, Y) not in disp_sizes:
                 X, Y = disp_sizes[0]
             self.X = X
@@ -144,7 +152,10 @@ class _Box(object):
             self.SAVE = True
             self.sdl2_quit()
             self.game_init()
-
+    def set_mode(self, mode):
+        self.MODE = mode
+        self.SAVE = True
+        
     def save(self):
         if self.SAVE:
             try:
@@ -155,6 +166,7 @@ class _Box(object):
                     f.write("FULL_SCREEN=True\n")
                 else:
                     f.write("FULL_SCREEN=False\n")
+                f.write("MODE=%s\n"%self.MODE)
                 f.close()
             except:
                 pass

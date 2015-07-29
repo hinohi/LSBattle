@@ -114,7 +114,8 @@ void main() {
     xi.w = xp.w - distance(xp.xyz, xi.xyz);
     xi = dX + Lorentz * xi;
     xi.w = -length(xi.xyz);
-    ratio = xi.w / (Lorentz_p2e * xi).w;
+    vec4 tmp = Lorentz_p2e * xi;
+    ratio = xi.w / tmp.w;
     xi.w = 1.0;
     gl_Position = gl_ModelViewProjectionMatrix * xi;
     %s
@@ -183,7 +184,7 @@ class Polygon(MqoGpoPolygon):
         )
         self.t_color_local = glGetUniformLocation(self.program_tex, "color")
         self.t_L_local = glGetUniformLocation(self.program_tex, "Lorentz")
-        self.t_Lpe_local = glGetUniformLocation(self.program_col, "Lorentz_p2e")
+        self.t_Lpe_local = glGetUniformLocation(self.program_tex, "Lorentz_p2e")
         self.t_R_local = glGetUniformLocation(self.program_tex, "Rotate")
         self.t_dX_local = glGetUniformLocation(self.program_tex, "dX")
         self.t_xp_local = glGetUniformLocation(self.program_tex, "xp")
@@ -237,7 +238,7 @@ class Polygon(MqoGpoPolygon):
         # dX: X-Xp in background frame
         dX = X - Xp
         dX.t = -dX.length()
-        xp = Lorentz(U).get_transform_v4(-dX)
+        xp = Lorentz(U).get_transform(-dX)
 
         # xp: Xp-X in enemy frame
         xp = [xp.x, xp.y, xp.z, xp.t]

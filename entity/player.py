@@ -74,12 +74,15 @@ class Gun(object):
         LL = Lorentz(player.P.U)
         matrix = player.quaternion.get_RotMat()
         X = player.P.X.copy()
-        X += Vector4D.from_tv(0.0, matrix.up) * self.shoot_position
+        """
+        X: player's position in background frame
+        """
+        X += L.get_transform(Vector4D.from_tv(1, matrix.up)) * self.shoot_position
         v = -Vector3(matrix.forward)
         n = Vector4D.from_tv(1.0, v)
         L.transform(n)
         right = matrix.right
-        self.bullets.add(X, LL, n, self.range)
+        self.bullets.add(X, player.P.U, LL, n, self.range)
         nlis = []
         for i in xrange(len(self.div)):
             m = Quaternion.from_ax((i+1)*pi/30, right).get_RotMat()
@@ -90,14 +93,14 @@ class Gun(object):
                 n = Vector4D.from_tv(1.0, mm.get_rotate(d))
                 L.transform(n)
                 nlis.append(n)
-                self.bullets.add(X, LL, n, self.range)
+                self.bullets.add(X, player.P.U, LL, n, self.range)
 
         dt = ds / par_frame
         for i in xrange(1, par_frame):
             XX = X.get_linear_add(player.P.U, dt*i)
-            self.bullets.add(XX, LL, n, self.range)
+            self.bullets.add(XX, player.P.U, LL, n, self.range)
             for nn in nlis:
-                self.bullets.add(XX, LL, nn, self.range)
+                self.bullets.add(XX, player.P.U, LL, nn, self.range)
 
     def _gun_action_single(self, keys, ds):
         if self._gun_flg:
@@ -117,9 +120,10 @@ class Gun(object):
 
 class Player(object):
 
-    def __init__(self, world, state, pos):
+    def __init__(self, world, state, pos, level):
         self.world = world
         self.state = state
+        self.level = level
         self.P = PhaseSpace(pos, Vector4D(1,0,0,0))
         self.time = 0.0
         self.recovery_interval = script.player.recovery_interval
@@ -231,15 +235,21 @@ class Player(object):
         self.turn_speed_1 -= self.turn_resistivity * self.turn_speed_1 * ds
         self.turn_speed_2 -= self.turn_resistivity * self.turn_speed_2 * ds
 
-    def action(self, keys, ds):
+    def action(self, keys, level, ds):
         self.change_direction(keys, ds)
 
         self.guns[self.state.gun_mode].gun_action(keys, ds)
 
-        if keys.k_brake:
-            acceleration = self.P.get_resist(self.resistivity*30)
+        acceleration = Vector4D(0.0, 0.0, 0.0, 0.0)
+        if level.is_easy():
+            acceleration += self.P.get_resist(self.resistivity*10)
+        elif level.is_normal():
+            acceleration += self.P.get_resist(self.resistivity*5)
         else:
-            acceleration = self.P.get_resist(self.resistivity)
+            if keys.k_brake:
+                acceleration += self.P.get_resist(self.resistivity*30)
+            elif keys.k_accel == 0.0:
+                acceleration += self.P.get_resist(self.resistivity)
         self.get_acceleration(keys, ds, acceleration)
         self.calc_repulsion(acceleration)
         self.P.transform(acceleration, ds)
@@ -299,13 +309,16 @@ class Player(object):
         glVertex(ox,    oy+ly)
         glEnd()
         FlatScreen.pop()
+        glColor(0.5, 0.5, 1.0, 1.0)
+        drawSentence("HP", ly, ox, oy+ly)
 
     def draw_gun_name(self):
-        text = self.state.gun_info
-        glColor(*script.player.gun_info.color)
-        drawSentence(text, BOX.Y * script.player.gun_info.height,
-                           BOX.X * script.player.gun_info.position_x,
-                           BOX.Y * script.player.gun_info.position_y)
+        if not self.level.is_easy():
+            text = self.state.gun_info
+            glColor(*script.player.gun_info.color)
+            drawSentence(text, BOX.Y * script.player.gun_info.height,
+                               BOX.X * script.player.gun_info.position_x,
+                               BOX.Y * script.player.gun_info.position_y)
 
     def draw_booster(self, keys):
         if keys.k_booster:

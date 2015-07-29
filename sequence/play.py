@@ -33,7 +33,7 @@ class Play(object):
         self.move_message = Sentence("Move,move!!", BOX.Y/5)
         self.keys = Keys()
         
-        self.world.action(self.keys, 0.01)
+        self.world.action(self.keys, self.level, 0.01)
         self.world.draw(self.keys)
         sdl2.SDL_GL_SwapWindow(BOX.window)
 
@@ -66,39 +66,40 @@ class Play(object):
                             break
                         elif flg == self.stopmenu.TITLE:
                             return self.ELSE
-                    elif key == self.keys.accel_forward:
+                    elif key == self.keys.accel_forward and self.level.enabled("accel_forward"):
                         self.keys.k_accel |= 1
-                    elif key == self.keys.accel_back:
+                    elif key == self.keys.accel_back and self.level.enabled("accel_back"):
                         self.keys.k_accel |= 2
-                    elif key == self.keys.booster:
-                        self.keys.k_booster = 1
-                    elif key == self.keys.accel_right:
+                    elif key == self.keys.accel_right and self.level.enabled("accel_right"):
                         self.keys.k_accel |= 4
                         self.keys.k_accel_priority = 0
-                    elif key == self.keys.accel_left:
+                    elif key == self.keys.accel_left and self.level.enabled("accel_left"):
                         self.keys.k_accel |= 8
                         self.keys.k_accel_priority = 1
-                    elif key == self.keys.turn_right:
+                    elif key == self.keys.turn_right and self.level.enabled("turn_right"):
                         self.keys.k_turn_right = True
                         self.keys.k_turn_priority1 = 0
-                    elif key == self.keys.turn_left:
+                    elif key == self.keys.turn_left and self.level.enabled("turn_left"):
                         self.keys.k_turn_left  = True
                         self.keys.k_turn_priority1 = 1
-                    elif key == self.keys.turn_up:
+                    elif key == self.keys.turn_up and self.level.enabled("turn_up"):
                         self.keys.k_turn_up = True
                         self.keys.k_turn_priority2 = 0
-                    elif key == self.keys.turn_down:
+                    elif key == self.keys.turn_down and self.level.enabled("turn_down"):
                         self.keys.k_turn_down  = True
                         self.keys.k_turn_priority2 = 1
-                    elif key == self.keys.shoot:        shoot = True
+                    elif key == self.keys.shoot and self.level.enabled("shoot"):
+                        shoot = True
                     elif key in KS_RETURN:
                         ret = True
-                    elif key == self.keys.toggle_HUD:
+                    elif key == self.keys.toggle_HUD and self.level.enabled("toggle_HUD"):
                         self.keys.k_map = (self.keys.k_map+1)%2
-                    elif key == self.keys.change_gun:
+                    elif key == self.keys.change_gun and self.level.enabled("change_gun"):
                         self.world.player.state.gun_change()
-                    elif key == self.keys.brake:
+                    elif key == self.keys.brake and self.level.enabled("brake"):
                         self.keys.k_brake = 1
+                    elif key == self.keys.booster and self.level.enabled("booster"):
+                        self.keys.k_booster = 1
                     elif script.game.cheat:
                         if key == sdl2.SDLK_c:
                             return self.WIN
@@ -156,7 +157,7 @@ class Play(object):
 
             if 0 < lose_time:
                 self.keys.k_bullet = -1
-            self.world.action(self.keys, ds)
+            self.world.action(self.keys, self.level, ds)
             self.world.draw(self.keys)
 
             if self.world.player.gun_get_time + 1.5 > self.world.player.time:
@@ -194,7 +195,7 @@ class Play(object):
                 lose_time = 0
             
             if self.keys.k_map == 1:
-                GL.glColor(1.0, 1.0, 0.0, 1.0)
+                GL.glColor(0.3, 0.6, 0.3, 1.0)
                 text = "Score %i\n"%self.world.score
                 drawSentence(text, scoreHight, BOX.X*0.01, BOX.Y)
 

@@ -29,6 +29,7 @@ def make_default_script():
         depth += 1
         l = [a for a in dir(block) if not a.startswith("_")]
         l.sort(key=lambda a:isinstance(block[a], Block)*1 + isinstance(block[a], list)*1)
+        width = 40
         for name in l:
             if "_"+name+"_obj" in block:
                 for nex in block[name]:
@@ -39,9 +40,9 @@ def make_default_script():
                 s = indent*depth + name + " = " + str(block[name]).replace("\n", "\\n")
                 n = len(s)
                 if "_"+name+"_func" in block:
-                    s += " "*(58-n if n < 58 else 0) + " # " +  block["_"+name+"_func"].__name__
+                    s += " "*(width-n if n < width else 0) + " # " +  block["_"+name+"_func"].__name__
                 else:
-                    s += " "*(58-n if n < 58 else 0) + " # eval"
+                    s += " "*(width-n if n < width else 0) + " # eval"
                 f.write(s + "\n")
         depth -= 1
         f.write(indent*depth + "}\n")

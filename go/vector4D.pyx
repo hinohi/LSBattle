@@ -1,11 +1,11 @@
 # coding: utf8
 # cython: profile=False
-# go.vector4D.pyx
+# go/vector4D.pyx
+cimport cython
 from libc.math cimport sqrt
 
-from vector4D cimport Vector4D
-
-from vector3 import Vector3, vec3
+from vector3 cimport vec3_from_floats
+from vector4D cimport Vector4D, vec4_from_floats
 
 
 cdef void _arg0(Vector4D self, args):
@@ -53,24 +53,6 @@ cdef class Vector4D(object):
     def __init__(self, *args):
         _args[len(args)](self, args)
 
-    cpdef Vector4D from_floats(self, double t, double x, double y, double z):
-        cdef Vector4D v = Vector4D.__new__(Vector4D)
-        v._t = t
-        v._x = x
-        v._y = y
-        v._z = z
-        return v
-
-    @classmethod
-    def from_iter(cls, iterable):
-        next = iter(iterable).next
-        cdef Vector4D v = Vector4D.__new__(Vector4D)
-        v._t = next()
-        v._x = next()
-        v._y = next()
-        v._z = next()
-        return v
-
     @classmethod
     def from_tv(cls, double t, v):
         cdef Vector4D u = Vector4D.__new__(Vector4D)
@@ -82,8 +64,8 @@ cdef class Vector4D(object):
         u._z = z
         return u
 
-    def copy(self):
-        return self.from_floats(self._t, self._x, self._y, self._z)
+    cpdef Vector4D copy(self):
+        return vec4_from_floats(self._t, self._x, self._y, self._z)
     __copy__ = copy
 
     def _get_t(self):
@@ -111,7 +93,7 @@ cdef class Vector4D(object):
     z = property(_get_z, _set_z, None, "z component.")
 
     def _get_3d(self):
-        return vec3.from_floats(self._x, self._y, self._z)
+        return vec3_from_floats(self._x, self._y, self._z)
     def _set_3d(self, v):
         cdef double x, y, z
         x, y, z = v
@@ -126,8 +108,8 @@ cdef class Vector4D(object):
         yield self._y
         yield self._z
 
-    def __add__(Vector4D self, Vector4D rhs):
-        return self.from_floats(self._t+rhs._t, self._x+rhs._x, self._y+rhs._y, self._z+rhs._z)
+    def __add__(Vector4D lhs, Vector4D rhs):
+        return vec4_from_floats(lhs._t+rhs._t, lhs._x+rhs._x, lhs._y+rhs._y, lhs._z+rhs._z)
     def __iadd__(Vector4D self, Vector4D rhs):
         self._t += rhs._t
         self._x += rhs._x
@@ -135,8 +117,8 @@ cdef class Vector4D(object):
         self._z += rhs._z
         return self
 
-    def __sub__(Vector4D self, Vector4D rhs):
-        return self.from_floats(self._t-rhs._t, self._x-rhs._x, self._y-rhs._y, self._z-rhs._z)
+    def __sub__(Vector4D lhs, Vector4D rhs):
+        return vec4_from_floats(lhs._t-rhs._t, lhs._x-rhs._x, lhs._y-rhs._y, lhs._z-rhs._z)
     def __isub__(Vector4D self, Vector4D rhs):
         self._t -= rhs._t
         self._x -= rhs._x
@@ -145,7 +127,7 @@ cdef class Vector4D(object):
         return self
 
     def __mul__(Vector4D self, double rhs):
-        return self.from_floats(self._t*rhs, self._x*rhs, self._y*rhs, self._z*rhs)
+        return vec4_from_floats(self._t*rhs, self._x*rhs, self._y*rhs, self._z*rhs)
     def __imul__(Vector4D self, double rhs):
         self._t *= rhs
         self._x *= rhs
@@ -155,7 +137,7 @@ cdef class Vector4D(object):
 
     def __div__(Vector4D self, double rhs):
         rhs = 1.0 / rhs
-        return self.from_floats(self._t*rhs, self._x*rhs, self._y*rhs, self._z*rhs)
+        return vec4_from_floats(self._t*rhs, self._x*rhs, self._y*rhs, self._z*rhs)
     def __idiv__(Vector4D self, double rhs):
         rhs = 1.0 / rhs
         self._t *= rhs
@@ -165,10 +147,10 @@ cdef class Vector4D(object):
         return self
 
     def __neg__(Vector4D self):
-        return self.from_floats(-self._t, -self._x, -self._y, -self._z)
+        return vec4_from_floats(-self._t, -self._x, -self._y, -self._z)
 
     def __pos__(Vector4D self):
-        return self.copy()
+        return vec4_from_floats(self._t, self._x, self._y, self._z)
 
     def __str__(Vector4D self):
         return "(%f, %f, %f, %f)"%(self._t, self._x, self._y, self._z)
@@ -213,7 +195,7 @@ cdef class Vector4D(object):
     cpdef double inner_product(self, Vector4D othr):
         return self._x*othr._x + self._y*othr._y + self._z*othr._z - self._t*othr._t
 
-    def squared_norm(self):
+    cpdef double squared_norm(self):
         return self._x*self._x + self._y*self._y + self._z*self._z - self._t*self._t
 
     cpdef double squared_norm_to(self, Vector4D othr):
@@ -224,6 +206,7 @@ cdef class Vector4D(object):
         z = self._z - othr._z
         return x*x + y*y + z*z - t*t
 
+    @cython.cdivision(True)
     def get_hat(self, double length=1.0):
         """
         self: Vector4D
@@ -236,10 +219,11 @@ cdef class Vector4D(object):
         cdef double r = self._x*self._x + self._y*self._y + self._z*self._z
         if r > 0.0:
             r = length / sqrt(r)
-            return vec3.from_floats(self._x*r, self._y*r, self._z*r)
+            return vec3_from_floats(self._x*r, self._y*r, self._z*r)
         else:
-            return vec3.from_floats(length, 0.0, 0.0)
+            return vec3_from_floats(length, 0.0, 0.0)
 
+    @cython.cdivision(True)
     def hat(self, double length=1.0):
         cdef double r = self._x*self._x + self._y*self._y + self._z*self._z
         if r > 0.0:
@@ -250,6 +234,7 @@ cdef class Vector4D(object):
         else:
             self._x = length
 
+    @cython.cdivision(True)
     def get_normalize(self, double length=1.0):
         """
         self: Vector4D
@@ -261,19 +246,21 @@ cdef class Vector4D(object):
         cdef double  r = self._x*self._x + self._y*self._y + self._z*self._z
         if r > 0.0:
             r = length / sqrt(r)
-            return self.from_floats(self._t, self._x*r, self._y*r, self._z*r)
+            return vec4_from_floats(self._t, self._x*r, self._y*r, self._z*r)
         else:
-            return self.from_floats(self._t, 0.0, 0.0, 0.0)
+            return vec4_from_floats(self._t, 0.0, 0.0, 0.0)
 
-    def normalize(self, double length=1.0):
+    @cython.cdivision(True)
+    cpdef int normalize(self, double length=1.0):
         cdef double r = self._x*self._x + self._y*self._y + self._z*self._z
         if r > 0.0:
             r = length / sqrt(r)
             self._x *= r
             self._y *= r
             self._z *= r
+        return 0
 
-    def get_linear_add(self, Vector4D N, double s):
+    cpdef Vector4D get_linear_add(self, Vector4D N, double s):
         """
         N: Vector4D
         s: float
@@ -284,7 +271,7 @@ cdef class Vector4D(object):
         xx = self._x + N._x * s
         yy = self._y + N._y * s
         zz = self._z + N._z * s
-        return self.from_floats(tt, xx, yy, zz)
+        return vec4_from_floats(tt, xx, yy, zz)
 
     def get_linear_add_lis3(self, Vector4D N, double s):
         """
@@ -298,7 +285,7 @@ cdef class Vector4D(object):
         z = self._z + N._z * s
         return [x, y, z]
 
-    def get_div_point(self, Vector4D othr, double s):
+    cpdef Vector4D get_div_point(self, Vector4D othr, double s):
         """
         othr: Vector4D
         s: float in [0,1]
@@ -310,20 +297,19 @@ cdef class Vector4D(object):
         xx = self._x * t + othr._x * s
         yy = self._y * t + othr._y * s
         zz = self._z * t + othr._z * s
-        return self.from_floats(tt, xx, yy, zz)
-
-    def add_vec3(self, v):
-        cdef double x, y, z
-        x, y, z = v
-        self._x += x
-        self._y += y
-        self._z += z
-        return self
+        return vec4_from_floats(tt, xx, yy, zz)
 
     def get_lis(self):
         return [self._t, self._x, self._y, self._z]
-
+    def get_lis_glsl(self):
+        return [self._x, self._y, self._z, self._t]
     def get_lis3(self):
         return [self._x, self._y, self._z]
 
-vec4 = Vector4D()
+cdef Vector4D vec4_from_floats(double t, double x, double y, double z):
+    cdef Vector4D v = Vector4D.__new__(Vector4D)
+    v._t = t
+    v._x = x
+    v._y = y
+    v._z = z
+    return v

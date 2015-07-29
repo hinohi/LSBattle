@@ -5,20 +5,26 @@ import sdl2.ext
 
 from program.const import *
 from program.box import BOX
-from program.text import MyFont
-from program import script
 from sequence.locals import MenuItems, backimage
 
 
-class SetDisplaySize(object):
-    
+class ChoiceMode(object):
+
+    EASY   = 0
+    NORMAL = 1
+    HARD   = 2
+    RETURN = 3
+
+    def __init__(self):
+        self.texts = ["Easy",
+                      "Normal",
+                      "Hard"]
+
     def init(self):
-        self.texts = ["%i * %i"%size for size in disp_sizes]
-        if not BOX.FULL_SCREEN:
-            self.texts.append("Full Screen")
-        self.menu = MenuItems(self.texts, BOX.Y/12, ret=True, title="Display Size")
-        if not BOX.FULL_SCREEN:
-            self.menu.choice = disp_sizes.index((BOX.X, BOX.Y))
+        self.menu = MenuItems(self.texts, BOX.Y/10, ret=True)
+        self.menu.choice = {"EASY":0,
+                            "NORMAL":1,
+                            "HARD":2}[BOX.MODE]
 
     def mainloop(self):
         self.init()
@@ -30,7 +36,10 @@ class SetDisplaySize(object):
                 elif event.type == sdl2.SDL_KEYDOWN:
                     key = event.key.keysym.sym
                     if key in KS_ESC:
-                        choice = self.menu.RETURN
+                        if self.menu.choice == self.menu.RETURN:
+                            return
+                        else:
+                            choice = self.menu.RETURN
                         break
                     elif key == sdl2.SDLK_UP:
                         self.menu.up()
@@ -46,18 +55,13 @@ class SetDisplaySize(object):
                         break
 
             if 0 <= choice:
-                if choice < len(disp_sizes):
-                    BOX.set_displaysize(choice)
-                elif choice == self.menu.RETURN:
-                    return
-                else:
-                    BOX.set_fullscreen()
-                backimage.load()
-                MyFont.init_font(script.ui.font.name)
-                self.init()
-                return
-            
-            GL.glClear(GL.GL_DEPTH_BUFFER_BIT|GL.GL_COLOR_BUFFER_BIT)
+                if choice != self.menu.RETURN:
+                    BOX.set_mode({0:"EASY",
+                                  1:"NORMAL",
+                                  2:"HARD"}[choice])
+                return choice
+                    
+            backimage.draw()
             self.menu.draw()
             sdl2.SDL_GL_SwapWindow(BOX.window)
             sdl2.SDL_Delay(10)

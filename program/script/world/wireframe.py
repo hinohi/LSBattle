@@ -13,5 +13,5 @@ class wireframe(Block):
         self._size_func = high_func_num(float, 0.0001, 1000)
         self._range_func = high_func_num(float, 1.0, 10000.0)
         self._div_func = high_func_num(int, 2, 100)
-        self._line_width_func = high_func_num(int, 1, 10)
+        self._line_width_func = high_func_num(int, 1, 100)
         self._inner_div_func = high_func_num(int, 1, 100)

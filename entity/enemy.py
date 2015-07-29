@@ -26,7 +26,7 @@ class EnemyState(object):
 
 class Enemy(object):
 
-    def __init__(self, world, X, id, typ=None):
+    def __init__(self, world, X, id, typ=None, level=None):
         self.world = world
         self.scale = world.scale
         self.id = id
@@ -86,6 +86,11 @@ class Enemy(object):
             self.mode.think.far_p *= self.mode.acceleration
 
         self.time = -self.P.X.distance_to(world.player.P.X)
+        if level is not None:
+            if level.is_easy():
+                self.mode.shoot_interval *= 3.0
+            elif level.is_normal():
+                self.mode.shoot_interval *= 2.0
         self.next_shoot_time = self.time + self.mode.shoot_interval
         self.change_time = self.time + self.mode.think.zgzg_interval
         self.zgzg = randint(0, 3)
@@ -150,7 +155,7 @@ class Enemy(object):
             if self.zgzg%2:   p *= pp
             else:             p *= -pp
             n += p
-        acceleration.add_vec3(n)
+        acceleration.d += n
 
     def hit_check(self, X1, X0, color=None):
         score = 0
@@ -301,7 +306,7 @@ class Enemy(object):
             self.last_R = R
             self.model.draw(Xp, L, LL, X, U, R) # draw body's polygon
 
-            LX = L.get_transform_v4(X-Xp)
+            LX = L.get_transform(X-Xp)
             R_i = R.get_inverse_rot()
             glDisable(GL_CULL_FACE)
             if script.enemy.timer.visible: self.draw_timer(LX, R, R_i, state0, state1, s)
@@ -330,8 +335,8 @@ class Enemies(object):
     def __iter__(self):
         return iter(self.enemies)
 
-    def add(self, x, typ=None):
-        self.enemies.append(Enemy(self.world, x, self.n, typ))
+    def add(self, x, typ=None, level=None):
+        self.enemies.append(Enemy(self.world, x, self.n, typ=typ, level=level))
         self.n += 1
 
     def action(self, ds):

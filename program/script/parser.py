@@ -16,7 +16,7 @@ class Parser(object):
         while True:
             self.n += 1
             line = self.f.next() + " "
-            line = line[:line.rfind("#")].strip()
+            line = line[:line.find("#")].strip()
             if line and not line[0].startswith("#"):
                 return line
 
