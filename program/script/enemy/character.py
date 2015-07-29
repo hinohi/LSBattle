@@ -2,22 +2,6 @@
 from ..common import Block, color_func, high_func_num
 
 
-_think_type = [
-    [3.0, -0.2, 0.0,  1.0, 0.0],
-    [100.0, 0.1, 0.2,  1.0, 0.1],
-    [3.0,  0., 0.2,  2.0, 0.1],
-    [1.0,  0.1, 0.2,  1.0, 0.1],
-    [3.0, -1.0, 0.01, -0.1, 0.01],
-    [5.0,  -0.5, 0.01, -0.07, 0.01],
-    [1.0,  0.01, 0.01,  1.0, 0.0]
-]
-"""
- [interval of direction change, 
-  radial outward thrust when close,
-  horizontal thrust when close,
-  radial outward thrust when far,
-  horizontal thrust when far]
-"""
 class think(Block):
     def __init__(self):
         self.zgzg_interval = 10.0
@@ -56,13 +40,11 @@ class character(Block):
         self._collision_radius_by_friend_func = high_func_num(float, 0.0, 1.0)
         self._hp_func = high_func_num(int, 1, 10000000)
         self._shoot_interval_func = float
-        # self._shoot_div_func = high_func_num(int, 0, 64)
         self._shoot_div_phi_func = high_func_num(float, 0.0, 1.0)
         self._acceleration_func = high_func_num(float, 0.0, 10.0)
         self._resistivity_func = high_func_num(float, 0.0, 10.0)
         self._bullet_speed_func = high_func_num(float, 0.5, 0.99999)
         self._bullet_range_func = high_func_num(float, 1.0, 1000.0)
-        self._think_type_func = high_func_num(int, 0, len(_think_type)-1, None)
 
     def _check(self):
         if isinstance(self.shoot_div, int):
