@@ -8,6 +8,13 @@ class Block(object):
     
     def __getitem__(self, key):
         return self.__dict__[key]
+    
+    def _check(self):
+        for name in dir(self):
+            if not name.startswith("_"):
+                obj = getattr(self, name)
+                if isinstance(obj, Block):
+                    obj._check()
 
 
 def color_func(line):

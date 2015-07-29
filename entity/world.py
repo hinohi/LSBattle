@@ -8,7 +8,6 @@ from OpenGL.GL import *
 from go import Vector3, Vector4D, Matrix44, Lorentz
 from entity import Player
 from entity import Enemies
-from entity import StarDust
 from entity import WireFrame
 from entity import Sky
 from entity import Stars
@@ -23,7 +22,6 @@ class World(object):
         self.scale = scale
         L *= scale
         self.L = L
-        # self.stardust = StarDust(scale)
         self.wireframe = WireFrame(scale)
         self.sky = Sky()
         self.player = Player(self, playerstate, Vector4D(0, 0, 0, L), level=level)
@@ -85,7 +83,6 @@ class World(object):
         glLoadMatrixd(matrix_i.to_opengl())
         self.sky.draw(matrix_i, LL)
         if keys.k_map:
-            # self.stardust.draw(Xp, L)
             self.wireframe.draw(Xp, L)
         glEnable(GL_DEPTH_TEST)
         self.stars.draw(Xp, L, LL)
