@@ -12,7 +12,7 @@ from program.utils import DY_TEXTURE_KYU
 class Flame(object):
 
     def __init__(self, S=0.5, v=0.6, n=5, m=10,
-                 color=(1.0, 0.9, 0.99, 0.6), psize=0.02, p=0):
+                 color=(1.0, 0.9, 0.99, 0.6), psize=0.02):
         """
         S: float, lifetime of each particle consisting of the flame.
         v: float, velocity of each particle consisting of the flame.
@@ -33,13 +33,10 @@ class Flame(object):
                                             cos(phi),
                                             sin(phi)*cos(theta)))
         vertices.append(Vector4D(t, 0.0, -1.0, 0.0))
-        if p:print len(vertices)
         self.vertices = vertices
         self.a = self.vertices[0].squared_norm()
-        # self.sizes = [BOX.Y*psize*(random() + 0.5) for i in self.vertices]
-        self.sizes = [BOX.Y*psize for i in self.vertices]
-        if p: print self.sizes
-        self.SS = [S * (random()*2.0 + 0.5) for i in self.vertices]
+        self.sizes = [BOX.Y*psize*(0.9 + random()*0.2) for i in self.vertices]
+        self.SS = [S * (0.5 + random()*2.0) for i in self.vertices]
 
     def draw(self, X, Xp, L, LL=None, color=None):
         a = self.a
@@ -48,26 +45,24 @@ class Flame(object):
         ac = a * c
         vertices = []
         U = []
-        sizes = []
         if LL is None:
             NN = self.vertices
         else:
             NN = [LL.get_transform(N) for N in self.vertices]
         vc = 0
-        for N, size, S in zip(NN, self.sizes, self.SS):
+        for N, S in zip(NN, self.SS):
             b = N.inner_product(dX)
             s = b - sqrt(b*b - ac)
             if 0.0 < s:
                 if s < S:
                     vertices.extend(X.get_linear_add_lis3(N, s))
-                    U.extend([N.x, N.y, N.z, N.t])
-                    # r = 2.0*s/S
-                    # sizes.append(size*r*(2.0-r))
-                    sizes.append(size)
+                    U.extend(N.get_lis_glsl())
             else:
                 vc += 1
         if vertices:
-            self.model.draw(Xp, L, vertices, U, sizes, color=color)
+            self.model.draw(Xp, L, vertices, U, self.sizes, color=color)
             return True
         elif vc == 0:
             return False
+        else:
+            return True
