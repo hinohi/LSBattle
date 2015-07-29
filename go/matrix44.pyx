@@ -1,15 +1,13 @@
 # coding: utf8
 # cython: profile=False
-# go.matrix44.pyx
+# go/matrix44.pyx
+cimport cython
 from libc.math cimport sqrt, sin, cos
 DEF pi = 3.141592653589793115997963468544185161590576171875
 
-from vector3 cimport Vector3
-from vector4D cimport Vector4D
-from matrix44 cimport Matrix44
-
-from vector3 import Vector3, vec3
-from vector4D import Vector4D, vec4
+from vector3 cimport Vector3, vec3_from_floats
+from vector4D cimport Vector4D, vec4_from_floats
+from matrix44 cimport Matrix44, Lorentz
 
 
 cdef class Matrix44(object):
@@ -25,72 +23,23 @@ cdef class Matrix44(object):
             self.m10 = 0.0; self.m11 = 1.0; self.m12 = 0.0; self.m13 = 0.0
             self.m20 = 0.0; self.m21 = 0.0; self.m22 = 1.0; self.m23 = 0.0
             self.m30 = 0.0; self.m31 = 0.0; self.m32 = 0.0; self.m33 = 1.0
-            
-    @classmethod
-    def Lorentz(cls, Vector4D u):
-        cdef Matrix44 m = Matrix44.__new__(Matrix44)
-        cdef double x, y, z, x2, y2, z2, r, g, xy, yz, zx
-        x = u._x
-        y = u._y
-        z = u._z
-        x2 = x*x
-        y2 = y*y
-        z2 = z*z
-        r = x2 + y2 + z2
-        if r > 0.0:
-            g = sqrt(1.0 + r)
-            r = 1.0 / r
-            xy = (g-1.0)*x*y*r
-            yz = (g-1.0)*y*z*r
-            zx = (g-1.0)*z*x*r
-            m.m00 =  g; m.m01 =                 -x; m.m02 =                 -y; m.m03 =                 -z
-            m.m10 = -x; m.m11 = (g*x2 + y2 + z2)*r; m.m12 =                 xy; m.m13 =                 zx
-            m.m20 = -y; m.m21 =                 xy; m.m22 = (x2 + g*y2 + z2)*r; m.m23 =                 yz
-            m.m30 = -z; m.m31 =                 zx; m.m32 =                 yz; m.m33 = (x2 + y2 + g*z2)*r
-        else:
-            m.m00 = 1.0; m.m01 = 0.0; m.m02 = 0.0; m.m03 = 0.0
-            m.m10 = 0.0; m.m11 = 1.0; m.m12 = 0.0; m.m13 = 0.0
-            m.m20 = 0.0; m.m21 = 0.0; m.m22 = 1.0; m.m23 = 0.0
-            m.m30 = 0.0; m.m31 = 0.0; m.m32 = 0.0; m.m33 = 1.0
-        return m
 
-    # def _get_row_1(self):
-    #     return [self.m11, self.m21, self.m31]
-    # def _set_row_1(self, values):
-    #     self.m11 = values[0] * 1.0
-    #     self.m21 = values[1] * 1.0
-    #     self.m31 = values[2] * 1.0
-
-    # def _get_row_2(self):
-    #     return [self.m12, self.m22, self.m32]
-    # def _set_row_2(self, values):
-    #     self.m12 = values[0] * 1.0
-    #     self.m22 = values[1] * 1.0
-    #     self.m32 = values[2] * 1.0
-
-    # def _get_row_3(self):
-    #     return [self.m13, self.m23, self.m33]
-    # def _set_row_3(self, values):
-    #     self.m13 = values[0] * 1.0
-    #     self.m23 = values[1] * 1.0
-    #     self.m33 = values[2] * 1.0
-    
     def _get_row_1(self):
-        return [self.m11, self.m12, self.m13]
+        return vec3_from_floats(self.m11, self.m12, self.m13)
     def _set_row_1(self, values):
         self.m11 = values[0] * 1.0
         self.m12 = values[1] * 1.0
         self.m13 = values[2] * 1.0
 
     def _get_row_2(self):
-        return [self.m21, self.m22, self.m23]
+        return vec3_from_floats(self.m21, self.m22, self.m23)
     def _set_row_2(self, values):
         self.m21 = values[0] * 1.0
         self.m22 = values[1] * 1.0
         self.m23 = values[2] * 1.0
 
     def _get_row_3(self):
-        return [self.m31, self.m32, self.m33]
+        return vec3_from_floats(self.m31, self.m32, self.m33)
     def _set_row_3(self, values):
         self.m31 = values[0] * 1.0
         self.m31 = values[1] * 1.0
@@ -285,9 +234,9 @@ cdef class Matrix44(object):
         xx = self.m11*x + self.m12*y + self.m13*z
         yy = self.m21*x + self.m22*y + self.m23*z
         zz = self.m31*x + self.m32*y + self.m33*z
-        return vec3.from_floats(xx, yy, zz)
+        return vec3_from_floats(xx, yy, zz)
 
-    def transform(self, Vector4D v):
+    cpdef int transform(self, Vector4D v):
         """
         self: Matrix44
         v: Vector4D
@@ -304,8 +253,9 @@ cdef class Matrix44(object):
         v._x = self.m10*t + self.m11*x + self.m12*y + self.m13*z
         v._y = self.m20*t + self.m21*x + self.m22*y + self.m23*z
         v._z = self.m30*t + self.m31*x + self.m32*y + self.m33*z
-    
-    def get_transform(self, v):
+        return 0
+
+    cpdef Vector4D get_transform(self, v):
         cdef double t, x, y, z, tt, xx, yy, zz
         t, x, y, z = v
         
@@ -313,17 +263,7 @@ cdef class Matrix44(object):
         xx = self.m10*t + self.m11*x + self.m12*y + self.m13*z
         yy = self.m20*t + self.m21*x + self.m22*y + self.m23*z
         zz = self.m30*t + self.m31*x + self.m32*y + self.m33*z
-        return [tt, xx, yy, zz]
-        
-    def get_transform_v4(self, v):
-        cdef double t, x, y, z, tt, xx, yy, zz
-        t, x, y, z = v
-        
-        tt = self.m00*t + self.m01*x + self.m02*y + self.m03*z
-        xx = self.m10*t + self.m11*x + self.m12*y + self.m13*z
-        yy = self.m20*t + self.m21*x + self.m22*y + self.m23*z
-        zz = self.m30*t + self.m31*x + self.m32*y + self.m33*z
-        return vec4.from_floats(tt, xx, yy, zz)
+        return vec4_from_floats(tt, xx, yy, zz)
 
     def get_transform_lis3(self, v):
         cdef double t, x, y, z, xx, yy, zz
@@ -363,3 +303,31 @@ cdef class Matrix44(object):
                 self.m10, self.m20, self.m30, self.m00]
     def get_gamma(self):
         return self.m00
+
+@cython.cdivision(True)
+cpdef Matrix44 Lorentz(Vector4D u):
+    cdef Matrix44 m = Matrix44.__new__(Matrix44)
+    cdef double x, y, z, x2, y2, z2, r, g, xy, yz, zx
+    x = u._x
+    y = u._y
+    z = u._z
+    x2 = x*x
+    y2 = y*y
+    z2 = z*z
+    r = x2 + y2 + z2
+    if r > 0.0:
+        g = sqrt(1.0 + r)
+        r = 1.0 / r
+        xy = (g-1.0)*x*y*r
+        yz = (g-1.0)*y*z*r
+        zx = (g-1.0)*z*x*r
+        m.m00 =  g; m.m01 =                 -x; m.m02 =                 -y; m.m03 =                 -z
+        m.m10 = -x; m.m11 = (g*x2 + y2 + z2)*r; m.m12 =                 xy; m.m13 =                 zx
+        m.m20 = -y; m.m21 =                 xy; m.m22 = (x2 + g*y2 + z2)*r; m.m23 =                 yz
+        m.m30 = -z; m.m31 =                 zx; m.m32 =                 yz; m.m33 = (x2 + y2 + g*z2)*r
+    else:
+        m.m00 = 1.0; m.m01 = 0.0; m.m02 = 0.0; m.m03 = 0.0
+        m.m10 = 0.0; m.m11 = 1.0; m.m12 = 0.0; m.m13 = 0.0
+        m.m20 = 0.0; m.m21 = 0.0; m.m22 = 1.0; m.m23 = 0.0
+        m.m30 = 0.0; m.m31 = 0.0; m.m32 = 0.0; m.m33 = 1.0
+    return m

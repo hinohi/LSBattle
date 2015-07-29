@@ -44,7 +44,7 @@ class Star(object):
         if self.hp > 0:
             dX = self.X - Xp
             dX.t = -dX.length()
-            dx = L.get_transform_v4(dX)
+            dx = L.get_transform(dX)
             r = -dx.t
             if r > 0.5*BOX.far_clip:
                 s = 0.05 * BOX.far_clip / r

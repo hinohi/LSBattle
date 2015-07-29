@@ -77,7 +77,7 @@ class Gun(object):
         """
         X: player's position in background frame
         """
-        X += L.get_transform_v4(Vector4D.from_tv(1, matrix.up)) * self.shoot_position
+        X += L.get_transform(Vector4D.from_tv(1, matrix.up)) * self.shoot_position
         v = -Vector3(matrix.forward)
         n = Vector4D.from_tv(1.0, v)
         L.transform(n)

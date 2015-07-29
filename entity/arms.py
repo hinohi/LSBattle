@@ -102,35 +102,9 @@ class SlowBullet(object):
 
 class _BaseBullets(object):
 
-    def __init__(self, world, color=(0.9, 0.1, 0.1, 0.8), psize=0.02):
-        self.world = world
-        self.bullets = []
-        self.size = BOX.X * psize
-        self.n = 0
-        self.hit_n = 0
-        self.model = PointSprite(size=self.size, color=color, texture=DY_TEXTURE_KYU)
-        if self.__class__.__name__ == "Bullets":
-            self.color = [1.0 if i > 1.0 else i for i in  (Vector3(color)*2.0).get_lis()] + [0.8]
-            self.flame = Flame(S=0.3, v=0.4, psize=psize*2, color=self.color)
-        else:
-            self.color = [1.0 if i > 1.0 else i for i in  (Vector3(color)*2.0).get_lis()] + [0.4]
-            self.flame = Flame(S=0.3, v=0.4, psize=psize*0.5, color=self.color)
-
     def __iter__(self):
         return iter(self.bullets)
 
-    def draw(self, Xp, L):
-        if self.bullets:
-            vertices = []
-            bullets = []
-            for bullet in self.bullets:
-                if bullet.draw(Xp, L, self.flame, vertices):
-                    bullets.append(bullet)
-                elif bullet.hit:
-                    self.hit_n += 1
-            self.bullets = bullets
-            if vertices:
-                self.model.draw(Xp, L, vertices=vertices)
 
 class Bullets(_BaseBullets):
 
@@ -141,7 +115,7 @@ class Bullets(_BaseBullets):
         self.n = 0
         self.hit_n = 0
         self.model = PointSpriteDoppler(size=self.size, color=color, texture=DY_TEXTURE_KYU)
-        self.color = [1.0 if i > 1.0 else i for i in  (Vector3(color)*2.0).get_lis()] + [0.8]
+        self.color = [1.0 if i > 1.0 else i for i in Vector3(color[:3])*2.0] + [0.8]
         self.flame = Flame(S=0.3, v=0.4, psize=psize*2, color=self.color)
 
     def add(self, X, U, L, N, S):
@@ -183,7 +157,7 @@ class SlowBullets(_BaseBullets):
         self.n = 0
         self.hit_n = 0
         self.model = PointSpriteDoppler(size=self.size, color=color, texture=DY_TEXTURE_KYU)
-        self.color = [1.0 if i > 1.0 else i for i in  (Vector3(color)*2.0).get_lis()] + [0.4]
+        self.color = [1.0 if i > 1.0 else i for i in Vector3(color[:3])*2.0] + [0.4]
         self.flame = Flame(S=0.3, v=0.4, psize=psize*0.5, color=self.color)
 
     def add(self, X, N, S, id=None):

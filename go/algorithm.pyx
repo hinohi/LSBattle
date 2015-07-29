@@ -1,18 +1,18 @@
 # coding: utf8
 # cython: profile=False
-# go.algorithm.pyx
+# go/algorithm.pyx
+cimport cython
 from libc.math cimport sqrt
 
 from vector4D cimport Vector4D
-from matrix44 cimport Matrix44
-
-from matrix44 import Matrix44
+from matrix44 cimport Matrix44, Lorentz
 
 
+@cython.cdivision(True)
 def calc_shoot_direction(Vector4D Xp, Vector4D Up, Vector4D X, Vector4D U, double v):
-    cdef Matrix44 L = Matrix44.Lorentz(Up)
-    cdef Vector4D x = L.get_transform_v4(X-Xp)
-    cdef Vector4D u = L.get_transform_v4(U)
+    cdef Matrix44 L = Lorentz(Up)
+    cdef Vector4D x = L.get_transform(X-Xp)
+    cdef Vector4D u = L.get_transform(U)
     cdef double v2 = v*v
     cdef double a = -v2*u._t*u._t + u._x*u._x + u._y*u._y + u._z*u._z
     cdef double b = -v2*x._t*u._t + x._x*u._x + x._y*u._y + x._z*u._z
@@ -27,17 +27,19 @@ def calc_shoot_direction(Vector4D Xp, Vector4D Up, Vector4D X, Vector4D U, doubl
     dz = (x._z + tau*u._z) * s
     return [dx, dy, dz]
 
+@cython.cdivision(True)
 def calc_repulsion(Vector4D Xp, Vector4D X1, Vector4D U1, double collision_radius, double repulsion, Vector4D acceleration):
     cdef Vector4D X = Xp - X1
     cdef double R = -U1.inner_product(X)
     if R < collision_radius:
         X.normalize(repulsion * (collision_radius - R))
         X._t = U1.dot(X) / U1._t
-        Matrix44.Lorentz(-U1).transform(X)
+        Lorentz(-U1).transform(X)
         acceleration._x += X._x
         acceleration._y += X._y
         acceleration._z += X._z
 
+@cython.cdivision(True)
 def hit_check(Vector4D Xs, Vector4D N, double S, Vector4D X1, Vector4D X0, double collision_radius2):
     cdef Vector4D X, dX, Y, dY
     cdef double Nt, Xt, dXt, dot, dY2, tc, s, R2

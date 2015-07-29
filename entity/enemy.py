@@ -155,7 +155,7 @@ class Enemy(object):
             if self.zgzg%2:   p *= pp
             else:             p *= -pp
             n += p
-        acceleration.add_vec3(n)
+        acceleration.d += n
 
     def hit_check(self, X1, X0, color=None):
         score = 0
@@ -306,7 +306,7 @@ class Enemy(object):
             self.last_R = R
             self.model.draw(Xp, L, LL, X, U, R) # draw body's polygon
 
-            LX = L.get_transform_v4(X-Xp)
+            LX = L.get_transform(X-Xp)
             R_i = R.get_inverse_rot()
             glDisable(GL_CULL_FACE)
             if script.enemy.timer.visible: self.draw_timer(LX, R, R_i, state0, state1, s)

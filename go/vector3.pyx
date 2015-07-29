@@ -1,9 +1,10 @@
 # coding: utf8
 # cython: profile=False
-# go.vector3.pyx
+# go/vector3.pyx
+cimport cython
 from libc.math cimport sqrt
 
-from vector3 cimport Vector3
+from vector3 cimport Vector3, vec3_from_floats
 
 
 cdef void _arg0(Vector3 self, args):
@@ -12,7 +13,7 @@ cdef void _arg0(Vector3 self, args):
     self._z = 0.0
 cdef void _arg1(Vector3 self, args):
     cdef double x, y, z
-    x, y, z = args[0][:3]
+    x, y, z = args[0]
     self._x = x
     self._y = y
     self._z = z
@@ -32,22 +33,6 @@ cdef class Vector3(object):
     
     def __init__(self, *args):
         _args[len(args)](self, args)
-
-    cpdef Vector3 from_floats(self, double x, double y, double z):
-        cdef Vector3 v = Vector3.__new__(Vector3)
-        v._x = x
-        v._y = y
-        v._z = z
-        return v
-
-    @classmethod
-    def from_iter(cls, iterable):
-        next = iter(iterable).next
-        cdef Vector3 v = Vector3.__new__(Vector3)
-        v._x = next()*1.0
-        v._y = next()*1.0
-        v._z = next()*1.0
-        return v
 
     cpdef copy(self):
         cdef Vector3 v = Vector3.__new__(Vector3)
@@ -87,7 +72,7 @@ cdef class Vector3(object):
         yield self._z
 
     def __add__(Vector3 self, Vector3 rhs):
-        return self.from_floats(self._x+rhs._x, self._y+rhs._y, self._z+rhs._z)
+        return vec3_from_floats(self._x+rhs._x, self._y+rhs._y, self._z+rhs._z)
     def __iadd__(Vector3 self, Vector3 rhs):
         self._x += rhs._x
         self._y += rhs._y
@@ -95,7 +80,7 @@ cdef class Vector3(object):
         return self
 
     def __sub__(Vector3 self, Vector3 rhs):
-        return self.from_floats(self._x-rhs._x, self._y-rhs._y, self._z-rhs._z)
+        return vec3_from_floats(self._x-rhs._x, self._y-rhs._y, self._z-rhs._z)
     def __isub__(Vector3 self, Vector3 rhs):
         self._x -= rhs._x
         self._y -= rhs._y
@@ -103,7 +88,7 @@ cdef class Vector3(object):
         return self
 
     def __mul__(Vector3 self, double rhs):
-        return self.from_floats(self._x*rhs, self._y*rhs, self._z*rhs)
+        return vec3_from_floats(self._x*rhs, self._y*rhs, self._z*rhs)
     def __imul__(Vector3 self, double rhs):
         self._x *= rhs
         self._y *= rhs
@@ -112,7 +97,7 @@ cdef class Vector3(object):
 
     def __div__(Vector3 self, double rhs):
         rhs = 1.0 / rhs
-        return self.from_floats(self._x*rhs, self._y*rhs, self._z*rhs)
+        return vec3_from_floats(self._x*rhs, self._y*rhs, self._z*rhs)
     def __idiv__(Vector3 self, double rhs):
         rhs = 1.0 / rhs
         self._x *= rhs
@@ -121,7 +106,7 @@ cdef class Vector3(object):
         return self
 
     def __neg__(self):
-        return self.from_floats(-self._x, -self._y, -self._z)
+        return vec3_from_floats(-self._x, -self._y, -self._z)
 
     def __pos__(self):
         return self.copy()
@@ -130,10 +115,11 @@ cdef class Vector3(object):
         cdef double r = self._x*self._x + self._y*self._y + self._z*self._z
         if r:
             r = length / sqrt(r)
-            return self.from_floats(self._x*r, self._y*r, self._z*r)
+            return vec3_from_floats(self._x*r, self._y*r, self._z*r)
         else:
-            return self.from_floats(length, 0.0, 0.0)
+            return vec3_from_floats(length, 0.0, 0.0)
 
+    @cython.cdivision(True)
     def hat(self, double length=1.0):
         cdef double r = self._x*self._x + self._y*self._y + self._z*self._z
         if r:
@@ -144,14 +130,16 @@ cdef class Vector3(object):
         else:
             self._x = length
 
+    @cython.cdivision(True)
     def get_normalize(self, double length=1.0):
         cdef double r = self._x*self._x + self._y*self._y + self._z*self._z
         if r:
             r = length / sqrt(r)
-            return self.from_floats(self._x*r, self._y*r, self._z*r)
+            return vec3_from_floats(self._x*r, self._y*r, self._z*r)
         else:
-            return self.from_floats(0.0, 0.0, 0.0)
+            return vec3_from_floats(0.0, 0.0, 0.0)
 
+    @cython.cdivision(True)
     def normalize(self, double length=1.0):
         cdef double r = self._x*self._x + self._y*self._y + self._z*self._z
         if r:
@@ -188,11 +176,16 @@ cdef class Vector3(object):
     def cross(self, othr):
         cdef double x, y, z
         x, y, z = othr
-        return self.from_floats( self._y*z - y*self._z,
+        return vec3_from_floats( self._y*z - y*self._z,
                                  self._z*x - z*self._x,
                                  self._x*y - x*self._y )
 
     def get_lis(self):
         return [self._x, self._y, self._z]
 
-vec3 = Vector3()
+cdef Vector3 vec3_from_floats(double x, double y, double z):
+    cdef Vector3 v = Vector3.__new__(Vector3)
+    v._x = x
+    v._y = y
+    v._z = z
+    return v
