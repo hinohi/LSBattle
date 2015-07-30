@@ -10,33 +10,36 @@ from model.flame import Flame
 from program.const import IMG_DIR, c
 from program.box import BOX
 from program.text import drawSentence3d
+from program import script
 
-
-_data = [["earth.jpg", 6378000, 23.4*pi/180,            0, 100],
+_data = [["earth.jpg", 6378000, 23.4*pi/180,            0, 30],
          ["moon.jpg",  1738000,           0,    384400000, 10],
-         ["sun.gif", 695500000,           0, 149597870700, 1000]]
+         ["sun.gif", 695500000,           0, 149597870700, 100]]
 
-def _high_func(sphere_radius, phi, rescale):
-    mat = Matrix44.scale(sphere_radius*rescale) * Matrix44.x_rotation(phi)
+def _high_func(sphere_radius, tilt, rescale):
+    mat = Matrix44.scale(sphere_radius*rescale) * Matrix44.x_rotation(tilt)
     def func(x, y, z):
         return mat.get_rotate([x, y, z])
     return func
 
 class Star(object):
 
-    def __init__(self, pos, rescale, n):
-        tex_name, sphere_radius, phi, orbital_radius, hp = _data[n]
-        func = _high_func(sphere_radius, phi, rescale)
-        self.radius = sphere_radius * rescale
+    def __init__(self, pos, rescale, star_data):
+        func = _high_func(star_data.sphere_radius, star_data.tilt, rescale)
+        self.radius = star_data.sphere_radius * rescale
         self.radius2 = self.radius**2
-        self.model = Polygon(IMG_DIR+"star", func=func, texture=False)
-        self.model.set_texture(tex_name)
+        if star_data.texture is None:
+            self.model = Polygon(IMG_DIR+star_data.model, func=func)
+        else:
+            self.model = Polygon(IMG_DIR+star_data.model, func=func, texture=False)
+            self.model.set_texture(star_data.texture)
         self.X = pos + Vector4D(0.0, 0.0, 0.0, -orbital_radius*rescale)
-        self.hp = hp
-        self.flame = Flame(S=50.0*self.radius, v=0.1,
-                           n=40, m=40,
-                           color=[1.0, 0.8, 0.8, 0.8],
-                           psize=0.2*self.radius)
+        self.hp = star_data.hp
+        flame_data = script.world.planet.flame
+        self.flame = Flame(S=flame_data.life*self.radius, v=flame_data.speed,
+                           n=flame_data.num, m=flame_data.num*2,
+                           color=flame_data.num.color,
+                           psize=flame_data.size*self.radius)
         self.alive = True
         self.X_dead = None
 
@@ -68,10 +71,14 @@ class Star(object):
 
 class Stars(object):
 
-    def __init__(self, world, pos, scale):
+    def __init__(self, world, pos):
         self.world = world
         rescale = 1.0 / c
-        self.stars = [Star(pos, rescale, i) for i in xrange(len(_data))]
+        
+        self.stars = {}
+        for star_data in script.world.planet.stars:
+            self.stars[star_data.name] = Star()
+        [Star(pos, rescale, i) for i in xrange(len(_data))]
 
     def draw(self, Xp, L, LL):
         for star in self.stars:
