@@ -49,3 +49,4 @@ class character(Block):
     def _check(self):
         if isinstance(self.shoot_div, int):
             self.shoot_div = [self.shoot_div]
+        super(character, self)._check()

@@ -8,7 +8,8 @@ Player {
     turbo = 3.0                          # float 0.0<=x<=100.0
     turn_acceleration = 9.0              # float -100.0<=x<=100.0
     turn_resistivity = 5.0               # float 0.0<=x<=100.0
-    gun {
+    guns {
+        gun {
         accuracy_condition = 0.0         # float 0.0<=x<=1.0
         automatic = False                # eval
         name = Hand Gun                  # str
@@ -28,160 +29,73 @@ Player {
             rotation_speed = 0.5         # float
             size = 0.4                   # float 0.01<=x<=10.0
             color = [1.0, 1.0, 1.0, 1.0] # color_func
+            }
         }
-    }
-    gun {
-        accuracy_condition = 1.0         # float 0.0<=x<=1.0
-        automatic = True                 # eval
-        name = Machine Gun               # str
-        power = 1.0                      # float 0.01<=x<=1000.0
-        range = 150.0                    # float 2.0<=x<=1000.0
-        reload_time = 100                # int 1<=x<=100000
-        shoot_position = -0.05           # float -1.0<=x<=1.0
-        speed = 1.0                      # float 0.7<=x<=1.0
-        stage_condition = 3              # int -1<=x<=1000
-        bullet {
-            size = 0.02                  # float 0.001<=x<=0.1
-            color = [0.8, 0.8, 0.2, 0.9] # color_func
+        gun {
+            accuracy_condition = 1.0         # float 0.0<=x<=1.0
+            automatic = True                 # eval
+            name = Machine Gun               # str
+            power = 1.0                      # float 0.01<=x<=1000.0
+            range = 150.0                    # float 2.0<=x<=1000.0
+            reload_time = 100                # int 1<=x<=100000
+            shoot_position = -0.05           # float -1.0<=x<=1.0
+            speed = 1.0                      # float 0.7<=x<=1.0
+            stage_condition = 3              # int -1<=x<=1000
+            bullet {
+                size = 0.02                  # float 0.001<=x<=0.1
+                color = [0.8, 0.8, 0.2, 0.9] # color_func
+            }
+            div = []                         # eval
+            model {
+                name = M134                  # func_str
+                rotation_speed = 0.5         # float
+                size = 0.4                   # float 0.01<=x<=10.0
+                color = [1.0, 1.0, 1.0, 1.0] # color_func
+            }
         }
-        div = []                         # eval
-        model {
-            name = M134                  # func_str
-            rotation_speed = 0.5         # float
-            size = 0.4                   # float 0.01<=x<=10.0
-            color = [1.0, 1.0, 1.0, 1.0] # color_func
+        gun {
+            accuracy_condition = 1.0         # float 0.0<=x<=1.0
+            automatic = True                 # eval
+            name = Chainsaw                  # str
+            power = 1.0                      # float 0.01<=x<=1000.0
+            range = 80.0                     # float 2.0<=x<=1000.0
+            reload_time = 50                 # int 1<=x<=100000
+            shoot_position = -0.05           # float -1.0<=x<=1.0
+            speed = 1.0                      # float 0.7<=x<=1.0
+            stage_condition = 6              # int -1<=x<=1000
+            bullet {
+                size = 0.01                  # float 0.001<=x<=0.1
+                color = [0.8, 0.8, 0.2, 0.9] # color_func
+            }
+            div = [3]                        # eval
+            model {
+                name = chainsaw              # func_str
+                rotation_speed = 0.5         # float
+                size = 0.4                   # float 0.01<=x<=10.0
+                color = [1.0, 1.0, 1.0, 1.0] # color_func
+            }
         }
-    }
-    gun {
-        accuracy_condition = 1.0         # float 0.0<=x<=1.0
-        automatic = True                 # eval
-        name = Chainsaw                  # str
-        power = 1.0                      # float 0.01<=x<=1000.0
-        range = 80.0                     # float 2.0<=x<=1000.0
-        reload_time = 50                 # int 1<=x<=100000
-        shoot_position = -0.05           # float -1.0<=x<=1.0
-        speed = 1.0                      # float 0.7<=x<=1.0
-        stage_condition = 6              # int -1<=x<=1000
-        bullet {
-            size = 0.01                  # float 0.001<=x<=0.1
-            color = [0.8, 0.8, 0.2, 0.9] # color_func
-        }
-        div = [3]                        # eval
-        model {
-            name = chainsaw              # func_str
-            rotation_speed = 0.5         # float
-            size = 0.4                   # float 0.01<=x<=10.0
-            color = [1.0, 1.0, 1.0, 1.0] # color_func
-        }
-    }
-    gun {
-        accuracy_condition = 1.0         # float 0.0<=x<=1.0
-        automatic = True                 # eval
-        name = Shotgun                   # str
-        power = 1000.0                   # float 0.01<=x<=1000.0
-        range = 75.0                     # float 2.0<=x<=1000.0
-        reload_time = 2000               # int 1<=x<=100000
-        shoot_position = -0.05           # float -1.0<=x<=1.0
-        speed = 1.0                      # float 0.7<=x<=1.0
-        stage_condition = 12             # int -1<=x<=1000
-        bullet {
-            size = 0.025                 # float 0.001<=x<=0.1
-            color = [0.8, 0.8, 0.2, 0.9] # color_func
-        }
-        div = [6, 12, 18]                # eval
-        model {
-            name = M26A1                 # func_str
-            rotation_speed = 0.5         # float
-            size = 0.4                   # float 0.01<=x<=10.0
-            color = [1.0, 1.0, 1.0, 1.0] # color_func
-        }
-    }
-    gun {
-        accuracy_condition = 0.0         # float 0.0<=x<=1.0
-        automatic = False                # eval
-        name = Hand Gun                  # str
-        power = 1.0                      # float 0.01<=x<=1000.0
-        range = 60.0                     # float 2.0<=x<=1000.0
-        reload_time = 300                # int 1<=x<=100000
-        shoot_position = -0.05           # float -1.0<=x<=1.0
-        speed = 1.0                      # float 0.7<=x<=1.0
-        stage_condition = 0              # int -1<=x<=1000
-        bullet {
-            size = 0.025                 # float 0.001<=x<=0.1
-            color = [0.8, 0.8, 0.2, 0.9] # color_func
-        }
-        div = []                         # eval
-        model {
-            name = Hand Gun              # func_str
-            rotation_speed = 0.5         # float
-            size = 0.4                   # float 0.01<=x<=10.0
-            color = [1.0, 1.0, 1.0, 1.0] # color_func
-        }
-    }
-    gun {
-        accuracy_condition = 1.0         # float 0.0<=x<=1.0
-        automatic = True                 # eval
-        name = Machine Gun               # str
-        power = 1.0                      # float 0.01<=x<=1000.0
-        range = 150.0                    # float 2.0<=x<=1000.0
-        reload_time = 100                # int 1<=x<=100000
-        shoot_position = -0.05           # float -1.0<=x<=1.0
-        speed = 1.0                      # float 0.7<=x<=1.0
-        stage_condition = 3              # int -1<=x<=1000
-        bullet {
-            size = 0.02                  # float 0.001<=x<=0.1
-            color = [0.8, 0.8, 0.2, 0.9] # color_func
-        }
-        div = []                         # eval
-        model {
-            name = M134                  # func_str
-            rotation_speed = 0.5         # float
-            size = 0.4                   # float 0.01<=x<=10.0
-            color = [1.0, 1.0, 1.0, 1.0] # color_func
-        }
-    }
-    gun {
-        accuracy_condition = 1.0         # float 0.0<=x<=1.0
-        automatic = True                 # eval
-        name = Chainsaw                  # str
-        power = 1.0                      # float 0.01<=x<=1000.0
-        range = 80.0                     # float 2.0<=x<=1000.0
-        reload_time = 50                 # int 1<=x<=100000
-        shoot_position = -0.05           # float -1.0<=x<=1.0
-        speed = 1.0                      # float 0.7<=x<=1.0
-        stage_condition = 6              # int -1<=x<=1000
-        bullet {
-            size = 0.01                  # float 0.001<=x<=0.1
-            color = [0.8, 0.8, 0.2, 0.9] # color_func
-        }
-        div = [3]                        # eval
-        model {
-            name = chainsaw              # func_str
-            rotation_speed = 0.5         # float
-            size = 0.4                   # float 0.01<=x<=10.0
-            color = [1.0, 1.0, 1.0, 1.0] # color_func
-        }
-    }
-    gun {
-        accuracy_condition = 1.0         # float 0.0<=x<=1.0
-        automatic = True                 # eval
-        name = Shotgun                   # str
-        power = 1000.0                   # float 0.01<=x<=1000.0
-        range = 75.0                     # float 2.0<=x<=1000.0
-        reload_time = 2000               # int 1<=x<=100000
-        shoot_position = -0.05           # float -1.0<=x<=1.0
-        speed = 1.0                      # float 0.7<=x<=1.0
-        stage_condition = 12             # int -1<=x<=1000
-        bullet {
-            size = 0.025                 # float 0.001<=x<=0.1
-            color = [0.8, 0.8, 0.2, 0.9] # color_func
-        }
-        div = [6, 12, 18]                # eval
-        model {
-            name = M26A1                 # func_str
-            rotation_speed = 0.5         # float
-            size = 0.4                   # float 0.01<=x<=10.0
-            color = [1.0, 1.0, 1.0, 1.0] # color_func
+        gun {
+            accuracy_condition = 1.0         # float 0.0<=x<=1.0
+            automatic = True                 # eval
+            name = Shotgun                   # str
+            power = 1000.0                   # float 0.01<=x<=1000.0
+            range = 75.0                     # float 2.0<=x<=1000.0
+            reload_time = 2000               # int 1<=x<=100000
+            shoot_position = -0.05           # float -1.0<=x<=1.0
+            speed = 1.0                      # float 0.7<=x<=1.0
+            stage_condition = 12             # int -1<=x<=1000
+            bullet {
+                size = 0.025                 # float 0.001<=x<=0.1
+                color = [0.8, 0.8, 0.2, 0.9] # color_func
+            }
+            div = [6, 12, 18]                # eval
+            model {
+                name = M26A1                 # func_str
+                rotation_speed = 0.5         # float
+                size = 0.4                   # float 0.01<=x<=10.0
+                color = [1.0, 1.0, 1.0, 1.0] # color_func
+            }
         }
     }
     gun_info {
@@ -277,772 +191,390 @@ Enemy {
         size = 0.02                      # float 0.001<=x<=0.1
         color = [1.0, 0.0, 1.0, 1.0]     # color_func
     }
-    character {
-        acceleration = 10.0              # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.75              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 1                           # int 1<=x<=10000000
-        name = reimu                     # str
-        resistivity = 8.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.5             # float
-        size = 0.9                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = []                   # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.0                  # float
-            near_n = 0.2                 # float
-            near_p = 0.0                 # float
-            zgzg_interval = 1.0          # float
+    characters {
+        character {
+            acceleration = 10.0              # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.75              # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 1                           # int 1<=x<=10000000
+            name = reimu                     # str
+            resistivity = 8.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.02             # float 0.0<=x<=1.0
+            shoot_interval = 0.5             # float
+            size = 0.9                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = []                   # eval
+            think {
+                distance0 = 4.0              # float
+                distance1 = 10.0             # float
+                far_n = 1.0                  # float
+                far_p = 0.0                  # float
+                near_n = 0.2                 # float
+                near_p = 0.0                 # float
+                zgzg_interval = 1.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 2.4               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.7               # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 2                           # int 1<=x<=10000000
-        name = dorake                    # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.8             # float
-        size = 1.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = []                   # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.0                  # float
-            near_n = -0.2                # float
-            near_p = 0.0                 # float
-            zgzg_interval = 3.0          # float
+        character {
+            acceleration = 2.4               # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.7               # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 2                           # int 1<=x<=10000000
+            name = dorake                    # str
+            resistivity = 2.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.02             # float 0.0<=x<=1.0
+            shoot_interval = 0.8             # float
+            size = 1.0                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = []                   # eval
+            think {
+                distance0 = 4.0              # float
+                distance1 = 10.0             # float
+                far_n = 1.0                  # float
+                far_p = 0.0                  # float
+                near_n = -0.2                # float
+                near_p = 0.0                 # float
+                zgzg_interval = 3.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 2.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.75              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 1                           # int 1<=x<=10000000
-        name = marisa                    # str
-        resistivity = 3.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.5             # float
-        size = 0.9                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = []                   # eval
-        think {
-            distance0 = 10.0             # float
-            distance1 = 15.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.1                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 1.0          # float
+        character {
+            acceleration = 2.0               # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.75              # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 1                           # int 1<=x<=10000000
+            name = marisa                    # str
+            resistivity = 3.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.02             # float 0.0<=x<=1.0
+            shoot_interval = 0.5             # float
+            size = 0.9                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = []                   # eval
+            think {
+                distance0 = 10.0             # float
+                distance1 = 15.0             # float
+                far_n = 1.0                  # float
+                far_p = 0.1                  # float
+                near_n = 0.1                 # float
+                near_p = 0.2                 # float
+                zgzg_interval = 1.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 1.8               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.85              # float 0.5<=x<=0.99999
-        collision_radius = 1.0           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.5 # float 0.0<=x<=1.0
-        hp = 10                          # int 1<=x<=10000000
-        name = kuma                      # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.05             # float 0.0<=x<=1.0
-        shoot_interval = 1.0             # float
-        size = 2.2                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [6]                  # eval
-        think {
-            distance0 = 8.0              # float
-            distance1 = 16.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.1                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 100.0        # float
+        character {
+            acceleration = 1.8               # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.85              # float 0.5<=x<=0.99999
+            collision_radius = 1.0           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.5 # float 0.0<=x<=1.0
+            hp = 10                          # int 1<=x<=10000000
+            name = kuma                      # str
+            resistivity = 2.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.05             # float 0.0<=x<=1.0
+            shoot_interval = 1.0             # float
+            size = 2.2                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = [6]                  # eval
+            think {
+                distance0 = 8.0              # float
+                distance1 = 16.0             # float
+                far_n = 1.0                  # float
+                far_p = 0.1                  # float
+                near_n = 0.1                 # float
+                near_p = 0.2                 # float
+                zgzg_interval = 100.0        # float
+            }
         }
-    }
-    character {
-        acceleration = 1.5               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.9               # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 8                           # int 1<=x<=10000000
-        name = buta                      # str
-        resistivity = 1.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.05             # float 0.0<=x<=1.0
-        shoot_interval = 0.8             # float
-        size = 1.5                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [4]                  # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 2.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.0                 # float
-            near_p = 1.0                 # float
-            zgzg_interval = 3.0          # float
+        character {
+            acceleration = 1.5               # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.9               # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 8                           # int 1<=x<=10000000
+            name = buta                      # str
+            resistivity = 1.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.05             # float 0.0<=x<=1.0
+            shoot_interval = 0.8             # float
+            size = 1.5                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = [4]                  # eval
+            think {
+                distance0 = 4.0              # float
+                distance1 = 10.0             # float
+                far_n = 2.0                  # float
+                far_p = 0.1                  # float
+                near_n = 0.0                 # float
+                near_p = 1.0                 # float
+                zgzg_interval = 3.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 5.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.9               # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 5                           # int 1<=x<=10000000
-        name = medaka                    # str
-        resistivity = 0.8                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 1.5             # float
-        size = 0.9                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = []                   # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.0                  # float
-            near_n = -0.2                # float
-            near_p = 0.0                 # float
-            zgzg_interval = 3.0          # float
+        character {
+            acceleration = 5.0               # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.9               # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 5                           # int 1<=x<=10000000
+            name = medaka                    # str
+            resistivity = 0.8                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.02             # float 0.0<=x<=1.0
+            shoot_interval = 1.5             # float
+            size = 0.9                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = []                   # eval
+            think {
+                distance0 = 4.0              # float
+                distance1 = 10.0             # float
+                far_n = 1.0                  # float
+                far_p = 0.0                  # float
+                near_n = -0.2                # float
+                near_p = 0.0                 # float
+                zgzg_interval = 3.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 3.6               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.95              # float 0.5<=x<=0.99999
-        collision_radius = 1.0           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.5 # float 0.0<=x<=1.0
-        hp = 15                          # int 1<=x<=10000000
-        name = Manticore                 # str
-        resistivity = 3.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.6             # float
-        size = 2.4                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [3]                  # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.1                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 1.0          # float
+        character {
+            acceleration = 3.6               # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.95              # float 0.5<=x<=0.99999
+            collision_radius = 1.0           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.5 # float 0.0<=x<=1.0
+            hp = 15                          # int 1<=x<=10000000
+            name = Manticore                 # str
+            resistivity = 3.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.02             # float 0.0<=x<=1.0
+            shoot_interval = 0.6             # float
+            size = 2.4                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = [3]                  # eval
+            think {
+                distance0 = 4.0              # float
+                distance1 = 10.0             # float
+                far_n = 1.0                  # float
+                far_p = 0.1                  # float
+                near_n = 0.1                 # float
+                near_p = 0.2                 # float
+                zgzg_interval = 1.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 5.6               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.85              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 5                           # int 1<=x<=10000000
-        name = allosaurus                # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.2             # float
-        size = 3.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [3]                  # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 2.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.0                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 3.0          # float
+        character {
+            acceleration = 5.6               # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.85              # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 5                           # int 1<=x<=10000000
+            name = allosaurus                # str
+            resistivity = 2.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.02             # float 0.0<=x<=1.0
+            shoot_interval = 0.2             # float
+            size = 3.0                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = [3]                  # eval
+            think {
+                distance0 = 4.0              # float
+                distance1 = 10.0             # float
+                far_n = 2.0                  # float
+                far_p = 0.1                  # float
+                near_n = 0.0                 # float
+                near_p = 0.2                 # float
+                zgzg_interval = 3.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 10.0              # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.999             # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 5                           # int 1<=x<=10000000
-        name = Griffin                   # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.3             # float
-        size = 2.4                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [4]                  # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.1                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 5.0          # float
+        character {
+            acceleration = 10.0              # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.999             # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 5                           # int 1<=x<=10000000
+            name = Griffin                   # str
+            resistivity = 2.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.02             # float 0.0<=x<=1.0
+            shoot_interval = 0.3             # float
+            size = 2.4                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = [4]                  # eval
+            think {
+                distance0 = 4.0              # float
+                distance1 = 10.0             # float
+                far_n = 1.0                  # float
+                far_p = 0.1                  # float
+                near_n = 0.1                 # float
+                near_p = 0.2                 # float
+                zgzg_interval = 5.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 6.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.99              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 40                          # int 1<=x<=10000000
-        name = gargoyle                  # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.5             # float
-        size = 2.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [4]                  # eval
-        think {
-            distance0 = 2.0              # float
-            distance1 = 4.0              # float
-            far_n = -0.1                 # float
-            far_p = 0.01                 # float
-            near_n = -1.0                # float
-            near_p = 0.01                # float
-            zgzg_interval = 3.0          # float
+        character {
+            acceleration = 6.0               # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.99              # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 40                          # int 1<=x<=10000000
+            name = gargoyle                  # str
+            resistivity = 2.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.02             # float 0.0<=x<=1.0
+            shoot_interval = 0.5             # float
+            size = 2.0                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = [4]                  # eval
+            think {
+                distance0 = 2.0              # float
+                distance1 = 4.0              # float
+                far_n = -0.1                 # float
+                far_p = 0.01                 # float
+                near_n = -1.0                # float
+                near_p = 0.01                # float
+                zgzg_interval = 3.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 2.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.9               # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 5                           # int 1<=x<=10000000
-        name = Medusa                    # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.03             # float 0.0<=x<=1.0
-        shoot_interval = 0.1             # float
-        size = 3.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [4, 8]               # eval
-        think {
-            distance0 = 2.0              # float
-            distance1 = 4.0              # float
-            far_n = -0.07                # float
-            far_p = 1.0                  # float
-            near_n = -0.5                # float
-            near_p = 0.01                # float
-            zgzg_interval = 5.0          # float
+        character {
+            acceleration = 2.0               # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.9               # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 5                           # int 1<=x<=10000000
+            name = Medusa                    # str
+            resistivity = 2.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.03             # float 0.0<=x<=1.0
+            shoot_interval = 0.1             # float
+            size = 3.0                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = [4, 8]               # eval
+            think {
+                distance0 = 2.0              # float
+                distance1 = 4.0              # float
+                far_n = -0.07                # float
+                far_p = 1.0                  # float
+                near_n = -0.5                # float
+                near_p = 0.01                # float
+                zgzg_interval = 5.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 8.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.99              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 30                          # int 1<=x<=10000000
-        name = minotaurus                # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.3             # float
-        size = 4.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [8]                  # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 2.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.0                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 3.0          # float
+        character {
+            acceleration = 8.0               # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.99              # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 30                          # int 1<=x<=10000000
+            name = minotaurus                # str
+            resistivity = 2.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.02             # float 0.0<=x<=1.0
+            shoot_interval = 0.3             # float
+            size = 4.0                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = [8]                  # eval
+            think {
+                distance0 = 4.0              # float
+                distance1 = 10.0             # float
+                far_n = 2.0                  # float
+                far_p = 0.1                  # float
+                near_n = 0.0                 # float
+                near_p = 0.2                 # float
+                zgzg_interval = 3.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 2.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.99              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 100                         # int 1<=x<=10000000
-        name = Golem                     # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.08             # float 0.0<=x<=1.0
-        shoot_interval = 0.5             # float
-        size = 6.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [4, 8]               # eval
-        think {
-            distance0 = 3.0              # float
-            distance1 = 4.0              # float
-            far_n = -0.07                # float
-            far_p = 0.01                 # float
-            near_n = -0.5                # float
-            near_p = 0.01                # float
-            zgzg_interval = 5.0          # float
+        character {
+            acceleration = 2.0               # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.99              # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 100                         # int 1<=x<=10000000
+            name = Golem                     # str
+            resistivity = 2.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.08             # float 0.0<=x<=1.0
+            shoot_interval = 0.5             # float
+            size = 6.0                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = [4, 8]               # eval
+            think {
+                distance0 = 3.0              # float
+                distance1 = 4.0              # float
+                far_n = -0.07                # float
+                far_p = 0.01                 # float
+                near_n = -0.5                # float
+                near_p = 0.01                # float
+                zgzg_interval = 5.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 10.0              # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.99              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 30                          # int 1<=x<=10000000
-        name = Phoenix                   # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.06             # float 0.0<=x<=1.0
-        shoot_interval = 0.3             # float
-        size = 4.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [8]                  # eval
-        think {
-            distance0 = 3.0              # float
-            distance1 = 4.0              # float
-            far_n = -0.1                 # float
-            far_p = 0.01                 # float
-            near_n = -1.0                # float
-            near_p = 0.01                # float
-            zgzg_interval = 3.0          # float
+        character {
+            acceleration = 10.0              # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.99              # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 30                          # int 1<=x<=10000000
+            name = Phoenix                   # str
+            resistivity = 2.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.06             # float 0.0<=x<=1.0
+            shoot_interval = 0.3             # float
+            size = 4.0                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = [8]                  # eval
+            think {
+                distance0 = 3.0              # float
+                distance1 = 4.0              # float
+                far_n = -0.1                 # float
+                far_p = 0.01                 # float
+                near_n = -1.0                # float
+                near_p = 0.01                # float
+                zgzg_interval = 3.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 10.0              # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.99              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 30                          # int 1<=x<=10000000
-        name = wyvern                    # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.015            # float 0.0<=x<=1.0
-        shoot_interval = 0.3             # float
-        size = 6.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [4, 6]               # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 2.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.0                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 3.0          # float
+        character {
+            acceleration = 10.0              # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.99              # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 30                          # int 1<=x<=10000000
+            name = wyvern                    # str
+            resistivity = 2.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.015            # float 0.0<=x<=1.0
+            shoot_interval = 0.3             # float
+            size = 6.0                       # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = [4, 6]               # eval
+            think {
+                distance0 = 4.0              # float
+                distance1 = 10.0             # float
+                far_n = 2.0                  # float
+                far_p = 0.1                  # float
+                near_n = 0.0                 # float
+                near_p = 0.2                 # float
+                zgzg_interval = 3.0          # float
+            }
         }
-    }
-    character {
-        acceleration = 2.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.99999           # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 200                         # int 1<=x<=10000000
-        name = bos                       # str
-        resistivity = 3.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.03             # float 0.0<=x<=1.0
-        shoot_interval = 0.1             # float
-        size = 10.0                      # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [6, 8, 10]           # eval
-        think {
-            distance0 = 10.0             # float
-            distance1 = 15.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.1                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 1.0          # float
-        }
-    }
-    character {
-        acceleration = 10.0              # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.75              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 1                           # int 1<=x<=10000000
-        name = reimu                     # str
-        resistivity = 8.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.5             # float
-        size = 0.9                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = []                   # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.0                  # float
-            near_n = 0.2                 # float
-            near_p = 0.0                 # float
-            zgzg_interval = 1.0          # float
-        }
-    }
-    character {
-        acceleration = 2.4               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.7               # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 2                           # int 1<=x<=10000000
-        name = dorake                    # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.8             # float
-        size = 1.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = []                   # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.0                  # float
-            near_n = -0.2                # float
-            near_p = 0.0                 # float
-            zgzg_interval = 3.0          # float
-        }
-    }
-    character {
-        acceleration = 2.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.75              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 1                           # int 1<=x<=10000000
-        name = marisa                    # str
-        resistivity = 3.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.5             # float
-        size = 0.9                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = []                   # eval
-        think {
-            distance0 = 10.0             # float
-            distance1 = 15.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.1                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 1.0          # float
-        }
-    }
-    character {
-        acceleration = 1.8               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.85              # float 0.5<=x<=0.99999
-        collision_radius = 1.0           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.5 # float 0.0<=x<=1.0
-        hp = 10                          # int 1<=x<=10000000
-        name = kuma                      # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.05             # float 0.0<=x<=1.0
-        shoot_interval = 1.0             # float
-        size = 2.2                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [6]                  # eval
-        think {
-            distance0 = 8.0              # float
-            distance1 = 16.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.1                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 100.0        # float
-        }
-    }
-    character {
-        acceleration = 1.5               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.9               # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 8                           # int 1<=x<=10000000
-        name = buta                      # str
-        resistivity = 1.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.05             # float 0.0<=x<=1.0
-        shoot_interval = 0.8             # float
-        size = 1.5                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [4]                  # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 2.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.0                 # float
-            near_p = 1.0                 # float
-            zgzg_interval = 3.0          # float
-        }
-    }
-    character {
-        acceleration = 5.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.9               # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 5                           # int 1<=x<=10000000
-        name = medaka                    # str
-        resistivity = 0.8                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 1.5             # float
-        size = 0.9                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = []                   # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.0                  # float
-            near_n = -0.2                # float
-            near_p = 0.0                 # float
-            zgzg_interval = 3.0          # float
-        }
-    }
-    character {
-        acceleration = 3.6               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.95              # float 0.5<=x<=0.99999
-        collision_radius = 1.0           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.5 # float 0.0<=x<=1.0
-        hp = 15                          # int 1<=x<=10000000
-        name = Manticore                 # str
-        resistivity = 3.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.6             # float
-        size = 2.4                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [3]                  # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.1                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 1.0          # float
-        }
-    }
-    character {
-        acceleration = 5.6               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.85              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 5                           # int 1<=x<=10000000
-        name = allosaurus                # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.2             # float
-        size = 3.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [3]                  # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 2.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.0                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 3.0          # float
-        }
-    }
-    character {
-        acceleration = 10.0              # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.999             # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 5                           # int 1<=x<=10000000
-        name = Griffin                   # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.3             # float
-        size = 2.4                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [4]                  # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.1                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 5.0          # float
-        }
-    }
-    character {
-        acceleration = 6.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.99              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 40                          # int 1<=x<=10000000
-        name = gargoyle                  # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.5             # float
-        size = 2.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [4]                  # eval
-        think {
-            distance0 = 2.0              # float
-            distance1 = 4.0              # float
-            far_n = -0.1                 # float
-            far_p = 0.01                 # float
-            near_n = -1.0                # float
-            near_p = 0.01                # float
-            zgzg_interval = 3.0          # float
-        }
-    }
-    character {
-        acceleration = 2.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.9               # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 5                           # int 1<=x<=10000000
-        name = Medusa                    # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.03             # float 0.0<=x<=1.0
-        shoot_interval = 0.1             # float
-        size = 3.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [4, 8]               # eval
-        think {
-            distance0 = 2.0              # float
-            distance1 = 4.0              # float
-            far_n = -0.07                # float
-            far_p = 1.0                  # float
-            near_n = -0.5                # float
-            near_p = 0.01                # float
-            zgzg_interval = 5.0          # float
-        }
-    }
-    character {
-        acceleration = 8.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.99              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 30                          # int 1<=x<=10000000
-        name = minotaurus                # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.02             # float 0.0<=x<=1.0
-        shoot_interval = 0.3             # float
-        size = 4.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [8]                  # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 2.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.0                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 3.0          # float
-        }
-    }
-    character {
-        acceleration = 2.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.99              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 100                         # int 1<=x<=10000000
-        name = Golem                     # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.08             # float 0.0<=x<=1.0
-        shoot_interval = 0.5             # float
-        size = 6.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [4, 8]               # eval
-        think {
-            distance0 = 3.0              # float
-            distance1 = 4.0              # float
-            far_n = -0.07                # float
-            far_p = 0.01                 # float
-            near_n = -0.5                # float
-            near_p = 0.01                # float
-            zgzg_interval = 5.0          # float
-        }
-    }
-    character {
-        acceleration = 10.0              # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.99              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 30                          # int 1<=x<=10000000
-        name = Phoenix                   # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.06             # float 0.0<=x<=1.0
-        shoot_interval = 0.3             # float
-        size = 4.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [8]                  # eval
-        think {
-            distance0 = 3.0              # float
-            distance1 = 4.0              # float
-            far_n = -0.1                 # float
-            far_p = 0.01                 # float
-            near_n = -1.0                # float
-            near_p = 0.01                # float
-            zgzg_interval = 3.0          # float
-        }
-    }
-    character {
-        acceleration = 10.0              # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.99              # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 30                          # int 1<=x<=10000000
-        name = wyvern                    # str
-        resistivity = 2.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.015            # float 0.0<=x<=1.0
-        shoot_interval = 0.3             # float
-        size = 6.0                       # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [4, 6]               # eval
-        think {
-            distance0 = 4.0              # float
-            distance1 = 10.0             # float
-            far_n = 2.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.0                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 3.0          # float
-        }
-    }
-    character {
-        acceleration = 2.0               # float 0.0<=x<=10.0
-        bullet_range = 100.0             # float 1.0<=x<=1000.0
-        bullet_speed = 0.99999           # float 0.5<=x<=0.99999
-        collision_radius = 0.5           # float 0.0<=x<=1.0
-        collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
-        hp = 200                         # int 1<=x<=10000000
-        name = bos                       # str
-        resistivity = 3.0                # float 0.0<=x<=10.0
-        shoot_div_phi = 0.03             # float 0.0<=x<=1.0
-        shoot_interval = 0.1             # float
-        size = 10.0                      # float 0.1<=x<=1000.0
-        color = [1.0, 1.0, 1.0, 1.0]     # color_func
-        shoot_div = [6, 8, 10]           # eval
-        think {
-            distance0 = 10.0             # float
-            distance1 = 15.0             # float
-            far_n = 1.0                  # float
-            far_p = 0.1                  # float
-            near_n = 0.1                 # float
-            near_p = 0.2                 # float
-            zgzg_interval = 1.0          # float
+        character {
+            acceleration = 2.0               # float 0.0<=x<=10.0
+            bullet_range = 100.0             # float 1.0<=x<=1000.0
+            bullet_speed = 0.99999           # float 0.5<=x<=0.99999
+            collision_radius = 0.5           # float 0.0<=x<=1.0
+            collision_radius_by_friend = 0.25 # float 0.0<=x<=1.0
+            hp = 200                         # int 1<=x<=10000000
+            name = bos                       # str
+            resistivity = 3.0                # float 0.0<=x<=10.0
+            shoot_div_phi = 0.03             # float 0.0<=x<=1.0
+            shoot_interval = 0.1             # float
+            size = 10.0                      # float 0.1<=x<=1000.0
+            color = [1.0, 1.0, 1.0, 1.0]     # color_func
+            shoot_div = [6, 8, 10]           # eval
+            think {
+                distance0 = 10.0             # float
+                distance1 = 15.0             # float
+                far_n = 1.0                  # float
+                far_p = 0.1                  # float
+                near_n = 0.1                 # float
+                near_p = 0.2                 # float
+                zgzg_interval = 1.0          # float
+            }
         }
     }
     flame {

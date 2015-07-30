@@ -23,11 +23,11 @@ class Player(Block):
         self.turbo = 2.5
         self.repulsion = 100.0
         self.recovery_interval = 3.0
-        self.gun = []
+        self.guns = []
         self.hpbar = hpbar()
         self.gun_info = gun_info()
         self.window = window()
-        self._gun_obj = gun
+        self._guns_obj = gun
         self._collision_radius_func = high_func_num(float, 0.0, 1.0)
         self._hp_func = high_func_num(int, 1, 10000000)
         self._acceleration_func = high_func_num(float, 0.0, 10.0)
@@ -39,9 +39,9 @@ class Player(Block):
         self._recovery_interval_func = high_func_num(float, 0.0, 100000.0)
 
     def _check(self):
-        if not self.gun:
+        if not self.guns:
             for data in _default_gun:
-                gun = self._gun_obj()
+                gun = self._guns_obj()
                 gun.name               = data[0]
                 gun.model.name         = data[1]
                 gun.range              = data[2]
@@ -51,7 +51,6 @@ class Player(Block):
                 gun.stage_condition    = data[6]
                 gun.power              = data[7]
                 gun.bullet.size        = data[8]
-                self.gun.append(gun)
-        for g in self.gun:
-            g._check()
+                self.guns.append(gun)
+        super(Player, self)._check()
 
