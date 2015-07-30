@@ -60,3 +60,5 @@ target/
 *.c
 go/*.c
 *.html
+
+resources/config/*.ini
