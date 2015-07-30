@@ -15,3 +15,4 @@ class window(Block):
         self._pre_size_func = high_func_num(float, 1e-4, 0.2)
         self._pre_color_func = color_func
         self._texture_func = func_str
+        self._texture_dynamic_num_func = int

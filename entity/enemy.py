@@ -193,13 +193,9 @@ class Enemy(object):
                            self.world.player.repulsion,
                            acceleration)
 
-        U = Vector4D(1, 0, 0, 0)
-        for star in self.world.stars.stars:
-            star.X.t = self.P.X.t - self.P.X.distance_to(star.X)
-            calc_repulsion(self.P.X, star.X, U,
-                           self.collision_radius,
-                           self.repulsion*100,
-                           acceleration)
+        self.world.solar.calc_repulsion(self.P.X, acceleration,
+                                        self.collision_radius,
+                                        self.repulsion*100.0)
 
     def change_direction(self, X_playerPLC, U_playerPLC, ds):
         forward = Vector3(self.quaternion.get_forward_lis3_i())

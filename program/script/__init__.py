@@ -2,7 +2,7 @@
 import os as _os
 import glob as _glob
 import sys as _sys
-import traceback as _traceback
+# import traceback as _traceback
 # import logging as _logging
 
 from program import const
@@ -32,8 +32,9 @@ def make_default_script():
         width = 40
         for name in l:
             if "_"+name+"_obj" in block:
+                f.write(indent*depth + name + " {\n")
                 for nex in block[name]:
-                    pri(nex, depth)
+                    pri(nex, depth+1)
             elif isinstance(block[name], Block):
                 pri(block[name], depth)
             else:

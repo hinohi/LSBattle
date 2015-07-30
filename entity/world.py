@@ -10,7 +10,7 @@ from entity import Player
 from entity import Enemies
 from entity import WireFrame
 from entity import Sky
-from entity import Stars
+from entity import SolarSystem
 from entity import Item
 from program.const import *
 
@@ -34,7 +34,7 @@ class World(object):
             z = 6*L*(1.0*random()-2.0)
             self.enemies.add(Vector4D(0, x, y, z), typ=typ, level=self.level)
 
-        self.stars = Stars(self, Vector4D(0.0, 0.0, -0.5*scale, L-3*scale), scale)
+        self.solar = SolarSystem(self, self.player.P.X, scale)
         
         if item is not None and item == playerstate.gun_num:
             self.item = Item(item, self.player.P.X+Vector4D(0, 0, 0.5*scale, -5*scale), scale)
@@ -54,7 +54,7 @@ class World(object):
         while count < n:
             self.player.action(keys, level, ds)
             self.score += self.enemies.action(ds)
-            self.stars.hit_check(self.player.P.X)
+            self.solar.hit_check(self.player.P.X)
             
             if (self.item is not None and
                 self.player.P.X.distance_to_squared(self.item.X) < self.player.collision_radius2*4):
@@ -85,7 +85,7 @@ class World(object):
         if keys.k_map:
             self.wireframe.draw(Xp, L)
         glEnable(GL_DEPTH_TEST)
-        self.stars.draw(Xp, L, LL)
+        self.solar.draw(Xp, L, LL)
         self.enemies.draw(Xp, L, LL)
         if self.item is not None:
             self.item.draw(Xp, L, LL)

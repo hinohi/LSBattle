@@ -200,13 +200,9 @@ class Player(object):
                                self.collision_radius + enemy.collision_radius,
                                self.repulsion,
                                acceleration)
-        U = Vector4D(1.0, 0.0, 0.0, 0.0)
-        for star in self.world.stars.stars:
-            star.X.t = self.P.X.t - self.P.X.distance_to(star.X)
-            calc_repulsion(self.P.X, star.X, U,
-                           self.collision_radius*0.3+star.radius,
-                           self.repulsion*1000,
-                           acceleration)
+        self.world.solar.calc_repulsion(self.P.X, acceleration,
+                                        self.collision_radius*0.3,
+                                        self.repulsion*1000.0,)
 
     def change_direction(self, keys, ds):
         if keys.k_turn_priority1 == 0:
@@ -349,35 +345,3 @@ class Player(object):
             glLineWidth(5)
             self.lines.draw(self.P.X, L, vertices_p, vertices_f)
             glLineWidth(1)
-
-    def draw_lines(self, L, m):
-        # glLineWidth(1)
-        a = 0.01
-        b = 0.0
-        drawrange = 100
-        earth_drawrange = 10
-        ox, oy, oz = m.forward
-        ox *= a
-        oy *= a
-        oz *= a
-
-        # Draw a lint to the earth.
-        glBegin(GL_LINES)
-        x, y, z = L.get_transform_lis3(self.world.stars.stars[0].X - self.P.X)
-        glColor(0.0, 0.0, 1.0, 0.5)
-        r2 = (x - ox)**2.0 + (y - oy)**2.0 + (z - oz)**2.0
-        if r2>earth_drawrange:
-            c = b / sqrt(r2)
-            glVertex(ox+(x-ox)*c, oy+(y-oy)*c, oz+(z-oz)*c)
-            glVertex(x, y, z)
-
-        # # Draw a line to the enemies.
-        # glColor(1.0, 0.0, 0.0, 0.5)
-        # for enemy in self.world.enemies:
-        #     x, y, z = L.get_transform_lis3(enemy.P.X-self.P.X)
-        #     r2 = (x - ox)**2.0 + (y - oy)**2.0 + (z - oz)**2.0
-        #     if r2>drawrange:
-        #         c = b / sqrt(r2)
-        #         glVertex(ox+(x-ox)*c, oy+(y-oy)*c, oz+(z-oz)*c)
-        #         glVertex(x, y, z)
-        glEnd()
