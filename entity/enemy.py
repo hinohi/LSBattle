@@ -31,10 +31,10 @@ class Enemy(object):
         self.scale = world.scale
         self.id = id
         if typ is None:
-            typ = min(randint(0, world.level.types-1), len(script.enemy.character)-1)
+            typ = min(randint(0, world.level.types-1), len(script.enemy.characters)-1)
         else:
-            typ = min(typ, len(script.enemy.character)-1)
-        self.mode = script.enemy.character[typ]
+            typ = min(typ, len(script.enemy.characters)-1)
+        self.mode = script.enemy.characters[typ]
         self.size = self.mode.size * world.scale
         self.model = Polygon(os.path.join(IMG_DIR, self.mode.name),
                              func=lambda x,y,z:(x*self.size, y*self.size, z*self.size),

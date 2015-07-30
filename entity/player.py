@@ -18,7 +18,7 @@ from program import script
 
 class PlayerState(object):
     def __init__(self):
-        self.max_gun_num = len(script.player.gun)
+        self.max_gun_num = len(script.player.guns)
         self.gun_mode = 0
         self.gun_num = 1
         self.make_gun_icon()
@@ -28,7 +28,7 @@ class PlayerState(object):
         self.hp = script.player.hp
     
     def make_gun_icon(self):
-        gun = script.player.gun[self.gun_mode]
+        gun = script.player.guns[self.gun_mode]
         self.gun_info = script.player.gun_info.format%{
                 "MODE":self.gun_mode+1,
                 "NUM":self.gun_num,
@@ -148,7 +148,7 @@ class Player(object):
         self.delay = self.collision_radius
         self.repulsion = (script.player.repulsion + script.enemy.repulsion) * 0.5
 
-        self.guns = [Gun(self.world, g) for g in script.player.gun]
+        self.guns = [Gun(self.world, g) for g in script.player.guns]
         self.gun_get_time = -10.0
 
         self.hit_flg = False

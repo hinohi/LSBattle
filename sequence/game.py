@@ -64,11 +64,11 @@ class Game(object):
         while True:
 
             if item is None and playerstate.gun_num < playerstate.max_gun_num:
-                gun = script.player.gun[playerstate.gun_num]
+                gun = script.player.guns[playerstate.gun_num]
                 if stage >= gun.stage_condition:
                     item = playerstate.gun_num
 
-            #sdl2.SDL_ShowCursor(0)
+            sdl2.SDL_ShowCursor(0)
             loading.draw()
             # 1 game unit = scale * (ligh speed * 1 second)
             playerstate.reset_hp()
@@ -100,7 +100,7 @@ class Game(object):
                     item = None
 
                 if item is None and playerstate.gun_num < playerstate.max_gun_num:
-                    gun = script.player.gun[playerstate.gun_num]
+                    gun = script.player.guns[playerstate.gun_num]
                     if score_object.accuracy >= gun.accuracy_condition:
                         item = playerstate.gun_num
 

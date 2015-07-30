@@ -17,7 +17,7 @@ class Parser(object):
             self.n += 1
             line = self.f.next() + " "
             line = line[:line.find("#")].strip()
-            if line and not line[0].startswith("#"):
+            if line and not line.startswith("#"):
                 return line
 
     def parse(self, f, **setting):
@@ -30,72 +30,73 @@ class Parser(object):
             except StopIteration:
                 return
             m = self.re_block.match(line)
-            if m is not None:
-                name = m.group(1)
-                if name in self.setting:
-                    # logging.info("reading '%s' block", name)
-                    self.read_block(self.setting[name])
-                else:
-                    # logging.warning("skiping '%s' block", name)
-                    self.skip_block()
-            else:pass
-                # logging.debug("no match line (%i)", self.n)
+            if m is None:
+                continue
+            name = m.group(1)
+            if name in self.setting:
+                self.read_block(self.setting[name])
+            else:
+                self.skip_block()
+    
+    def perse_oneline_block(self, block, line):
+        m = self.re_block.match(line)
+        if m is None:
+            return False
+        name = m.group(1)
+        if name.startswith("_"):
+            return True
+        if name in block:
+            next_block = block[name]
+            if "_"+name+"_obj" in block:
+                self.read_list_block(block, name)
+            elif isinstance(next_block, Block):
+                self.read_block(next_block)
+        else:
+            self.skip_block()
+        return True
+    
+    def perse_oneline_member(self, block, line):
+        m = self.re_member.match(line)
+        if m is None:
+            return
+        name, value = m.groups()
+        if name.startswith("_"):
+            return
+        if name in block:
+            if isinstance(block[name], Block):
+                return
+            func_name = "_"+name+"_func"
+            if func_name in block:
+                func = block[func_name]
+                v = func(value)
+                setattr(block, name, v)
+            else:
+                v = eval(value)
+                setattr(block, name, v)
 
     def read_block(self, block):
         while True:
             line = self.read()
             if line == "}":return
-            while line.endswith("\\"):
-                line = line[:-1].strip() + self.read()
+            is_block = self.perse_oneline_block(block, line)
+            if not is_block:
+                self.perse_oneline_member(block, line)
+    
+    def read_list_block(self, block, name):
+        block[name] = []
+        obj_class = block["_"+name+"_obj"]
+        while True:
+            line = self.read()
+            if line == "}":return
             m = self.re_block.match(line)
-            if m is not None:
-                name = m.group(1)
-                if name.startswith("_"):
-                    # logging.warning("the block name does not start '_' (%s)", name)
-                    continue
-                if name in block:
-                    next_block = block[name]
-                    if "_"+name+"_obj" in block:
-                        obj = block["_"+name+"_obj"]()
-                        # logging.info("reading '%s' block, that is the obj block", name)
-                        self.read_block(obj)
-                        next_block.append(obj)
-                    elif isinstance(next_block, Block):
-                        # logging.info("reading '%s' block", name)
-                        self.read_block(next_block)
-                    else:pass
-                        # logging.debug("%s is not instance of 'Block'", name)
-                else:
-                    # logging.warning("skiping block, '%s' block does not have '%s' block", block.__class__.__name__, name)
-                    self.skip_block()
+            if m is None:
                 continue
-            m = self.re_member.match(line)
-            if m is not None:
-                name, value = m.groups()
-                if name.startswith("_"):
-                    # logging.warning("the attribute name does not start '_' (%s)", name)
-                    continue
-                if name in block:
-                    if isinstance(block[name], Block):
-                        pass
-                        # logging.warning("the '%s' is block, not attribute", name)
-                    else:
-                        func_name = "_"+name+"_func"
-                        if func_name in block:
-                            func = block[func_name]
-                            v = func(value)
-                            setattr(block, name, v)
-                        else:
-                            v = eval(value)
-                            setattr(block, name, v)
-                        # logging.info("set attribute, %s = %r", name, v)
-                else:
-                    pass
-                    # logging.warning("skiping block, '%s' block does not have '%s'", block.__class__.__name__, name)
-            else:
-                pass
-                # logging.debug("no match line (%i)", self.n)
-
+            obj = obj_class()
+            obj_name = m.group(1)
+            if obj_name != obj.__class__.__name__:
+                continue
+            self.read_block(obj)
+            block[name].append(obj)
 
     def skip_block(self):
         while True:

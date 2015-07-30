@@ -11,14 +11,14 @@ class Item(object):
     def __init__(self, item, X, scale=1.0):
         self.item = item
         self.X = X
-        name = script.player.gun[item].model.name
-        size = script.player.gun[item].model.size * scale
-        color = script.player.gun[item].model.color
+        name = script.player.guns[item].model.name
+        size = script.player.guns[item].model.size * scale
+        color = script.player.guns[item].model.color
         def func(x, y, z):
             return x*size, y*size, z*size
         self.model = Polygon(IMG_DIR+name, func=func, color=color)
         self.time = 0.0
-        self.rotation_speed = script.player.gun[item].model.rotation_speed
+        self.rotation_speed = script.player.guns[item].model.rotation_speed
 
     def action(self, ds):
         self.time += ds

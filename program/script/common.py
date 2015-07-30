@@ -8,6 +8,8 @@ class Block(object):
     
     def __getitem__(self, key):
         return self.__dict__[key]
+    def __setitem__(self, key, value):
+        self.__dict__[key] = value
     
     def _check(self):
         for name in dir(self):
