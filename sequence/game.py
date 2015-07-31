@@ -38,7 +38,11 @@ class Game(object):
             if flg == title.PLAY:
                 mode = choicemode.mainloop()
                 if not mode == choicemode.RETURN:
-                    self.play_loop(mode)
+                    self.howto_loop(mode)
+                    if mode == choicemode.TRAVEL:
+                        self.travel_loop(mode)
+                    else:
+                        self.play_loop(mode)
                     top = True
             elif flg == title.OPTION:
                 option.mainloop()
@@ -50,10 +54,21 @@ class Game(object):
             elif flg == title.QUIT:
                 BOX.game_quit()
     
-    def play_loop(self, mode):
+    def howto_loop(self, mode):
         howto = Howto(GameLevel(1, mode))
         howto.mainloop()
-
+        
+    def travel_loop(self, mode):
+        loading = Loading()
+        sdl2.SDL_ShowCursor(0)
+        loading.draw()
+        playerstate = PlayerState()
+        playerstate.gun_num += 1
+        travel = Travel(GameLevel(1, mode), script.game.scale, playerstate)
+        travel.mainloop()
+        sdl2.SDL_ShowCursor(1)
+    
+    def play_loop(self, mode):
         loading = Loading()
         continue_q = ContineQuestion()
         gameover = GameOver()
@@ -74,20 +89,12 @@ class Game(object):
 
             sdl2.SDL_ShowCursor(0)
             loading.draw()
-            # 1 game unit = scale * (ligh speed * 1 second)
             playerstate.reset_hp()
-            if not level.is_travel():
-                play = Play(playerstate,
-                            level,
-                            scale=script.game.scale,
-                            total_score=total_score,
-                            item=item)
-            else:
-                play = Travel(playerstate,
-                            level,
-                            scale=script.game.scale,
-                            total_score=total_score,
-                            item=item)
+            play = Play(level,
+                        script.game.scale,
+                        playerstate,
+                        total_score=total_score,
+                        item=item)
             flg = play.mainloop()
             sdl2.SDL_ShowCursor(1)
             total_score = play.world.score

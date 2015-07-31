@@ -173,7 +173,8 @@ World {
     enemy_bullet_num_limit = 1200        # int 100<=x<=100000000
     player_bullet_num_limit = 1200       # int 100<=x<=100000000
     sky {
-        rotation = 1.0471975512          # float 0.0<=x<=6.28318530718
+        rotation0 = 90          # float 0.0<=x<=6.28318530718
+        rotation1 = 30          # float 0.0<=x<=6.28318530718
         texture0 = milkyway.jpg          # func_str
         texture1 = milkyway2.jpg         # func_str
     }

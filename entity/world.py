@@ -17,49 +17,53 @@ from program.const import *
 
 class World(object):
 
-    def __init__(self, playerstate, level, scale=1.0, L=10, item=None):
+    def __init__(self, level, scale, playerstate, item=None):
         self.level = level
         self.scale = scale
-        L *= scale
-        self.L = L
-        self.wireframe = WireFrame(scale)
+        self.playerstate = playerstate
+        self.L = self.level.L * scale
+        self.wireframe = WireFrame(scale=self.scale)
         self.sky = Sky()
-        self.player = Player(self, playerstate, Vector4D(0, 0, 0, L), level=level)
-        self.enemies = Enemies(self)
-        types = [randint(0, level.types - 1)for i in xrange(level.enemy_num-1)]
-        types += [level.types-1]
+        self.player = Player(world=self, level=level,
+                             state=playerstate,
+                             pos=Vector4D(0, 0, 0, self.L))
+        self.solar = SolarSystem(self, self.player.P.X, self.scale)
+        self.enemies = Enemies(world=self)
+        self.item = None
+        if not level.is_travel():
+            self.init_set_enemy()
+            self.init_set_item(item)
+        self.score = 0
+    
+    def init_set_enemy(self):
+        types = [randint(0, self.level.types - 1)for i in xrange(self.level.enemy_num-1)]
+        types += [self.level.types-1]
         for typ in types:
-            x = 6*L*(2.0*random()-1.0)
-            y = 6*L*(2.0*random()-1.0)
-            z = 6*L*(1.0*random()-2.0)
+            x = 6.0 * self.L * (2.0*random()-1.0)
+            y = 6.0 * self.L * (2.0*random()-1.0)
+            z = 6.0 * self.L * (1.0*random()-2.0)
             self.enemies.add(Vector4D(0, x, y, z), typ=typ, level=self.level)
 
-        self.solar = SolarSystem(self, self.player.P.X, scale)
-        
-        if item is not None and item == playerstate.gun_num:
-            self.item = Item(item, self.player.P.X+Vector4D(0, 0, 0.5*scale, -5*scale), scale)
-        else:
-            self.item = None
-            
-        self.score = 0
+    def init_set_item(self, item):
+        if item is not None and item == self.playerstate.gun_num:
+            pos = self.player.P.X + Vector4D(0, 0, 0.5, -5.0) * self.scale
+            self.item = Item(item, pos, self.scale)
 
-    def action(self, keys, level, ds):
+    def action(self, keys, ds):
         n = int(ds * 10.0) + 1
         ds /= n
         count = 0
         while count < n:
-            self.player.action(keys, level, ds)
+            self.player.action(keys, ds)
             self.score += self.enemies.action(ds)
             self.solar.hit_check(self.player.P.X)
             
-            if (self.item is not None and
-                self.player.P.X.distance_to_squared(self.item.X) < self.player.collision_radius2*4):
-                self.player.state.gun_get()
-                self.player.gun_get_time = self.player.time
-                self.item = None
-            elif self.item is not None:
+            if self.item is not None:
                 self.item.action(ds)
-
+                if (self.player.P.X.distance_to_squared(self.item.X) < self.player.collision_radius2*4):
+                    self.player.state.gun_get()
+                    self.player.gun_get_time = self.player.time
+                    self.item = None
             count += 1
 
     def draw(self, keys):

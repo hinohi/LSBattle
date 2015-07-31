@@ -22,10 +22,11 @@ class GameLevel(object):
             "booster": {EASY:False, NORMAL: False, HARD:True, TRAVEL:True},
             "accel_right": {EASY:False, NORMAL: True, HARD:True, TRAVEL:True},
             "accel_left": {EASY:False, NORMAL: True, HARD:True, TRAVEL:True},
-            "change_gun": {EASY:False, NORMAL: True, HARD:True, TRAVEL:True},
+            "change_gun": {EASY:False, NORMAL: True, HARD:True, TRAVEL:False},
             "brake": {EASY:False, NORMAL: False, HARD:True, TRAVEL:True},
             "toggle_HUD": {EASY:False, NORMAL: True, HARD:True, TRAVEL:True},
         }
+        
     def enabled(self, key):
         if key in self.table:
             return self.table[key][self.mode]

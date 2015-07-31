@@ -1,5 +1,5 @@
 #coding: utf8
-from math import sqrt, sin
+from math import sqrt
 
 from OpenGL import GL
 import sdl2
@@ -16,37 +16,27 @@ from sequence.stopmenu import StopMenu
 
 
 class Travel(object):
-    WIN = 0
-    LOSE = 1
-    ELSE = 2
-    def __init__(self, playerstate, level, scale=1.0, total_score=0, item=None):
+    
+    def __init__(self, level, scale, playerstate):
         BOX.resize(scale)
         self.stopmenu = StopMenu()
         self.level = level
-        self.world = World(playerstate, level, scale, level.L, item)
-        self.world.score += total_score
+        self.world = World(level, scale, playerstate)
 
     def init(self):
         self.start_message = Sentence(self.level.stage_name, BOX.Y/10)
-        self.clear_message = Sentence("STAGE CLEAR!", BOX.Y/8)
-        self.gun_message = Sentence("Got New Gun!", BOX.Y/8)
-        self.move_message = Sentence("Move,move!!", BOX.Y/5)
         self.keys = Keys()
         
-        self.world.action(self.keys, self.level, 0.01)
+        self.world.action(self.keys, 0.01)
         self.world.draw(self.keys)
         sdl2.SDL_GL_SwapWindow(BOX.window)
 
     def mainloop(self):
         self.init()
-        scoreHight = BOX.Y/15
         textHeight = BOX.Y/25
         fps = FramePerSec()
         total_time = 0
-        clear_time = 0
-        lose_time = 0
         last_tick = sdl2.SDL_GetTicks()
-        last_move = self.world.player.time
         shoot = False
         while True:
             
@@ -65,7 +55,7 @@ class Travel(object):
                             last_tick = sdl2.SDL_GetTicks()
                             break
                         elif flg == self.stopmenu.TITLE:
-                            return self.ELSE
+                            return
                     elif key == self.keys.accel_forward and self.level.enabled("accel_forward"):
                         self.keys.k_accel |= 1
                     elif key == self.keys.accel_back and self.level.enabled("accel_back"):
@@ -144,7 +134,7 @@ class Travel(object):
                 else:
                     self.keys.k_bullet = 0
 
-            self.world.action(self.keys, self.level, ds)
+            self.world.action(self.keys, ds)
             self.world.draw(self.keys)
 
             if total_time < 2.0:
@@ -152,25 +142,20 @@ class Travel(object):
                 self.start_message.draw_center()
 
             if self.keys.k_map == 1:
-                GL.glColor(0.3, 0.6, 0.3, 1.0)
-                text = "Score %i\n"%self.world.score
-                drawSentence(text, scoreHight, BOX.X*0.01, BOX.Y)
-
                 g = self.world.player.P.U.get_gamma()
                 u = sqrt(1.0 - 1.0/g**2)
                 v = c * u
                 text = "Stage: %i\n"%self.level.stage
                 text += "FPS: %i\n"%(fps.get())
                 text += "Speed: {:,d}m/s\n".format(int(v))
-                # text += "      {:,d}km/h\n".format(int(v*3.6))
                 text += "       %.3fc\n"%(u)
                 text += "Lorentz factor: %.1f\n"%(g)
                 GL.glColor(0.3, 0.6, 0.3, 1.0)
-                drawSentence(text, textHeight, BOX.X*0.01, BOX.Y-scoreHight)
+                drawSentence(text, textHeight, BOX.X*0.01, BOX.Y)
 
                 text  = "Proper Time: %is\n"%(total_time)
                 text += " World Time: %is\n"%(self.world.player.P.X.t)
                 GL.glColor(1.0, 1.0, 1.0, 0.5)
-                drawSentence(text, textHeight, BOX.X*0.01, BOX.Y-scoreHight-5*textHeight)
+                drawSentence(text, textHeight, BOX.X*0.01, BOX.Y-5*textHeight)
 
             sdl2.SDL_GL_SwapWindow(BOX.window)

@@ -28,7 +28,7 @@ class ChoiceMode(object):
                             "NORMAL":1,
                             "HARD":2,
                             "TRAVEL":3}[BOX.MODE]
-        self.menu.pos[-2][1] -= self.menu.height*0.8
+        self.menu.pos[-2][1] -= self.menu.height*0.25
 
     def mainloop(self):
         self.init()
