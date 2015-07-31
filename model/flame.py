@@ -45,22 +45,24 @@ class Flame(object):
         ac = a * c
         vertices = []
         U = []
+        sizes = []
         if LL is None:
             NN = self.vertices
         else:
             NN = [LL.get_transform(N) for N in self.vertices]
         vc = 0
-        for N, S in zip(NN, self.SS):
+        for N, S, size in zip(NN, self.SS, self.sizes):
             b = N.inner_product(dX)
             s = b - sqrt(b*b - ac)
             if 0.0 < s:
                 if s < S:
                     vertices.extend(X.get_linear_add_lis3(N, s))
                     U.extend(N.get_lis_glsl())
+                    sizes.append(size)
             else:
                 vc += 1
         if vertices:
-            self.model.draw(Xp, L, vertices, U, self.sizes, color=color)
+            self.model.draw(Xp, L, vertices, U, sizes, color=color)
             return True
         elif vc == 0:
             return False

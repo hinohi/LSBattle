@@ -19,6 +19,8 @@ class Howto(object):
             if level.enabled(name):
                 texts1.append(self.keys.name2[self.keys.names.index(name)])
                 texts2.append(self.keys.key_map[key])
+        texts1 += ["", "Exit          "]
+        texts2 += ["", "ESC"]
         n = len(texts1)
         size = BOX.Y*0.6 / n
         self.menu_1 = MenuItems(texts1, size, 0.15,

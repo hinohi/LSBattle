@@ -13,18 +13,22 @@ class ChoiceMode(object):
     EASY   = 0
     NORMAL = 1
     HARD   = 2
-    RETURN = 3
+    TRAVEL = 3
+    RETURN = 4
 
     def __init__(self):
         self.texts = ["Easy",
                       "Normal",
-                      "Hard"]
+                      "Hard",
+                      "Travel"]
 
     def init(self):
         self.menu = MenuItems(self.texts, BOX.Y/10, ret=True)
         self.menu.choice = {"EASY":0,
                             "NORMAL":1,
-                            "HARD":2}[BOX.MODE]
+                            "HARD":2,
+                            "TRAVEL":3}[BOX.MODE]
+        self.menu.pos[-2][1] -= self.menu.height*0.8
 
     def mainloop(self):
         self.init()
@@ -58,7 +62,8 @@ class ChoiceMode(object):
                 if choice != self.menu.RETURN:
                     BOX.set_mode({0:"EASY",
                                   1:"NORMAL",
-                                  2:"HARD"}[choice])
+                                  2:"HARD",
+                                  3:"TRAVEL"}[choice])
                 return choice
                     
             backimage.draw()

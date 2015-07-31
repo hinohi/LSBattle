@@ -6,6 +6,7 @@ from program.text import MyFont
 from sequence.locals import GameLevel, GameScore, backimage
 from sequence.title import Title
 from sequence.play import Play
+from sequence.travel import Travel
 from sequence.choicemode import ChoiceMode
 from sequence.howto import Howto
 from sequence.option import Option
@@ -63,6 +64,9 @@ class Game(object):
         item = None
         while True:
 
+            level = GameLevel(stage, mode)
+            if level.is_travel():
+                playerstate.gun_num = playerstate.max_gun_num
             if item is None and playerstate.gun_num < playerstate.max_gun_num:
                 gun = script.player.guns[playerstate.gun_num]
                 if stage >= gun.stage_condition:
@@ -72,11 +76,18 @@ class Game(object):
             loading.draw()
             # 1 game unit = scale * (ligh speed * 1 second)
             playerstate.reset_hp()
-            play = Play(playerstate,
-                        GameLevel(stage, mode),
-                        scale=script.game.scale,
-                        total_score=total_score,
-                        item=item)
+            if not level.is_travel():
+                play = Play(playerstate,
+                            level,
+                            scale=script.game.scale,
+                            total_score=total_score,
+                            item=item)
+            else:
+                play = Travel(playerstate,
+                            level,
+                            scale=script.game.scale,
+                            total_score=total_score,
+                            item=item)
             flg = play.mainloop()
             sdl2.SDL_ShowCursor(1)
             total_score = play.world.score

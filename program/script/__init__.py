@@ -35,6 +35,7 @@ def make_default_script():
                 f.write(indent*depth + name + " {\n")
                 for nex in block[name]:
                     pri(nex, depth+1)
+                f.write(indent*depth + "}\n")
             elif isinstance(block[name], Block):
                 pri(block[name], depth)
             else:

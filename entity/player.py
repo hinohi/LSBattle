@@ -239,6 +239,7 @@ class Player(object):
         acceleration = Vector4D(0.0, 0.0, 0.0, 0.0)
         if level.is_easy():
             acceleration += self.P.get_resist(self.resistivity*10)
+        #elif level.is_normal() or level.is_travel():
         elif level.is_normal():
             acceleration += self.P.get_resist(self.resistivity*5)
         else:
