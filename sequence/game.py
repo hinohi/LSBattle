@@ -6,6 +6,7 @@ from program.text import MyFont
 from sequence.locals import GameLevel, GameScore, backimage
 from sequence.title import Title
 from sequence.play import Play
+from sequence.travel import Travel
 from sequence.choicemode import ChoiceMode
 from sequence.howto import Howto
 from sequence.option import Option
@@ -37,7 +38,11 @@ class Game(object):
             if flg == title.PLAY:
                 mode = choicemode.mainloop()
                 if not mode == choicemode.RETURN:
-                    self.play_loop(mode)
+                    self.howto_loop(mode)
+                    if mode == choicemode.TRAVEL:
+                        self.travel_loop(mode)
+                    else:
+                        self.play_loop(mode)
                     top = True
             elif flg == title.OPTION:
                 option.mainloop()
@@ -49,10 +54,21 @@ class Game(object):
             elif flg == title.QUIT:
                 BOX.game_quit()
     
-    def play_loop(self, mode):
+    def howto_loop(self, mode):
         howto = Howto(GameLevel(1, mode))
         howto.mainloop()
-
+        
+    def travel_loop(self, mode):
+        loading = Loading()
+        sdl2.SDL_ShowCursor(0)
+        loading.draw()
+        playerstate = PlayerState()
+        playerstate.gun_num += 1
+        travel = Travel(GameLevel(1, mode), script.game.scale, playerstate)
+        travel.mainloop()
+        sdl2.SDL_ShowCursor(1)
+    
+    def play_loop(self, mode):
         loading = Loading()
         continue_q = ContineQuestion()
         gameover = GameOver()
@@ -63,6 +79,9 @@ class Game(object):
         item = None
         while True:
 
+            level = GameLevel(stage, mode)
+            if level.is_travel():
+                playerstate.gun_num = playerstate.max_gun_num
             if item is None and playerstate.gun_num < playerstate.max_gun_num:
                 gun = script.player.guns[playerstate.gun_num]
                 if stage >= gun.stage_condition:
@@ -70,11 +89,10 @@ class Game(object):
 
             sdl2.SDL_ShowCursor(0)
             loading.draw()
-            # 1 game unit = scale * (ligh speed * 1 second)
             playerstate.reset_hp()
-            play = Play(playerstate,
-                        GameLevel(stage, mode),
-                        scale=script.game.scale,
+            play = Play(level,
+                        script.game.scale,
+                        playerstate,
                         total_score=total_score,
                         item=item)
             flg = play.mainloop()

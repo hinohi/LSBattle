@@ -19,11 +19,11 @@ class Play(object):
     WIN  = 0
     LOSE = 1
     ELSE = 2
-    def __init__(self, playerstate, level, scale=1.0, total_score=0, item=None):
+    def __init__(self, level, scale, playerstate=None, total_score=0, item=None):
         BOX.resize(scale)
         self.stopmenu = StopMenu()
         self.level = level
-        self.world = World(playerstate, level, scale, level.L, item)
+        self.world = World(level, scale, playerstate, item)
         self.world.score += total_score
 
     def init(self):
@@ -33,7 +33,7 @@ class Play(object):
         self.move_message = Sentence("Move,move!!", BOX.Y/5)
         self.keys = Keys()
         
-        self.world.action(self.keys, self.level, 0.01)
+        self.world.action(self.keys, 0.01)
         self.world.draw(self.keys)
         sdl2.SDL_GL_SwapWindow(BOX.window)
 
@@ -138,9 +138,8 @@ class Play(object):
             ds = dt * 0.001
             last_tick = tick
             fps.add(ds)
-            # if ds > 0.1:
-            #     ds = 0.1
             total_time += ds
+            
             if shoot:
                 self.keys.k_bullet += dt
             else:
@@ -157,7 +156,7 @@ class Play(object):
 
             if 0 < lose_time:
                 self.keys.k_bullet = -1
-            self.world.action(self.keys, self.level, ds)
+            self.world.action(self.keys, ds)
             self.world.draw(self.keys)
 
             if self.world.player.gun_get_time + 1.5 > self.world.player.time:
@@ -205,7 +204,6 @@ class Play(object):
                 text = "Stage: %i\n"%self.level.stage
                 text += "FPS: %i\n"%(fps.get())
                 text += "Speed: {:,d}m/s\n".format(int(v))
-                # text += "      {:,d}km/h\n".format(int(v*3.6))
                 text += "       %.3fc\n"%(u)
                 text += "Lorentz factor: %.1f\n"%(g)
                 text += "Enemy: %i"%(len([e for e in self.world.enemies if e.hp > 0]))
@@ -216,10 +214,5 @@ class Play(object):
                 text += " World Time: %is\n"%(self.world.player.P.X.t)
                 GL.glColor(1.0, 1.0, 1.0, 0.5)
                 drawSentence(text, textHeight, BOX.X*0.01, BOX.Y-scoreHight-6*textHeight)
-
-                # text = "enemie's B num = %i\n"%(len(self.world.enemies.bullets.bullets))
-                # text += "player's B num = %i"%(sum([len(g.bullets.bullets) for g in self.world.player.guns]))
-                # drawSentence(text, textHeight, BOX.X*0.01, BOX.Y-scoreHight-7*textHeight)
-
 
             sdl2.SDL_GL_SwapWindow(BOX.window)

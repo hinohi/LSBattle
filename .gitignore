@@ -62,4 +62,3 @@ go/*.c
 *.html
 
 resources/config/*.ini
-*.script

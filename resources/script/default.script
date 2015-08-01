@@ -104,6 +104,7 @@ Player {
                 color = [1.0, 1.0, 1.0, 1.0] # color_func
             }
         }
+    }
     hpbar {
         blood_time = 1.0                 # float
         length_x = 0.3                   # float
@@ -172,7 +173,8 @@ World {
     enemy_bullet_num_limit = 1200        # int 100<=x<=100000000
     player_bullet_num_limit = 1200       # int 100<=x<=100000000
     sky {
-        rotation = 1.0471975512          # float 0.0<=x<=6.28318530718
+        rotation0 = 90          # float 0.0<=x<=6.28318530718
+        rotation1 = 30          # float 0.0<=x<=6.28318530718
         texture0 = milkyway.jpg          # func_str
         texture1 = milkyway2.jpg         # func_str
     }
@@ -222,6 +224,7 @@ World {
                 texture = moon.jpg       # func_str
                 tilt = 0.0               # float -180<=x<=180
             }
+        }
     }
     wireframe {
         div = 5                          # int 2<=x<=100
@@ -622,6 +625,7 @@ Enemy {
                 zgzg_interval = 1.0      # float
             }
         }
+    }
     flame {
         life = 6.0                       # float 0.01<=x<=100.0
         num = 10                         # int 4<=x<=20

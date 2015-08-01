@@ -120,15 +120,15 @@ class Gun(object):
 
 class Player(object):
 
-    def __init__(self, world, state, pos, level):
+    def __init__(self, world, level, state, pos):
         self.world = world
         self.state = state
         self.level = level
         self.P = PhaseSpace(pos, Vector4D(1,0,0,0))
+        self.quaternion = Quaternion()
         self.time = 0.0
         self.recovery_interval = script.player.recovery_interval
         self.recovery_time = self.time + self.recovery_interval
-        self.quaternion = Quaternion()
         start = self.P.copy()
         start.X.t = 0.0
         self.worldline = WorldLine(start)
@@ -164,7 +164,7 @@ class Player(object):
         r, g, b, a = script.player.window.pre_color
         self.lines = Lines([r, g, b, a/2])
 
-    def get_acceleration(self, keys, ds, acceleration):
+    def get_acceleration(self, keys, ds):
         accel = keys.k_accel
         matrix = self.quaternion.get_RotMat()
         if accel&1:
@@ -189,8 +189,7 @@ class Player(object):
             ac.normalize(self.acceleration * script.player.turbo)
         else:
             ac.normalize(self.acceleration)
-
-        acceleration += ac
+        return ac
 
     def calc_repulsion(self, acceleration):
         for enemy in self.world.enemies:
@@ -230,30 +229,43 @@ class Player(object):
         self.quaternion *= Quaternion.from_ax(self.turn_speed_2 * ds, matrix.right)
         self.turn_speed_1 -= self.turn_resistivity * self.turn_speed_1 * ds
         self.turn_speed_2 -= self.turn_resistivity * self.turn_speed_2 * ds
-
-    def action(self, keys, level, ds):
+    
+    def get_viscous(self, keys):
+        if self.level.is_hard():
+            if keys.k_brake:
+                return self.P.get_resist(self.resistivity*20.0)
+            else:
+                return Vector4D(0, 0, 0, 0)
+        elif self.level.is_normal():
+            return self.P.get_resist(self.resistivity*5.0)
+        elif self.level.is_easy():
+            return self.P.get_resist(self.resistivity*10.0)
+        elif self.level.is_travel():
+            if keys.k_brake:
+                return self.P.get_resist(self.resistivity*10.0)
+            elif keys.k_accel:
+                return self.P.get_resist(self.resistivity*3.0)
+            else:
+                return Vector4D(0, 0, 0, 0)
+        else:
+            return self.P.get_resist(self.resistivity*5.0)
+            
+    def action(self, keys, ds):
         self.change_direction(keys, ds)
 
         self.guns[self.state.gun_mode].gun_action(keys, ds)
 
-        acceleration = Vector4D(0.0, 0.0, 0.0, 0.0)
-        if level.is_easy():
-            acceleration += self.P.get_resist(self.resistivity*10)
-        elif level.is_normal():
-            acceleration += self.P.get_resist(self.resistivity*5)
-        else:
-            if keys.k_brake:
-                acceleration += self.P.get_resist(self.resistivity*30)
-            elif keys.k_accel == 0.0:
-                acceleration += self.P.get_resist(self.resistivity)
-        self.get_acceleration(keys, ds, acceleration)
+        acceleration = self.get_acceleration(keys, ds)
+        acceleration += self.get_viscous(keys)
         self.calc_repulsion(acceleration)
         self.P.transform(acceleration, ds)
         self.time += ds
 
         X1 = self.P.X
         X0 = self.worldline.get_last()
-        if self.world.enemies.hit_check(X1, X0, self.collision_radius2, color=(0.95, 0.1, 0.1, 0.8)):
+        if self.world.enemies.hit_check(X1, X0,
+                                        self.collision_radius2,
+                                        color=(0.95, 0.1, 0.1, 0.8)):
             self.hp_times.append(self.time + self.delay - 0.03)
             self.bloot_time = self.time + self.delay
 

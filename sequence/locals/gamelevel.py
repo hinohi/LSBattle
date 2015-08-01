@@ -5,6 +5,7 @@ from program import script
 EASY   = 0
 NORMAL = 1
 HARD   = 2
+TRAVEL = 3
 
 class GameLevel(object):
     
@@ -17,24 +18,27 @@ class GameLevel(object):
         self.types = script.game.stage._types_num(stage)
 
         self.table = {
-        	"accel_back": {EASY:False, NORMAL: True, HARD:True},
-        	"booster": {EASY:False, NORMAL: True, HARD:True},
-        	"accel_right": {EASY:False, NORMAL: True, HARD:True},
-        	"accel_left": {EASY:False, NORMAL: True, HARD:True},
-        	"change_gun": {EASY:False, NORMAL: True, HARD:True},
-        	"brake": {EASY:False, NORMAL: True, HARD:True},
-        	"toggle_HUD": {EASY:False, NORMAL: True, HARD:True},
+            "accel_back": {EASY:False, NORMAL: True, HARD:True, TRAVEL:True},
+            "booster": {EASY:False, NORMAL: False, HARD:True, TRAVEL:True},
+            "accel_right": {EASY:False, NORMAL: True, HARD:True, TRAVEL:True},
+            "accel_left": {EASY:False, NORMAL: True, HARD:True, TRAVEL:True},
+            "change_gun": {EASY:False, NORMAL: True, HARD:True, TRAVEL:False},
+            "brake": {EASY:False, NORMAL: False, HARD:True, TRAVEL:True},
+            "toggle_HUD": {EASY:False, NORMAL: True, HARD:True, TRAVEL:True},
         }
+        
     def enabled(self, key):
-    	if key in self.table:
-    		return self.table[key][self.mode]
-    	else:
-    		return True
+        if key in self.table:
+            return self.table[key][self.mode]
+        else:
+            return True
 
     def is_easy(self):
-    	return EASY == self.mode
+        return EASY == self.mode
     def is_normal(self):
-    	return NORMAL == self.mode
+        return NORMAL == self.mode
     def is_hard(self):
-    	return HARD == self.mode
+        return HARD == self.mode
+    def is_travel(self):
+        return TRAVEL == self.mode
 
