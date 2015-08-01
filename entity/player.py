@@ -164,6 +164,8 @@ class Player(object):
         r, g, b, a = script.player.window.pre_color
         self.lines = Lines([r, g, b, a/2])
 
+        self.i = id(self.P.X)
+
     def get_acceleration(self, keys, ds):
         accel = keys.k_accel
         matrix = self.quaternion.get_RotMat()
@@ -251,6 +253,7 @@ class Player(object):
             return self.P.get_resist(self.resistivity*5.0)
             
     def action(self, keys, ds):
+        assert(self.i == id(self.P.X))
         self.change_direction(keys, ds)
 
         self.guns[self.state.gun_mode].gun_action(keys, ds)

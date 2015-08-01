@@ -33,8 +33,9 @@ class World(object):
         if not level.is_travel():
             self.init_set_enemy()
             self.init_set_item(item)
+            self.init_set_worldline()
         self.score = 0
-    
+
     def init_set_enemy(self):
         types = [randint(0, self.level.types - 1)for i in xrange(self.level.enemy_num-1)]
         types += [self.level.types-1]
@@ -49,6 +50,16 @@ class World(object):
             pos = self.player.P.X + Vector4D(0, 0, 0.5, -5.0) * self.scale
             self.item = Item(item, pos, self.scale)
 
+    def init_set_worldline(self):
+        self.worldline_ref = {}
+        lis = list(self.enemies) + [self.player]
+        for a in lis:
+            self.worldline_ref[id(a)] = a.worldline
+            for b in lis:
+                if a is b:
+                    continue
+                a.worldline.set_id(id(b.P.X))
+
     def action(self, keys, ds):
         n = int(ds * 10.0) + 1
         ds /= n
@@ -57,14 +68,18 @@ class World(object):
             self.player.action(keys, ds)
             self.score += self.enemies.action(ds)
             self.solar.hit_check(self.player.P.X)
-            
-            if self.item is not None:
-                self.item.action(ds)
-                if self.item.check_collision(self.player.P.X, self.player.collision_radius2*4):
-                    self.player.state.gun_get()
-                    self.player.gun_get_time = self.player.time
-                    self.item = None
+            self.item_action(ds)
             count += 1
+        for wl in self.worldline_ref.itervalues():
+            wl.cut()
+
+    def item_action(self, ds):
+        if self.item is not None:
+            self.item.action(ds)
+            if self.item.check_collision(self.player.P.X, self.player.collision_radius2*4):
+                self.player.state.gun_get()
+                self.player.gun_get_time = self.player.time
+                self.item = None
 
     def draw(self, keys):
         L = Lorentz(self.player.P.U)
@@ -82,7 +97,7 @@ class World(object):
             self.wireframe.draw(Xp, L)
         glEnable(GL_DEPTH_TEST)
         self.solar.draw(Xp, L, LL)
-        self.enemies.draw(Xp, L, LL)
+        self.enemies.draw(Xp, L, LL, self.worldline_ref)
         if self.item is not None:
             self.item.draw(Xp, L, LL)
         

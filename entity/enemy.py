@@ -26,10 +26,10 @@ class EnemyState(object):
 
 class Enemy(object):
 
-    def __init__(self, world, X, id, typ=None, level=None):
+    def __init__(self, world, X, number, typ=None, level=None):
         self.world = world
         self.scale = world.scale
-        self.id = id
+        self.number = number
         if typ is None:
             typ = min(randint(0, world.level.types-1), len(script.enemy.characters)-1)
         else:
@@ -101,19 +101,19 @@ class Enemy(object):
         self.X_to_head = None
         self.X_dead = None
         self.last_R = None
-        
-        self.hit_times = []
+
+        self.i = id(self.P.X)
 
     def _shoot(self, forward):
         n = Vector4D(1.0/self.mode.bullet_speed, forward)
         Lorentz(-self.P.U).transform(n)
-        self.world.enemies.bullets.add(self.P.X, n, self.bullet_range, self.id)
+        self.world.enemies.bullets.add(self.P.X, n, self.bullet_range, self.number)
 
     def _shoot_n(self, forward):
         n = Vector4D(1.0/self.mode.bullet_speed, forward)
         L = Lorentz(-self.P.U)
         L.transform(n)
-        self.world.enemies.bullets.add(self.P.X, n, self.bullet_range, self.id)
+        self.world.enemies.bullets.add(self.P.X, n, self.bullet_range, self.number)
         up = self.quaternion.get_upward_lis3_i()
         for i in xrange(len(self.shoot_div)):
             div = self.shoot_div[i]
@@ -123,7 +123,7 @@ class Enemy(object):
                 mm = Quaternion.from_ax(2*pi*j/div, forward).get_RotMat()
                 dd = Vector4D(1.0/self.mode.bullet_speed, mm.get_rotate(d))
                 L.transform(dd)
-                self.world.enemies.bullets.add(self.P.X, dd, self.bullet_range, self.id)
+                self.world.enemies.bullets.add(self.P.X, dd, self.bullet_range, self.number)
 
     def check_shoot(self):
         if self.next_shoot_time < self.time:
@@ -168,7 +168,7 @@ class Enemy(object):
             self.hp -= damage
             score += s
 
-        damage = self.world.enemies.bullets.hit_check(X1, X0, self.collision_radius_by_friend2, self.id)
+        damage = self.world.enemies.bullets.hit_check(X1, X0, self.collision_radius_by_friend2, self.number)
         if damage:
             self.hp -= damage
             s = script.game.score.hit_by_friend * damage
@@ -215,11 +215,13 @@ class Enemy(object):
             if c < cmin:
                 c = cmin
             c2 = sqrt(abs(c + 1.0)*0.5)
-            s2 = sqrt(abs(1.0 - c2**2))
+            s2 = sqrt(abs(1.0 - c2*c2))
             ax *= s2 / ax_length
-            self.quaternion = Quaternion(c2, ax) * self.quaternion
+            q = Quaternion(c2, ax)
+            self.quaternion = q * self.quaternion
 
     def action(self, ds):
+        assert(self.i == id(self.P.X))
         Xp = self.world.player.P.X
         score = 0
         self.X_to_head = self.world.player.worldline.get_X_FP(self.P.X, random())
@@ -351,9 +353,16 @@ class Enemies(object):
     def check_death(self):
         return all(enemy.hp <= 0.0 for enemy in self.enemies)
 
-    def draw(self, Xp, L, LL):
-        self.enemies = [enemy for enemy in self.enemies
-                        if (enemy.draw(Xp, L, LL) or enemy.hp > 0.0)]
+    def draw(self, Xp, L, LL, ref):
+        enemies = []
+        for enemy in self.enemies:
+            if enemy.draw(Xp, L, LL) or enemy.hp > 0.0:
+                enemies.append(enemy)
+            else:
+                del ref[id(enemy)]
+                for wl in ref.itervalues():
+                    wl.del_id(id(enemy.P.X))
+        self.enemies = enemies
 
     def hit_check(self, X1, X0, collision_radius2, color=None):
         return self.bullets.hit_check(X1, X0, collision_radius2, color=color)
