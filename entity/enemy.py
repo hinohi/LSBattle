@@ -1,5 +1,5 @@
 # coding: utf8
-# entity.enemy.py
+# entity/enemy.py
 import os
 from random import random, randint
 from math import sqrt, sin, cos, atan2, pi, isnan
