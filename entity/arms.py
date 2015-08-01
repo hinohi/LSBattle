@@ -15,7 +15,7 @@ class Bullet(object):
     
     def __init__(self, X, U, L, N, S):
         self.X = X.copy()
-        self.U = [U.x, U.y, U.z, U.t]
+        self.U = U.get_lis_glsl()
         self.L = L
         self.N = N.copy()
         self.S = S

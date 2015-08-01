@@ -345,8 +345,7 @@ class Enemies(object):
                 score += s
                 if flg:
                     tmp.append(enemy)
-            # actor = sorted(tmp, key=lambda enemy:enemy.P.X.t)
-            actor = tmp
+            actor = sorted(tmp, key=lambda enemy:enemy.P.X.t)
         return score
 
     def check_death(self):

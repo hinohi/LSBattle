@@ -1,5 +1,5 @@
 # coding: utf8
-# entity.item.py
+# entity/item.py
 from go import Vector4D, Matrix44
 from model.polygon import Polygon
 from program.const import IMG_DIR
@@ -22,7 +22,10 @@ class Item(object):
 
     def action(self, ds):
         self.time += ds
-        
+
+    def check_collision(self, Xp, r2):
+        return Xp.distance_to_squared(self.X) < r2
+
     def draw(self, Xp, L, LL):
         t = Xp.distance_to_squared(self.X)
         X = Vector4D.from_tv(-t, self.X.d)

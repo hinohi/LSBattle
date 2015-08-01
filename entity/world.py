@@ -1,5 +1,5 @@
 # coding: utf8
-# world.py
+# entity/world.py
 from math import pi
 from random import random, randint
 
@@ -60,7 +60,7 @@ class World(object):
             
             if self.item is not None:
                 self.item.action(ds)
-                if (self.player.P.X.distance_to_squared(self.item.X) < self.player.collision_radius2*4):
+                if self.item.check_collision(self.player.P.X, self.player.collision_radius2*4):
                     self.player.state.gun_get()
                     self.player.gun_get_time = self.player.time
                     self.item = None

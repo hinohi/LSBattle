@@ -1,13 +1,9 @@
 # coding: utf8
-# world.py
-from math import pi
-from random import random, randint
-
+# entity/wireframe.py
 from OpenGL.GL import *
 
 from go import Vector3, Vector4D, Matrix44, Lorentz
-from program.const import *
-from program.utils import compile_program, load_texture, DY_TEXTURE_KYU
+from program.utils import compile_program
 from program import script
 
 
