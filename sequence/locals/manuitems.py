@@ -45,7 +45,7 @@ class MenuItems(object):
                     M.RIGHT_RIGHT:lambda w:BOX.X - w - self.between_lines*3   + ofx}
         self.fx = self._fx[colum]
         self.pos = []
-        for i in xrange(self.n):
+        for i in range(self.n):
             x = self.fx(self.texts[i].width)
             self.pos.append([x, y])
             y -= height + self.between_lines
@@ -92,7 +92,7 @@ class MenuItems(object):
     def mouse_check(self, x, y):
         y = BOX.Y - y
         h = self.height
-        for i in xrange(self.n):
+        for i in range(self.n):
             ox, oy = self.pos[i]
             w = self.texts[i].width
             if ox < x < ox+w and oy-h < y < oy:
@@ -116,7 +116,7 @@ class MenuItems(object):
     def draw(self, focus=None):
         if focus is None:
             focus = (1.0, 0.15, 0.0, 1.0)
-        for i in xrange(self.n):
+        for i in range(self.n):
             if i == self.choice:
                 GL.glColor(*focus)
             else:

@@ -15,7 +15,7 @@ class Parser(object):
     def read(self):
         while True:
             self.n += 1
-            line = self.f.next() + " "
+            line = next(self.f) + " "
             line = line[:line.find("#")].strip()
             if line and not line.startswith("#"):
                 return line
@@ -112,6 +112,6 @@ if __name__ == "__main__":
     p = Parser()
     es = EnemySetting()
     p.parse(f, Enemy=es)
-    print es.character[0].name
-    print es.character[0].HP
-    print es.bullet.color
+    print(es.character[0].name)
+    print(es.character[0].HP)
+    print(es.bullet.color)

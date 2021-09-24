@@ -29,25 +29,25 @@ class WireFrame(object):
         vertices = []
         indices = []
         n = 2*N + 1
-        for i in xrange(-N, N+1):
+        for i in range(-N, N+1):
             xx = (i+0.5)*L/N
-            for j in xrange(-N, N+1):
+            for j in range(-N, N+1):
                 yy = (j+0.5)*L/N
-                for k in xrange(-N*c, N*c+1):
+                for k in range(-N*c, N*c+1):
                     zz = (k+0.5*c)*L/(N*c)
                     add(xx, yy, zz, k)
-        for i in xrange(-N, N+1):
+        for i in range(-N, N+1):
             xx = (i+0.5)*L/N
-            for j in xrange(-N, N+1):
+            for j in range(-N, N+1):
                 zz = (j+0.5)*L/N
-                for k in xrange(-N*c, N*c+1):
+                for k in range(-N*c, N*c+1):
                     yy = (k+0.5*c)*L/(N*c)
                     add(xx, yy, zz, k)
-        for i in xrange(-N, N+1):
+        for i in range(-N, N+1):
             zz = (i+0.5)*L/N
-            for j in xrange(-N, N+1):
+            for j in range(-N, N+1):
                 yy = (j+0.5)*L/N
-                for k in xrange(-N*c, N*c+1):
+                for k in range(-N*c, N*c+1):
                     xx = (k+0.5*c)*L/(N*c)
                     add(xx, yy, zz, k)
         cls.vertices = (GLfloat*len(vertices))(*vertices)

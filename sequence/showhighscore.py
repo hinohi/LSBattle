@@ -41,7 +41,7 @@ class ShowHighScore(object):
         return shs
 
     def reset(self):
-        scores = [[0, "A", 0.0]for i in xrange(10)]
+        scores = [[0, "A", 0.0]for i in range(10)]
         f = open(CONFIG_DIR+"highscore.dat", "w")
         for s, n, d in scores:
             f.write("%i %s %f\n"%(s, n, d))

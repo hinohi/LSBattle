@@ -84,11 +84,11 @@ class Gun(object):
         right = matrix.right
         self.bullets.add(X, player.P.U, LL, n, self.range)
         nlis = []
-        for i in xrange(len(self.div)):
+        for i in range(len(self.div)):
             m = Quaternion.from_ax((i+1)*pi/30, right).get_RotMat()
             d = m.get_rotate(v)
             div = self.div[i]
-            for j in xrange(div):
+            for j in range(div):
                 mm = Quaternion.from_ax(2*pi*j/div, v).get_RotMat()
                 n = Vector4D.from_tv(1.0, mm.get_rotate(d))
                 L.transform(n)
@@ -96,7 +96,7 @@ class Gun(object):
                 self.bullets.add(X, player.P.U, LL, n, self.range)
 
         dt = ds / par_frame
-        for i in xrange(1, par_frame):
+        for i in range(1, par_frame):
             XX = X.get_linear_add(player.P.U, dt*i)
             self.bullets.add(XX, player.P.U, LL, n, self.range)
             for nn in nlis:
@@ -338,7 +338,7 @@ class Player(object):
 
     def bullet_hit_check(self, X1, X0, collision_radius2):
         damege = 0
-        for i in xrange(self.state.gun_num):
+        for i in range(self.state.gun_num):
             gun = self.guns[i]
             damege += gun.bullets.hit_check(X1, X0, collision_radius2) * gun.power
         return damege

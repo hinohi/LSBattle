@@ -49,7 +49,7 @@ def make_default_script():
         depth -= 1
         f.write(indent*depth + "}\n")
 
-    for block in _kws.itervalues():
+    for block in _kws.values():
         pri(block)
 
     # print "make default script: OK"

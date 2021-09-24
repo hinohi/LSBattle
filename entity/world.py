@@ -37,7 +37,7 @@ class World(object):
         self.score = 0
 
     def init_set_enemy(self):
-        types = [randint(0, self.level.types - 1)for i in xrange(self.level.enemy_num-1)]
+        types = [randint(0, self.level.types - 1)for i in range(self.level.enemy_num-1)]
         types += [self.level.types-1]
         for typ in types:
             x = 6.0 * self.L * (2.0*random()-1.0)
@@ -70,7 +70,7 @@ class World(object):
             self.solar.hit_check(self.player.P.X)
             self.item_action(ds)
             count += 1
-        for wl in self.worldline_ref.itervalues():
+        for wl in self.worldline_ref.values():
             wl.cut()
 
     def item_action(self, ds):

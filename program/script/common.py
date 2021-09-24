@@ -78,7 +78,7 @@ if __name__ == "__main__":
     
     t = Test()
     t.b = 1
-    print "a" in t
-    print "b" in t
-    print "_a_func" in t
-    print t["a"]
+    print("a" in t)
+    print("b" in t)
+    print("_a_func" in t)
+    print(t["a"])

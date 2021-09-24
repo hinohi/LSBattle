@@ -22,7 +22,7 @@ class EntryHighScore(object):
             scores.append([float(s), n, float(d)])
         scores = scores[:_max_score_num]
         self.name = ["_"]*_max_name_num
-        for i in xrange(_max_score_num):
+        for i in range(_max_score_num):
             if self.new_score > scores[i][0]:
                 scores = scores[:i] + [[self.new_score, self.make_name(), time.time()]] + scores[i:-1]
                 break

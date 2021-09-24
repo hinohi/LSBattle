@@ -144,17 +144,17 @@ class SolarSystem(object):
             yield self.stars[name]
 
     def draw(self, Xp, L, LL):
-        for star in self.stars.itervalues():
+        for star in self.stars.values():
             star.draw(Xp, L, LL)
 
     def hit_check(self, Xp):
-        for star in self.stars.itervalues():
+        for star in self.stars.values():
             if star.hp > 0:
                 star.hit_check(Xp, self.world)
 
     def calc_repulsion(self, Xp, acceleration, collision_radius, repulsion):
         U = Vector4D(1.0, 0.0, 0.0, 0.0)
-        for star in self.stars.itervalues():
+        for star in self.stars.values():
             if star.hp > 0:
                 star.X.t = Xp.t - Xp.distance_to(star.X)
                 calc_repulsion(Xp, star.X, U,
