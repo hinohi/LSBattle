@@ -234,7 +234,7 @@ class MqoObject(object):
 
     def search_chunk(self):
         while True:
-            line = self.imqo.next().strip()
+            line = next(self.imqo).strip()
             m = self.re_chunk.match(line)
             if m:
                 return m.group(1)
@@ -255,7 +255,7 @@ class MqoObject(object):
         re_field = re.compile("^(\w+)\(([^)]*)\)")
         materials = []
         while True:
-            line = self.imqo.next().strip()
+            line = next(self.imqo).strip()
             if line == "}":break
             material = Material()
             fields = re_comp.split(line)
@@ -273,7 +273,7 @@ class MqoObject(object):
         obj = Obj()
         vertex = []
         while True:
-            line = self.imqo.next().strip()
+            line = next(self.imqo).strip()
             if line == "}":break
             m = self.re_chunk.match(line)
             if m:
@@ -321,7 +321,7 @@ class MqoObject(object):
     def vertex_chunk(self):
         vertex = []
         while True:
-            line = self.imqo.next().strip()
+            line = next(self.imqo).strip()
             if line == "}":break
             v = list(map(float, line.split()))
             vertex.append(v)
@@ -330,7 +330,7 @@ class MqoObject(object):
     def face_chunk(self):
         faces = []
         while True:
-            line = self.imqo.next().strip()
+            line = next(self.imqo).strip()
             if line == "}":break
             m = self.re_face.match(line)
             face = Face(*m.groups())
@@ -340,7 +340,7 @@ class MqoObject(object):
 
     def skip_chunk(self):
         while True:
-            line = self.imqo.next().strip()
+            line = next(self.imqo).strip()
             if line == "}":break
             if self.re_chunk.match(line):
                 self.skip_chunk()

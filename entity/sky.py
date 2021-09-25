@@ -33,7 +33,7 @@ class Sky(object):
                   -x,  y, z,
                   -x, -y, z,
                    x, -y, z]
-        self.n = len(vertex)/3
+        self.n = len(vertex)//3
         self.vertex = (GLfloat*len(vertex))(*vertex)
 
     def init_program(self):

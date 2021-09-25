@@ -73,7 +73,10 @@ class MyFont(object):
 class Sentence(object):
 
     def __init__(self, sentence, height):
-        self.text = [ord(c) for c in sentence]
+        if isinstance(sentence, str):
+            self.text = [ord(c) for c in sentence]
+        else:
+            self.text = list(sentence)
         self.height = height
         self.width = len(self.text) * height * MyFont.twh
 

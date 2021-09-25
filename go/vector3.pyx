@@ -95,10 +95,10 @@ cdef class Vector3(object):
         self._z *= rhs
         return self
 
-    def __div__(Vector3 self, double rhs):
+    def __truediv__(Vector3 self, double rhs):
         rhs = 1.0 / rhs
         return vec3_from_floats(self._x*rhs, self._y*rhs, self._z*rhs)
-    def __idiv__(Vector3 self, double rhs):
+    def __itruediv__(Vector3 self, double rhs):
         rhs = 1.0 / rhs
         self._x *= rhs
         self._y *= rhs

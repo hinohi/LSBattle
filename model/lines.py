@@ -50,7 +50,7 @@ class Lines(object):
         glUniform3fv(self.vec_local, 1, Xp.get_lis3())
         glUniformMatrix4fv(self.mat_local, 1, GL_FALSE, L.to_glsl())
         glBegin(GL_LINES)
-        for i in range(len(vertices_1)/3):
+        for i in range(len(vertices_1)//3):
             glVertex(vertices_1[i*3], vertices_1[i*3+1], vertices_1[i*3+2])
             glVertex(vertices_2[i*3], vertices_2[i*3+1], vertices_2[i*3+2])
         glEnd()

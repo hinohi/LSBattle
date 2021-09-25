@@ -30,7 +30,7 @@ class MqoGpoPolygon(object):
 
     def load_gpo(self, name, func=lambda x,y,z:(x,y,z), texture=True):
         igpo = open(name)
-        if igpo.next().strip() != "Game Polygon Object":
+        if next(igpo).strip() != "Game Polygon Object":
             raise IOError("%s is not gpo file"%name)
         path, name = os.path.split(name)
         self.path = path

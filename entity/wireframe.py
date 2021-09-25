@@ -23,8 +23,8 @@ class WireFrame(object):
         def add(xx, yy, zz, a):
             vertices.extend([xx, yy, zz])
             if a < N*c:
-                indices.append(len(vertices)/3-1)
-                indices.append(len(vertices)/3)
+                indices.append(len(vertices)//3-1)
+                indices.append(len(vertices)//3)
         c = script.world.wireframe.inner_div
         vertices = []
         indices = []

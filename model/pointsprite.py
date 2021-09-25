@@ -107,7 +107,7 @@ class PointSprite(object):
             glUniform1f(self.size_local, size)
         n = len(vertices)
         glVertexPointer(3, GL_FLOAT, 0, (GLfloat*n)(*vertices))
-        glDrawArrays(GL_POINTS, 0, n/3)
+        glDrawArrays(GL_POINTS, 0, n//3)
     def _draw_1_1(self, vertices, sizes):
         n = len(sizes)
         glEnableVertexAttribArray(self.size_local)
@@ -283,7 +283,7 @@ class PointSpriteDoppler(object):
             glUniform1f(self.size_local, size)
         n = len(vertices)
         glVertexPointer(3, GL_FLOAT, 0, (GLfloat*n)(*vertices))
-        glDrawArrays(GL_POINTS, 0, n/3)
+        glDrawArrays(GL_POINTS, 0, n//3)
     def _draw_1_1(self, vertices, sizes):
         n = len(sizes)
         glEnableVertexAttribArray(self.size_local)

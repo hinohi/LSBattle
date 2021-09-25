@@ -18,7 +18,7 @@ CONFIG_DIR = _os.path.join(_input_path, "config/")
 SCRIPT_DIR = _os.path.join(_input_path, "script/")
 
 VIEW_ANGLE = 60.0
-GAME_NAME = "Light Speed Battle"
+GAME_NAME = b"Light Speed Battle"
 
 c = 299792458.0 #Light Speed [m/sec]
 

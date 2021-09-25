@@ -135,10 +135,10 @@ cdef class Vector4D(object):
         self._z *= rhs
         return self
 
-    def __div__(Vector4D self, double rhs):
+    def __truediv__(Vector4D self, double rhs):
         rhs = 1.0 / rhs
         return vec4_from_floats(self._t*rhs, self._x*rhs, self._y*rhs, self._z*rhs)
-    def __idiv__(Vector4D self, double rhs):
+    def __itruediv__(Vector4D self, double rhs):
         rhs = 1.0 / rhs
         self._t *= rhs
         self._x *= rhs
