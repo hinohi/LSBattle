@@ -6,9 +6,10 @@ name = "pypi"
 [packages]
 pyopengl = "*"
 pillow = "*"
-cython = "*"
 
 [dev-packages]
+cython = "*"
+pyinstaller = "*"
 
 [requires]
 python_version = "3.9"
