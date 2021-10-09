@@ -23,11 +23,11 @@ class Flame(object):
         self.model = PointSpriteDoppler(color=color, texture=DY_TEXTURE_KYU)
         t = 1.0/v
         vertices = [Vector4D(t, 0.0, 1.0, 0.0)]
-        for i in xrange(1, m):
+        for i in range(1, m):
             phi = pi/m*i
             if i%2: e = pi/n
             else:   e = 0.0
-            for j in xrange(n):
+            for j in range(n):
                 theta = 2.0*pi/n*j + e
                 vertices.append(Vector4D(t, sin(phi)*sin(theta),
                                             cos(phi),

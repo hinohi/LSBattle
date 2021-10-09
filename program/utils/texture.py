@@ -19,29 +19,29 @@ def dynamic_texture(n):
         L = 64
         a = L - 1.0
         data = []
-        for y in xrange(L):
+        for y in range(L):
             yy = y/a * 2.0 - 1.0
-            for x in xrange(L):
+            for x in range(L):
                 xx = x/a * 2.0 - 1.0
                 z = 1.0 - (xx**2 + yy**2)
                 data.extend([1, sqrt(z) if z > 0.0 else 0])
-        raw_data = "".join(map(lambda i:chr(int(i*255)), data))
+        raw_data = "".join([chr(int(i*255)) for i in data])
         return raw_data, L, L, "LA"
     elif n == DY_TEXTURE_EDGE:
         L = 64
         a = L / 32 * 15
         b = L / 8
         data = []
-        for y in xrange(L):
+        for y in range(L):
             yy = abs(y-(L-1)/2.0)
-            for x in xrange(L):
+            for x in range(L):
                 xx = abs(x-(L-1)/2.0)
                 if (yy > a and xx > b) or (xx > a and yy > b):
                     z = 1
                 else:
                     z = 0
                 data.extend([1, z])
-        raw_data = "".join(map(lambda i:chr(int(i*255)), data))
+        raw_data = "".join([chr(int(i*255)) for i in data])
         return raw_data, L, L, "LA"
 
 class TextureInfo(object):

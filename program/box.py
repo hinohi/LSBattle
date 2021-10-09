@@ -74,7 +74,7 @@ class _Box(object):
                                                 self.X, self.Y,
                                                 flg)
             if not self.window:
-                print(sdl2.SDL_GetError())
+                print((sdl2.SDL_GetError()))
                 sdl2.ext.SDL_quit()
                 sys.exit(-1)
             self.context = sdl2.SDL_GL_CreateContext(self.window)

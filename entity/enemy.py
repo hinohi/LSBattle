@@ -115,11 +115,11 @@ class Enemy(object):
         L.transform(n)
         self.world.enemies.bullets.add(self.P.X, n, self.bullet_range, self.number)
         up = self.quaternion.get_upward_lis3_i()
-        for i in xrange(len(self.shoot_div)):
+        for i in range(len(self.shoot_div)):
             div = self.shoot_div[i]
             m = Quaternion.from_ax((i+1)*self.shoot_div_phi, up).get_RotMat()
             d = m.get_rotate(forward)
-            for j in xrange(div):
+            for j in range(div):
                 mm = Quaternion.from_ax(2*pi*j/div, forward).get_RotMat()
                 dd = Vector4D(1.0/self.mode.bullet_speed, mm.get_rotate(d))
                 L.transform(dd)
@@ -360,7 +360,7 @@ class Enemies(object):
                 enemies.append(enemy)
             else:
                 del ref[id(enemy)]
-                for wl in ref.itervalues():
+                for wl in ref.values():
                     wl.del_id(id(enemy.P.X))
         self.enemies = enemies
 

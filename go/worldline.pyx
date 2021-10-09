@@ -50,7 +50,7 @@ cdef class WorldLine(object):
             self.state = self.state[imin:]
             self.n -= imin
 
-    cdef int search_position_on_PLC(self, Vector4D Xp, int ix):
+    cdef int search_position_on_PLC(self, Vector4D Xp, long long ix):
         cdef double Xpt = Xp._t
         cdef int start = self.ix_map[ix].ix
         cdef int i
@@ -65,7 +65,7 @@ cdef class WorldLine(object):
 
     @cython.cdivision(True)
     def get_X_FP(self, Xp_py, double w=0.5):
-        cdef int ix = id(Xp_py)
+        cdef long long ix = id(Xp_py)
         cdef Vector4D Xp = Xp_py
         cdef int i = self.search_position_on_PLC(Xp, ix)
         if i == -1:
@@ -86,7 +86,7 @@ cdef class WorldLine(object):
 
     @cython.cdivision(True)
     def get_XU_on_PLC(self, Xp_py):
-        cdef int ix = id(Xp_py)
+        cdef long long ix = id(Xp_py)
         cdef Vector4D Xp = Xp_py
         cdef int i = self.search_position_on_PLC(Xp, ix)
         if i == -1:
@@ -104,7 +104,7 @@ cdef class WorldLine(object):
         return X0.get_div_point(X1, s), dX
 
     def get_State_on_PLC(self, Xp_py):
-        cdef int ix = id(Xp_py)
+        cdef long long ix = id(Xp_py)
         cdef int i = self.ix_map[ix].ix
         q0 = self.state[i]
         q1 = self.state[i+1]

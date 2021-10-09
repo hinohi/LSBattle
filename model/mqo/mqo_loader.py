@@ -27,7 +27,7 @@ class Face(object):
                 raise IOError("Face format is clashed")
             self.uv[2], self.uv[-2] = self.uv[-2], self.uv[2]
             self.uv[3], self.uv[-1] = self.uv[-1], self.uv[3]
-            for i in xrange(1, self.n*2, 2):
+            for i in range(1, self.n*2, 2):
                 self.uv[i] = 1.0 - self.uv[i]
         self.make_hash()
 
@@ -47,12 +47,12 @@ class Face(object):
             face.uv[3], face.uv[-1] = face.uv[-1], face.uv[3]
         else:
             face.uv = None
-        it = range(self.n)
+        it = list(range(self.n))
         it[1], it[-1] = it[-1], it[1]
         face.indices = []
         c = 0
         for i in it:
-            v = map(operator.mul, xi, vertex[self.indices[i]])
+            v = list(map(operator.mul, xi, vertex[self.indices[i]]))
             try:
                 index = vertex.index(v)
             except ValueError:
@@ -218,11 +218,11 @@ class MqoObject(object):
     ###### read tool ######
 
     def check_header(self):
-        firstline = self.imqo.next()
+        firstline = next(self.imqo)
         if "Metasequoia Document" not in firstline:
             raise IOError("This file is not Metasequoia Document")
 
-        line = self.imqo.next()
+        line = next(self.imqo)
         m = re.match("^Format (\w+) Ver (\d+)\.(\d+)", line)
         if m:
             if m.group(1) != "Text":
@@ -234,7 +234,7 @@ class MqoObject(object):
 
     def search_chunk(self):
         while True:
-            line = self.imqo.next().strip()
+            line = next(self.imqo).strip()
             m = self.re_chunk.match(line)
             if m:
                 return m.group(1)
@@ -255,7 +255,7 @@ class MqoObject(object):
         re_field = re.compile("^(\w+)\(([^)]*)\)")
         materials = []
         while True:
-            line = self.imqo.next().strip()
+            line = next(self.imqo).strip()
             if line == "}":break
             material = Material()
             fields = re_comp.split(line)
@@ -273,7 +273,7 @@ class MqoObject(object):
         obj = Obj()
         vertex = []
         while True:
-            line = self.imqo.next().strip()
+            line = next(self.imqo).strip()
             if line == "}":break
             m = self.re_chunk.match(line)
             if m:
@@ -296,15 +296,15 @@ class MqoObject(object):
                 elif name == "scale":
                     obj.scale = [float(i) for i in fields[1:]]
                     if obj.scale != [1.0,1.0,1.0]:
-                        print "s",obj.scale
+                        print("s",obj.scale)
                 elif name == "rotation":
                     obj.rotation = [float(i) for i in fields[1:]]
                     if obj.rotation != [.0,.0,.0]:
-                        print "r",obj.rotation
+                        print("r",obj.rotation)
                 elif name == "translation":
                     obj.translation = [float(i) for i in fields[1:]]
                     if obj.translation != [.0,.0,.0]:
-                        print "t",obj.translation
+                        print("t",obj.translation)
 
         vmap = [0]*len(vertex)
         for i, v in enumerate(vertex):
@@ -321,16 +321,16 @@ class MqoObject(object):
     def vertex_chunk(self):
         vertex = []
         while True:
-            line = self.imqo.next().strip()
+            line = next(self.imqo).strip()
             if line == "}":break
-            v = map(float, line.split())
+            v = list(map(float, line.split()))
             vertex.append(v)
         return vertex
 
     def face_chunk(self):
         faces = []
         while True:
-            line = self.imqo.next().strip()
+            line = next(self.imqo).strip()
             if line == "}":break
             m = self.re_face.match(line)
             face = Face(*m.groups())
@@ -340,7 +340,7 @@ class MqoObject(object):
 
     def skip_chunk(self):
         while True:
-            line = self.imqo.next().strip()
+            line = next(self.imqo).strip()
             if line == "}":break
             if self.re_chunk.match(line):
                 self.skip_chunk()
@@ -354,8 +354,8 @@ if __name__ == "__main__":
             self.n = len(self.lis)
             self.i = 0
             self.ii = 0
-            print "-"*100
-        def next(self):
+            print("-"*100)
+        def __next__(self):
             if self.i < self.n:
                 self.i += 1
                 if self.i*100/self.n > self.ii:
@@ -364,11 +364,11 @@ if __name__ == "__main__":
                     self.ii += 1
                 return self.lis[self.i-1]
             else:
-                print
+                print()
                 raise StopIteration
 
     t1 = time.clock()
     name = "../resources/img/haruna/haruna.mqo"
     m = MqoObject(F(open(name)))
     t2 = time.clock()
-    print t2 - t1
+    print(t2 - t1)

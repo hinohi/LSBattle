@@ -11,7 +11,7 @@ from program.utils import load_texture, FlatScreen
 
 _OFFSET = 32
 class MyFont(object):
-    c_map = [[0, 0]for i in xrange(_OFFSET, 127)]
+    c_map = [[0, 0]for i in range(_OFFSET, 127)]
     name = ""
     height = 0
     size = 512.0
@@ -73,7 +73,10 @@ class MyFont(object):
 class Sentence(object):
 
     def __init__(self, sentence, height):
-        self.text = [ord(c) for c in sentence]
+        if isinstance(sentence, str):
+            self.text = [ord(c) for c in sentence]
+        else:
+            self.text = list(sentence)
         self.height = height
         self.width = len(self.text) * height * MyFont.twh
 

@@ -1,7 +1,7 @@
 #coding: utf8
 import os
 
-import mqo_loader
+from . import mqo_loader
 
 
 class Point(object):
@@ -51,7 +51,7 @@ def mqo2gpo(name):
         if points[index] is None or points[index].texcoord is None:
             points[index] = p
         elif p.texcoord != points[index].texcoord:
-            for k in xrange(pre_len, len(points)):
+            for k in range(pre_len, len(points)):
                 if p == points[k]:
                     index = k
                     break
@@ -75,16 +75,16 @@ def mqo2gpo(name):
             indices = objects[-1][1]
         if face.uv is None:
             if face.n == 3:
-                l = [_col(i) for i in 0,1,2]
+                l = [_col(i) for i in (0,1,2)]
             else:
-                l = [_col(i) for i in 0,1,2,3]
-                l = [l[i] for i in 0,1,2,0,2,3]
+                l = [_col(i) for i in (0,1,2,3)]
+                l = [l[i] for i in (0,1,2,0,2,3)]
         else:
             if face.n == 3:
-                l = [_uv(i) for i in 0,1,2]
+                l = [_uv(i) for i in (0,1,2)]
             else:
-                l = [_uv(i) for i in 0,1,2,3]
-                l = [l[i] for i in 0,1,2,0,2,3]
+                l = [_uv(i) for i in (0,1,2,3)]
+                l = [l[i] for i in (0,1,2,0,2,3)]
         indices.extend(l)
     
     pmap = [0]*len(points)

@@ -30,7 +30,7 @@ class MqoGpoPolygon(object):
 
     def load_gpo(self, name, func=lambda x,y,z:(x,y,z), texture=True):
         igpo = open(name)
-        if igpo.next().strip() != "Game Polygon Object":
+        if next(igpo).strip() != "Game Polygon Object":
             raise IOError("%s is not gpo file"%name)
         path, name = os.path.split(name)
         self.path = path
@@ -41,15 +41,15 @@ class MqoGpoPolygon(object):
             words = line.split()
             if not words:continue
             if words[0] == "p":
-                x, y, z, u, v = map(float, words[1:])
+                x, y, z, u, v = list(map(float, words[1:]))
                 vertices.extend(func(x, y, z))
                 texcoords.extend([u, v])
             elif words[0] == "m":
-                color = map(float, words[1:-1])
+                color = list(map(float, words[1:-1]))
                 tex_name = words[-1][1:-1]
                 objects.append([Material(color, tex_name, texture, path), []])
             elif words[0] == "i":
-                objects[-1][1] = map(int, words[1:])
+                objects[-1][1] = list(map(int, words[1:]))
                 
         self.vertices = (GLfloat*len(vertices))(*vertices)
         self.texcoords = (GLfloat*len(texcoords))(*texcoords)
