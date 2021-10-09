@@ -6,26 +6,27 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from PIL import Image
 
-
 DY_TEXTURE_BETA = 0
-DY_TEXTURE_KYU  = 1
+DY_TEXTURE_KYU = 1
 DY_TEXTURE_EDGE = 2
+
+
 def dynamic_texture(n):
     if n == DY_TEXTURE_BETA:
         L = 64
-        raw_data = "\xff"*(L*L)
+        raw_data = "\xff" * (L * L)
         return raw_data, L, L, "L"
     elif n == DY_TEXTURE_KYU:
         L = 64
         a = L - 1.0
         data = []
         for y in range(L):
-            yy = y/a * 2.0 - 1.0
+            yy = y / a * 2.0 - 1.0
             for x in range(L):
-                xx = x/a * 2.0 - 1.0
-                z = 1.0 - (xx**2 + yy**2)
+                xx = x / a * 2.0 - 1.0
+                z = 1.0 - (xx ** 2 + yy ** 2)
                 data.extend([1, sqrt(z) if z > 0.0 else 0])
-        raw_data = "".join([chr(int(i*255)) for i in data])
+        raw_data = bytearray(int(i * 255) for i in data)
         return raw_data, L, L, "LA"
     elif n == DY_TEXTURE_EDGE:
         L = 64
@@ -33,16 +34,17 @@ def dynamic_texture(n):
         b = L / 8
         data = []
         for y in range(L):
-            yy = abs(y-(L-1)/2.0)
+            yy = abs(y - (L - 1) / 2.0)
             for x in range(L):
-                xx = abs(x-(L-1)/2.0)
+                xx = abs(x - (L - 1) / 2.0)
                 if (yy > a and xx > b) or (xx > a and yy > b):
                     z = 1
                 else:
                     z = 0
                 data.extend([1, z])
-        raw_data = "".join([chr(int(i*255)) for i in data])
+        raw_data = bytearray(int(i * 255) for i in data)
         return raw_data, L, L, "LA"
+
 
 class TextureInfo(object):
     def __init__(self, name, texture_id, width, height, mode):
